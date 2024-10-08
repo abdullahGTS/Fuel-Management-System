@@ -17,11 +17,10 @@ main {
                     display: flex;
                     padding: 0;
                     background-color: var(--gts-white-color);
-                    // border-radius: var(--gts-md-curve) 0 0 var(--gts-md-curve);
-                    // margin-right: -21px;
                     z-index: 3;
                     .auth-form-wrapper {
                         padding: 90px 70px;
+                        width: 100%;
                         display: inline-grid;
                         .auth-logo {
                             width: 160px;
