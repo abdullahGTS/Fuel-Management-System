@@ -1,0 +1,33 @@
+@import "./sidebar";
+
+#gts-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    background-color: var(--gts-light-color);
+
+    #gts-stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 14px 14px 14px 0;
+        height: 100%;
+        .gts-container {
+            width: 100%;
+            height: 100%;
+            border-radius: var(--gts-sm-curve);
+            background-color: var(--gts-white-color);
+            box-shadow: 0 0 14px rgba(21, 110, 65, 0.07) !important;
+
+            #gts-header {
+                width: 100%;
+                height: 100px;
+            }
+
+            .gts-content {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}

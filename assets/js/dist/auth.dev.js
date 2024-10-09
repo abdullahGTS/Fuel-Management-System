@@ -157,7 +157,7 @@ var Auth = {
         });
         setTimeout(function () {
           // Redirect after 5 seconds
-          window.location.href = '/pages/dashboard.html'; // Change this to your desired URL
+          window.location.href = '/portal/index.html'; // Change this to your desired URL
         }, 5000); // Optionally submit the form
         // document.getElementById('login-form').submit();
       }

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Manage all your fuel stations and analyze reports from your personalized dashboard.">
+    <meta name="keywords" content="Fuel Management, GTS, Dashboard, Station Reports">
+    <meta name="author" content="GTS - Global Technology Services">
+    <title>Dashboard - GTS Fuel Management</title>
+
+    <!-- Icons  -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="512x512" href="../android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="manifest" href="../site.webmanifest">
+
+    <!-- GTS Styles -->
+    <link rel="stylesheet" href="../assets/css/common.min.css">
+    <link rel="stylesheet" href="../assets/css/portal.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.min.css">
+    <link rel="stylesheet" href="../assets/css/responsive.min.css">
+
+    <!-- Vendor Styles -->
+    <link rel="stylesheet" href="../vendor/css/toastr.min.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+
+<body>
+    <div id="gts-wrapper">
+        <div id="side-bar">
+            <div class="gts-logo">
+                <a href="./index.html">
+                    <img src="../assets/imgs/gts-logo.png" class="desktop" alt="GTS Logo" />
+                    <img src="../assets/imgs/gts-logo-mobile.png" class="mobile" alt="GTS Logo" />
+                </a>
+            </div>
+            <div id="nav-wrapper">
+                <div class="nav-stage custom-scroll-bar">
+                    <div class="nav-items">
+                        <nav>
+                            <ul>
+                                <li class="active"><a href="./index.html">
+                                        <span class="mat-icon material-symbols-sharp">dashboard</span>
+                                        <span class="nav-item">Dashboard</span>
+                                    </a></li>
+                                <li><a href="./sites.html">
+                                        <span class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                        <span class="nav-item">Sites</span>
+                                    </a></li>
+                                <li><a href="./reports.html">
+                                        <span class="mat-icon material-symbols-sharp">lab_profile</span>
+                                        <span class="nav-item">Reports</span>
+                                    </a></li>
+                                <li><a href="./alarms.html">
+                                        <span class="mat-icon material-symbols-sharp">warning</span>
+                                        <span class="nav-item">Alarms
+                                            <span class="gts-badge">100</span>
+                                        </span>
+                                    </a></li>
+                                <li><a href="./tanks.html">
+                                        <span class="mat-icon material-symbols-sharp">storage</span>
+                                        <span class="nav-item">Tanks</span>
+                                    </a></li>
+                                <li><a href="./delivery.html">
+                                        <span class="mat-icon material-symbols-sharp">local_shipping</span>
+                                        <span class="nav-item">Delivery</span>
+                                    </a></li>
+                                <li><a href="./configurations.html">
+                                        <span class="mat-icon material-symbols-sharp">settings</span>
+                                        <span class="nav-item">Configurations</span>
+                                    </a></li>
+                            </ul>
+                        </nav>
+                        <button class="btn btn-icon" id="mobile-menu">
+                            <span class="mat-icon material-symbols-sharp">menu</span>
+                        </button>
+                    </div>
+
+                    <div class="nav-footer">
+                        <div class="nav-footer-wrapper" data-popover-target="#user-profile">
+                            <div class="gts-avatar">
+                                <img src="../assets/imgs/avatar.jpg" alt="User Avatar" />
+                            </div>
+
+                            <div class="gts-profile">
+                                <div class="welcome-user">Hi, <strong>Monther Younis</strong>
+                                    <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
+                                </div>
+                                <span class="user-email">monther.younis@outlook.com</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="gts-stage">
+            <div class="gts-container">
+                <header id="gts-header"></header>
+                <div class="gts-content custom-scroll-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popover -->
+    <div class="popover-wrapper" id="user-profile">
+        <div class="popover-body">
+            <ul>
+                <li><a href="#">
+                        <span class="mat-icon material-symbols-sharp">support</span>
+                        <span>Support</span>
+                    </a></li>
+                <li><a href="#">
+                        <span class="mat-icon material-symbols-sharp">logout</span>
+                        <span>Logout</span>
+                    </a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- Vendor Scripts -->
+    <script src="../vendor/js/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
+
+    <!-- GTS Scripts -->
+    <script type="text/javascript" src="../assets/js/script.js" async></script>
+    <script type="text/javascript" src="../assets/js/dashboard.js" async></script>
+</body>
+
+</html>
