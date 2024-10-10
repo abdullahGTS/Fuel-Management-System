@@ -1,4 +1,5 @@
-@import "./sidebar";
+@import "./components/sidebar";
+@import "./components/header";
 
 #gts-wrapper {
     display: flex;
@@ -18,12 +19,7 @@
             border-radius: var(--gts-sm-curve);
             background-color: var(--gts-white-color);
             box-shadow: 0 0 14px rgba(21, 110, 65, 0.07) !important;
-
-            #gts-header {
-                width: 100%;
-                height: 100px;
-            }
-
+            padding: 0;
             .gts-content {
                 width: 100%;
                 height: 100%;

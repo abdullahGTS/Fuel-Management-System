@@ -283,9 +283,12 @@
                 }
             }
         }
-        // #gts-stage {
-        //     padding: 14px;
-        // }
+        #gts-header {
+            padding: 0 34px !important;
+            .gts-head {
+                padding: 28px 0 !important;
+            }
+        }
     }
 }
 
@@ -310,7 +313,7 @@
                             opacity: 0;
                             box-shadow: 0 0 20px rgba(21, 110, 65, 0.2) !important;
                             transform: translateY(100%);
-                            transition: 280ms ease-in-out;
+                            transition: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
                             transition-delay: 0ms;
                             &.open {
                                 transform: translateY(0%);
@@ -334,10 +337,16 @@
                 }
             }
         }
+        #gts-header {
+            padding: 0 28px !important;
+            .gts-head {
+                padding: 21px 0 !important;
+            }
+        }
     }
 }
 
-@media (max-width: 448px) {
+@media (max-width: 521px) {
     #gts-wrapper {
         #side-bar {
             .gts-logo {
@@ -346,6 +355,42 @@
                 a {
                     .desktop {display: none;}
                     .mobile {display: inline-block;}
+                }
+            }
+        }
+
+        #gts-header {
+            .gts-head {
+                .gts-search {
+                    width: 38px;
+                    .mat-icon {
+                        width: 38px;
+                    }
+                    input {
+                        padding: 0;
+                        font-size: 0;
+                        cursor: pointer;
+                    }
+                    &:focus-within {
+                        position: absolute;
+                        width: 100%;
+                        z-index: 9991;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        top: 0;
+                        left: 0;
+                        .mat-icon {
+                            width: 58px;
+                        }
+                        input {
+                            padding: 7px 21px 7px 50px;
+                            cursor: text;
+                            font-size: var(--gts-normal-fs);
+                            height: 100% !important;
+                            background-color: var(--gts-white-color);
+                        }
+                    }
                 }
             }
         }
