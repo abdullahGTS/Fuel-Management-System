@@ -242,7 +242,8 @@ body:focus-visible::-webkit-scrollbar-thumb {
         box-shadow: 0 0 20px rgba(21, 110, 65, 0.2) !important;
         background-color: var(--gts-white-color);
         padding: 14px 28px;
-        min-width: 210px;
+        min-width: 180px;
+        max-width: 280px;
         ul {
             li {
                 a {

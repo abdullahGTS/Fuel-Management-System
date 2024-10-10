@@ -51,32 +51,16 @@ var Popover = {
   },
   // Set the width of the popover to match the target element's width
   setWidth: function setWidth(targetElement, popoverBody) {
-    var targetRect = targetElement.getBoundingClientRect();
-    popoverBody.style.width = "".concat(targetRect.width - 20, "px"); // Offset of 10px
+    var updatePopoverWidth = function updatePopoverWidth() {
+      var targetRect = targetElement.getBoundingClientRect();
+      popoverBody.style.width = "".concat(targetRect.width - 20, "px"); // Offset of 10px
+    }; // Set the initial width when the popover is created
+
+
+    updatePopoverWidth(); // Adjust the width on window resize
+
+    window.addEventListener("resize", updatePopoverWidth);
   },
-  // setPosition: (targetElement, popoverBody) => {
-  //   const targetRect = targetElement.getBoundingClientRect(); // Get the dimensions and position of the clicked element
-  //   const targetBody = popoverBody.getBoundingClientRect(); // Get the dimensions and position of the clicked element
-  //   const targetX = targetRect.left + window.scrollX; // Get the X position
-  //   const targetY = ( targetRect.top - targetBody.height)  + window.scrollY; // Get the Y position
-  //   // Set the initial position of the popover
-  //   popoverBody.style.position = "absolute";
-  //   popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
-  //   popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
-  //   // Check if the popover goes beyond the right edge of the screen
-  //   const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
-  //   const viewportWidth = window.innerWidth + window.scrollX;
-  //   if (popoverRightEdge > viewportWidth) {
-  //     // If the popover exceeds the screen width, move it to the left to fit within the screen
-  //     popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
-  //   }
-  //   // Check if the popover goes beyond the left edge of the screen
-  //   const popoverLeftEdge = targetX + 10;
-  //   if (popoverLeftEdge < window.scrollX) {
-  //     // If the popover is less than 0 (off-screen), adjust it to 10px from the left
-  //     popoverBody.style.left = `10px`;
-  //   }
-  // },
   setPosition: function setPosition(targetElement, popoverBody) {
     var updatePopoverPosition = function updatePopoverPosition() {
       var targetRect = targetElement.getBoundingClientRect(); // Get the dimensions and position of the clicked element
@@ -150,53 +134,85 @@ var MobileNav = {
   init: function init() {
     var navigation = document.querySelector("#side-bar");
 
-    if (navigation) {
-      MobileNav.openMenu();
-      MobileNav.closeMenu();
+    if (navigation && window.innerWidth < 769) {
+      MobileNav.bindMenuEvents(); // Bind events only once
+
+      console.log('Test');
+    }
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth < 769) {
+        MobileNav.bindMenuEvents(); // Ensure events are bound on mobile
+      } else {
+        MobileNav.unbindMenuEvents(); // Unbind events for desktop
+      }
+    });
+  },
+  bindMenuEvents: function bindMenuEvents() {
+    var mobileMenuTrigger = document.querySelector("#mobile-menu");
+    var navWrapper = document.querySelector("#nav-wrapper");
+    var navTag = navWrapper.querySelector('nav');
+    navTag.style.display = "none";
+    navTag.style.visibility = "hidden";
+    navTag.style.opacity = "0";
+
+    if (mobileMenuTrigger && navWrapper) {
+      mobileMenuTrigger.addEventListener("click", MobileNav.openMenu);
+      navTag.addEventListener("click", MobileNav.preventNavClose);
+    }
+  },
+  unbindMenuEvents: function unbindMenuEvents() {
+    var mobileMenuTrigger = document.querySelector("#mobile-menu");
+    var navWrapper = document.querySelector("#nav-wrapper");
+    var navTag = navWrapper.querySelector('nav');
+    navTag.style.display = "block";
+    navTag.style.visibility = "visible";
+    navTag.style.opacity = "1";
+
+    if (mobileMenuTrigger && navWrapper) {
+      mobileMenuTrigger.removeEventListener("click", MobileNav.openMenu);
+      navTag.removeEventListener("click", MobileNav.preventNavClose);
     }
   },
   openMenu: function openMenu() {
-    var mobileMenuTrigger = document.querySelector("#mobile-menu"); // The element that opens the menu
-
-    var navWrapper = document.querySelector("#nav-wrapper"); // The container that holds the navigation menu
-
+    var navWrapper = document.querySelector("#nav-wrapper");
     var navTag = navWrapper.querySelector('nav');
-    var navItems = navWrapper.querySelector('.nav-items');
+    var navItems = navWrapper.querySelector('.nav-items'); // Show the menu
 
-    if (mobileMenuTrigger && navWrapper) {
-      mobileMenuTrigger.addEventListener("click", function () {
-        // Display the nav menu
-        navTag.style.display = "flex"; // Create a backdrop
+    navTag.style.display = "block";
+    navTag.style.visibility = "visible";
+    navTag.style.opacity = "1";
+    setTimeout(function () {
+      navTag.classList.add('open');
+    }, 0); // Create and append the backdrop
 
-        var backdrop = document.createElement("div");
-        backdrop.id = "navBackdrop";
-        backdrop.style.display = "block"; // Append the backdrop to the body
-
-        navItems.appendChild(backdrop);
-        navTag.addEventListener("click", function (e) {
-          e.stopPropagation(); // Prevent click from propagating to backdrop
-        }); // When the backdrop is clicked, close the menu
-
-        backdrop.addEventListener("click", MobileNav.closeMenu);
-      });
-    }
+    var backdrop = document.createElement("div");
+    backdrop.id = "navBackdrop";
+    backdrop.style.display = "block";
+    navItems.appendChild(backdrop);
+    backdrop.addEventListener("click", MobileNav.closeMenu);
   },
   closeMenu: function closeMenu() {
     var navWrapper = document.querySelector("#nav-wrapper");
     var backdrop = document.querySelector("#navBackdrop");
-    var navTag = navWrapper.querySelector('nav'); // Hide the nav menu
-
-    if (navWrapper) {
-      navTag.style.display = "none";
-    } // Remove the backdrop
-
+    var navTag = navWrapper.querySelector('nav'); // Remove the backdrop first
 
     if (backdrop) {
       backdrop.remove();
-    }
-  }
-}; // Ensures the page is ready before initializing components
+    } // Hide the menu
 
+
+    navTag.classList.remove('open');
+    setTimeout(function () {
+      navTag.style.display = "none";
+      navTag.style.visibility = "hidden";
+      navTag.style.opacity = "0";
+    }, 320);
+  },
+  preventNavClose: function preventNavClose(e) {
+    e.stopPropagation(); // Prevent nav clicks from closing the menu
+  }
+};
 pageReady(function () {
   Button.init();
   Popover.init();
