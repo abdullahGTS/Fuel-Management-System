@@ -5,14 +5,15 @@
     --gts-gray-color: #9c9b9b;
     --gts-brd-color: 156, 155, 155;
     --gts-white-color: #FFFFFF;
-    --gts-light-color: #eff0f1;
-    --gts-red-color: #E04C4C;
+    --gts-light-color: #F4F7FE;
+
+    --gts-red-color: #e53434;
     --gts-green-color: #288048;
 
     /** Product Colors **/
-    --gasoline-95: #25A96C;
-    --gasoline-91: #E92733;
-    --diesel: #EF9F02;
+    --gasoline-95: #009C62;
+    --gasoline-91: #e55141;
+    --diesel: #FAB75C;
 
     /** Fonts **/
     --gts-main-font: "Poppins", sans-serif;
@@ -29,4 +30,8 @@
     --gts-lg-curve: 21px;
     --gts-md-curve: 14px;
     --gts-sm-curve: 7px;
+}
+
+.darkTheme {
+
 }

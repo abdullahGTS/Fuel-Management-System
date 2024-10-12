@@ -5,13 +5,13 @@ textarea {
     appearance: none;
     border-radius: var(--gts-sm-curve);
     background-color: var(--gts-light-color);
-    border: 0;
+    border: 1px rgba(var(--gts-brd-color), 0.2) solid;
+    border-color: rgba(var(--gts-brd-color), 0.1);
     padding: 16px 21px;
     font-size: var(--gts-normal-fs);
     width: 100%;
     position: relative;
     z-index: 2;
-
     &.input-error {
         box-shadow: 0 0 2px var(--gts-red-color);
     }
@@ -30,6 +30,7 @@ input[type="search"]::-webkit-search-cancel-button {
   input[type="search"] {
     appearance: textfield; /* Override default styling */
   }
+
 .btn {
     color: var(--gts-white-color);
     font-weight: 600;
@@ -37,7 +38,7 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: var(--gts-primary-color);
     overflow: hidden;
     height: 50px;
-    box-shadow: 0 0 20px rgba(21, 110, 65, 0.2) !important;
+    box-shadow: 0 0 21px rgba(21, 110, 65, 0.2) !important;
     .ripple {
         animation: rEffectAnimation 0.85s linear infinite;
         transform: translate(-50%, -50%) scale(0);

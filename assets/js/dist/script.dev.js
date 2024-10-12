@@ -11,35 +11,39 @@ var PageLoader = {
   progress: 0,
   // To keep track of current progress
   init: function init() {
-    // Initially start at 0%
-    PageLoader.updateProgress(0); // Gradually increase progress until the DOM is ready
+    var progressBar = document.querySelector('.gts-progress-bar');
 
-    var slowLoading = setInterval(function () {
-      if (PageLoader.progress < 80) {
-        PageLoader.updateProgress(PageLoader.progress + 1); // Increase slowly
-      }
-    }, 100); // Adjust the speed of the increase (100ms)
-    // Track when the DOM is interactive (50%)
+    if (progressBar) {
+      // Initially start at 0%
+      PageLoader.updateProgress(0); // Gradually increase progress until the DOM is ready
 
-    document.onreadystatechange = function () {
-      if (document.readyState === 'interactive') {
-        clearInterval(slowLoading); // Stop the slow loading process
+      var slowLoading = setInterval(function () {
+        if (PageLoader.progress < 80) {
+          PageLoader.updateProgress(PageLoader.progress + 1); // Increase slowly
+        }
+      }, 100); // Adjust the speed of the increase (100ms)
+      // Track when the DOM is interactive (50%)
 
-        PageLoader.slowIncreaseTo(90); // Slow increase to 90%
-      } else if (document.readyState === 'complete') {
-        PageLoader.slowIncreaseTo(100); // Finish loading (100%)
-        // Hide the loader after a short delay
+      document.onreadystatechange = function () {
+        if (document.readyState === 'interactive') {
+          clearInterval(slowLoading); // Stop the slow loading process
 
-        setTimeout(function () {
-          document.body.classList.add('loaded');
-        }, 1400); // 700ms delay before hiding
-      }
-    }; // Track full page load (assets like images are loaded)
+          PageLoader.slowIncreaseTo(90); // Slow increase to 90%
+        } else if (document.readyState === 'complete') {
+          PageLoader.slowIncreaseTo(100); // Finish loading (100%)
+          // Hide the loader after a short delay
+
+          setTimeout(function () {
+            document.body.classList.add('loaded');
+          }, 1400); // 1400ms delay before hiding
+        }
+      }; // Track full page load (assets like images are loaded)
 
 
-    window.addEventListener('load', function () {
-      PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
-    });
+      window.addEventListener('load', function () {
+        PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
+      });
+    }
   },
   // Function to update progress bar width
   updateProgress: function updateProgress(percent) {

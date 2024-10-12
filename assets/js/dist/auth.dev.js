@@ -145,20 +145,15 @@ var Auth = {
 
         submitButton.innerHTML = 'Signing In <div class="loader"></div>'; // Change button text and show preloader (spinner)
 
-        toastr.success('You have successfully signed in!', '', {
-          "closeButton": false,
-          "debug": false,
-          "newestOnTop": true,
-          "progressBar": true,
-          "positionClass": "toast-bottom-left",
-          "showDuration": "300",
-          "hideDuration": "1000",
-          "timeOut": "5000"
+        Snackbar.show({
+          text: 'You have successfully signed in!',
+          pos: 'bottom-left',
+          duration: 2800
         });
         setTimeout(function () {
-          // Redirect after 5 seconds
+          // Redirect after 3 seconds
           window.location.href = '/portal/index.html'; // Change this to your desired URL
-        }, 5000); // Optionally submit the form
+        }, 3000); // Optionally submit the form
         // document.getElementById('login-form').submit();
       }
     });

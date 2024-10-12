@@ -9,35 +9,39 @@ const PageLoader = {
   progress: 0, // To keep track of current progress
 
   init: () => {
-    // Initially start at 0%
-    PageLoader.updateProgress(0);
-    
-    // Gradually increase progress until the DOM is ready
-    const slowLoading = setInterval(() => {
-      if (PageLoader.progress < 80) {
-        PageLoader.updateProgress(PageLoader.progress + 1); // Increase slowly
-      }
-    }, 100); // Adjust the speed of the increase (100ms)
+    const progressBar = document.querySelector('.gts-progress-bar');
 
-    // Track when the DOM is interactive (50%)
-    document.onreadystatechange = () => {
-      if (document.readyState === 'interactive') {
-        clearInterval(slowLoading); // Stop the slow loading process
-        PageLoader.slowIncreaseTo(90); // Slow increase to 90%
-      } else if (document.readyState === 'complete') {
-        PageLoader.slowIncreaseTo(100); // Finish loading (100%)
+    if (progressBar) {
+      // Initially start at 0%
+      PageLoader.updateProgress(0);
 
-        // Hide the loader after a short delay
-        setTimeout(() => {
-          document.body.classList.add('loaded');
-        }, 1400); // 700ms delay before hiding
-      }
-    };
+      // Gradually increase progress until the DOM is ready
+      const slowLoading = setInterval(() => {
+        if (PageLoader.progress < 80) {
+          PageLoader.updateProgress(PageLoader.progress + 1); // Increase slowly
+        }
+      }, 100); // Adjust the speed of the increase (100ms)
 
-    // Track full page load (assets like images are loaded)
-    window.addEventListener('load', () => {
-      PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
-    });
+      // Track when the DOM is interactive (50%)
+      document.onreadystatechange = () => {
+        if (document.readyState === 'interactive') {
+          clearInterval(slowLoading); // Stop the slow loading process
+          PageLoader.slowIncreaseTo(90); // Slow increase to 90%
+        } else if (document.readyState === 'complete') {
+          PageLoader.slowIncreaseTo(100); // Finish loading (100%)
+
+          // Hide the loader after a short delay
+          setTimeout(() => {
+            document.body.classList.add('loaded');
+          }, 1400); // 1400ms delay before hiding
+        }
+      };
+
+      // Track full page load (assets like images are loaded)
+      window.addEventListener('load', () => {
+        PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
+      });
+    }
   },
 
   // Function to update progress bar width
@@ -107,8 +111,8 @@ const Popover = {
   // Set the width of the popover to match the target element's width
   setWidth: (targetElement, popoverBody) => {
     const updatePopoverWidth = () => {
-    const targetRect = targetElement.getBoundingClientRect();
-    popoverBody.style.width = `${targetRect.width - 20}px`; // Offset of 10px
+      const targetRect = targetElement.getBoundingClientRect();
+      popoverBody.style.width = `${targetRect.width - 20}px`; // Offset of 10px
     }
 
     // Set the initial width when the popover is created
@@ -125,12 +129,12 @@ const Popover = {
       const targetBody = popoverBody.getBoundingClientRect(); // Get the dimensions and position of the popover body
       const targetX = targetRect.left + window.scrollX; // Get the X position
       const targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the Y position
-  
+
       // Set the initial position of the popover
       popoverBody.style.position = "absolute";
       popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
       popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
-  
+
       // Check if the popover goes beyond the right edge of the screen
       const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
       const viewportWidth = window.innerWidth + window.scrollX;
@@ -138,7 +142,7 @@ const Popover = {
         // If the popover exceeds the screen width, move it to the left to fit within the screen
         popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
       }
-  
+
       // Check if the popover goes beyond the left edge of the screen
       const popoverLeftEdge = targetX + 10;
       if (popoverLeftEdge < window.scrollX) {
@@ -146,14 +150,14 @@ const Popover = {
         popoverBody.style.left = `10px`;
       }
     };
-  
+
     // Set the initial position when the popover is created
     updatePopoverPosition();
-  
+
     // Adjust the position on window resize
     window.addEventListener("resize", updatePopoverPosition);
   },
-  
+
   // Show the popover when clicking on the element with `data-target`
   openPopover: () => {
     const popoverTriggers = document.querySelectorAll("[data-popover-target]");
@@ -166,7 +170,7 @@ const Popover = {
 
         // Make the popover visible
         popoverWrapper.style.display = "block";
-        
+
         Popover.setWidth(trigger, popoverBody);
         Popover.setPosition(trigger, popoverBody);
       });
@@ -215,7 +219,7 @@ const MobileNav = {
 
     navTag.style.display = "none";
     navTag.style.visibility = "hidden";
-    navTag.style.opacity = "0"; 
+    navTag.style.opacity = "0";
 
     if (mobileMenuTrigger && navWrapper) {
       mobileMenuTrigger.addEventListener("click", MobileNav.openMenu);
@@ -229,7 +233,7 @@ const MobileNav = {
     const navTag = navWrapper.querySelector('nav');
     navTag.style.display = "block";
     navTag.style.visibility = "visible";
-    navTag.style.opacity = "1"; 
+    navTag.style.opacity = "1";
 
     if (mobileMenuTrigger && navWrapper) {
       mobileMenuTrigger.removeEventListener("click", MobileNav.openMenu);
@@ -243,12 +247,12 @@ const MobileNav = {
     const navItems = navWrapper.querySelector('.nav-items');
 
     // Show the menu
-      navTag.style.display = "block";
-      navTag.style.visibility = "visible";
-      navTag.style.opacity = "1"; 
-      setTimeout(() => {
-        navTag.classList.add('open');
-      }, 0);
+    navTag.style.display = "block";
+    navTag.style.visibility = "visible";
+    navTag.style.opacity = "1";
+    setTimeout(() => {
+      navTag.classList.add('open');
+    }, 0);
 
     // Create and append the backdrop
     const backdrop = document.createElement("div");
@@ -274,7 +278,7 @@ const MobileNav = {
     setTimeout(() => {
       navTag.style.display = "none";
       navTag.style.visibility = "hidden";
-      navTag.style.opacity = "0"; 
+      navTag.style.opacity = "0";
     }, 320);
   },
 

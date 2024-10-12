@@ -12,9 +12,9 @@
     background-color: hsla(0, 0%, 100%, 1);
     background-image:
         radial-gradient(at 4% 91%, hsla(153, 0%, 100%, 1) 0px, transparent 50%),
-        radial-gradient(at 97% 4%, hsla(149, 67%, 25%, 0.2) 0px, transparent 50%),
+        radial-gradient(at 97% 4%, hsla(149, 67%, 25%, 0.1) 0px, transparent 50%),
         radial-gradient(at 44% 43%, hsla(210, 6%, 94%, 1) 0px, transparent 50%),
-        radial-gradient(at 26% 99%, hsla(149, 67%, 25%, 0.1) 0px, transparent 50%),
+        radial-gradient(at 26% 99%, hsla(149, 67%, 25%, 0.2) 0px, transparent 50%),
         radial-gradient(at 0% 50%, hsla(355, 0%, 100%, 1) 0px, transparent 50%);
     display: flex;
     flex-direction: column;
@@ -60,10 +60,15 @@
 }
 
 /* Hide loader once the page is loaded */
-body.loaded #gts-loader {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease-in-out;
+body.loaded {
+    #gts-loader {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out;
+    }
+    #gts-wrapper {
+        opacity: 1 !important;
+    }
 }
 
 
@@ -72,12 +77,13 @@ body.loaded #gts-loader {
     flex-direction: row;
     height: 100%;
     background-color: var(--gts-light-color);
-
+    opacity: 0;
+    transition: opacity 420ms ease;
     #gts-stage {
         flex: 1;
         display: flex;
         flex-direction: column;
-        padding: 7px 7px 7px 0;
+        padding: 14px 14px 14px 0;
         height: 100%;
 
         .gts-container {
@@ -85,7 +91,7 @@ body.loaded #gts-loader {
             height: 100%;
             border-radius: var(--gts-sm-curve);
             background-color: var(--gts-white-color);
-            box-shadow: 0 0 14px rgba(21, 110, 65, 0.07) !important;
+            box-shadow: 0 0 21px rgba(21, 110, 65, 0.07) !important;
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -99,7 +105,7 @@ body.loaded #gts-loader {
                     width: 100%;
                     display: flex;
                     flex-direction: column;
-                    gap: 60px;
+                    gap: 70px;
 
                     .gts-section {
                         display: flex;
@@ -111,8 +117,8 @@ body.loaded #gts-loader {
                             flex-direction: row;
                             align-items: center;
                             gap: 7px;
-                            padding-bottom: 21px;
                             position: relative;
+                            padding: 0 3px 21px;
 
                             h2 {
                                 font-size: var(--gts-nomral-fs);

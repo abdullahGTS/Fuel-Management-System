@@ -3,9 +3,9 @@
 //dashboard.js
 // Unified Product Colors
 var productColors = {
-  gasoline95: '#25A96C',
-  gasoline91: '#E92733',
-  diesel: '#EF9F02'
+  gasoline95: '#009C62',
+  gasoline91: '#e55141',
+  diesel: '#FAB75C'
 }; // Unified Product Value from the DOM
 
 var GetCurrentProductValue = {
@@ -75,18 +75,31 @@ var TrendingUpdates = {
   },
   updateTrendingElement: function updateTrendingElement(element, percentageChange, formattedPercentage) {
     var trendingElement = element.querySelector('.trending');
-    var trendingTagElement = element.querySelector('.trending-tag'); // Remove existing 'up' or 'down' classes
+    var trendingTagElement = element.querySelector('.trending-tag');
+    var trendingDurationElement = element.querySelector('.trending-duration'); // Remove existing 'up' or 'down' classes
 
     trendingElement.classList.remove('up', 'down');
     trendingTagElement.innerHTML = ''; // Clear existing content
-    // Add class and icon based on trend
+
+    trendingDurationElement.innerHTML = ''; // Clear existing content
+
+    var trendMessage = ''; // Add class and icon based on trend
 
     if (percentageChange > 0) {
       trendingElement.classList.add('up');
       trendingTagElement.innerHTML = "\n                <span class=\"mat-icon material-symbols-sharp\">trending_up</span> ".concat(formattedPercentage, "%\n            ");
+      trendMessage = 'Up from last month';
     } else if (percentageChange < 0) {
       trendingElement.classList.add('down');
       trendingTagElement.innerHTML = "\n                <span class=\"mat-icon material-symbols-sharp\">trending_down</span> ".concat(formattedPercentage, "%\n            ");
+      trendMessage = 'Down from last month';
+    } else {
+      trendMessage = 'No change from last month';
+    } // Append the trend message to the .trending-duration element
+
+
+    if (trendingDurationElement) {
+      trendingDurationElement.innerHTML = "".concat(trendMessage);
     }
   },
   applyTrendingUpdates: function applyTrendingUpdates(firstWeek, lastWeek, className) {
@@ -195,70 +208,6 @@ var GasolineUsagePieChart = {
 }; // Area Chart for Fuel Usage for the Last 4 Weeks
 
 var FuelUsageAreaChart = {
-  // init: () => {
-  //     // Load Google Charts library
-  //     google.charts.load('current', { packages: ['corechart'] });
-  //     // Set callback to run when the library is loaded
-  //     google.charts.setOnLoadCallback(FuelUsageAreaChart.drawAreaChart);
-  // },
-  // // Function to draw the Area Chart
-  // drawAreaChart: () => {
-  //     // Create the data table
-  //     const data = new google.visualization.DataTable();
-  //     data.addColumn('string', 'Fuel Type');
-  //     data.addColumn('number', 'Current Value');
-  //     // Add the data rows using the unified current values
-  //     data.addRows([
-  //         ['Gasoline 95', GetCurrentProductValue.currentGasoline95Value],
-  //         ['Gasoline 91', GetCurrentProductValue.currentGasoline91Value],
-  //         ['Diesel', GetCurrentProductValue.currentDieselValue]
-  //     ]);
-  //     // Set chart options
-  //     const options = {
-  //         colors: [productColors.gasoline95, productColors.gasoline91, productColors.diesel],
-  //         isStacked: true,
-  //         legend: { 
-  //             position: 'none'  // Hides the default legend
-  //         },
-  //         vAxis: {
-  //             title: 'Value',
-  //             format: 'currency',  // Example: currency formatting for values
-  //         },
-  //         hAxis: {
-  //             title: 'Fuel Type',
-  //         },
-  //         height: 400,
-  //         animation: {
-  //             startup: true,
-  //             duration: 1000,
-  //             easing: 'out'
-  //         },
-  //     };
-  //     // Draw the chart in the specified div
-  //     const areaChartWrapper = document.getElementById('comparisonUsageChart'); // Ensure this ID matches your HTML
-  //     const chart = new google.visualization.AreaChart(areaChartWrapper);
-  //     chart.draw(data, options);
-  //     // Custom legend
-  //     FuelUsageAreaChart.drawLegend(areaChartWrapper);
-  // },
-  // // Function to draw a custom legend
-  // drawLegend: (wrapper) => {
-  //     const legendData = [
-  //         { label: 'Gasoline 95', color: productColors.gasoline95 },
-  //         { label: 'Gasoline 91', color: productColors.gasoline91 },
-  //         { label: 'Diesel', color: productColors.diesel }
-  //     ];
-  //     const legendContainer = wrapper.parentNode.querySelector('.chart-legend');
-  //     legendData.forEach(item => {
-  //         const legendItem = document.createElement('div');
-  //         legendItem.classList.add('legend-item');
-  //         legendItem.innerHTML = `
-  //         <span class="legend-color" style="background-color: ${item.color};"></span>
-  //         <span class="legend-label">${item.label}</span>
-  //       `;
-  //         legendContainer.appendChild(legendItem);
-  //     });
-  // }
   init: function init() {
     // Load Google Charts library
     google.charts.load('current', {
@@ -282,11 +231,17 @@ var FuelUsageAreaChart = {
     ['Week 4', GetCurrentProductValue.currentGasoline95Value || 0, GetCurrentProductValue.currentGasoline91Value || 0, GetCurrentProductValue.currentDieselValue || 0] // Current week values
     ]); // Set chart options
 
+    var windowWidth = window.innerWidth;
     var options = {
       title: '',
       isStacked: false,
       // Stack the areas (true, false, 'relative', 'percent')
       colors: [productColors.gasoline95, productColors.gasoline91, productColors.diesel],
+      chartArea: {
+        width: '80%',
+        height: windowWidth < 769 ? '45%' : '80%'
+      },
+      // Make chart area 80% of the wrapper size
       legend: {
         position: 'none'
       },
@@ -298,11 +253,12 @@ var FuelUsageAreaChart = {
         title: ''
       },
       keepInBounds: true,
-      curveType: 'function'
+      curveType: 'function',
+      connectSteps: true
     }; // Draw the chart in the specified div
 
     var areaChartWrapper = document.getElementById('comparisonUsageChart');
-    var chart = new google.visualization.LineChart(areaChartWrapper); // AreaChart or LineChart
+    var chart = new google.visualization.LineChart(areaChartWrapper); // AreaChart or LineChart or ColumnChart
 
     chart.draw(data, options); // Create a custom legend below the chart
 

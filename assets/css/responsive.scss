@@ -56,6 +56,33 @@
             }
         }
     }
+
+    #gts-wrapper {
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    .gts-cards {
+                                        .gts-card-container {
+                                            .trending {
+                                                .trending-duration {
+                                                    display: none !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @media (max-width: 1280px) {
@@ -88,6 +115,92 @@
                             justify-content: center;
                             .gts-avatar  {
                                 display: none !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    &.row-5-5 {
+                                        flex-direction: column;
+                                        .gts-box:first-of-type {
+                                            flex-basis: 100%;
+                                            max-width: 100%;
+                                        }
+                                    }
+                                    .gts-cards {
+                                        &.cards-3 {
+                                            grid-template-columns: repeat(3, 1fr);
+                                        }
+                                        .gts-card-container {
+                                            .gts-card {
+                                                padding: 30px 30px 70px;
+                                                .gts-value {
+                                                    h3 {
+                                                        span {
+                                                            font-size: var(--gts-title-fs);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .trending {
+                                                bottom: 20px;
+                                                .trending-duration {
+                                                    display: none !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+@media (max-width: 1048px) {
+    #gts-wrapper {
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    .gts-cards {
+                                        .gts-card-container {
+                                            .gts-card {
+                                                padding: 30px 30px 70px;
+                                                .gts-value {
+                                                    h3 {
+                                                        font-size: var(--gts-heading-fs);
+                                                        span {
+                                                            font-size: var(--gts-icon-fs);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .trending {
+                                                bottom: 20px;
+                                                .trending-duration {
+                                                    display: none !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -208,6 +321,42 @@
         }
         #gts-stage {
             padding: 7px;
+            height: calc(100% - 69px);
+            .gts-container {
+                .gts-content {
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    .gts-cards {
+                                        &.cards-3 {
+                                            grid-template-columns: repeat(1, 1fr);
+                                        }
+                                        .gts-card-container {
+                                            .gts-card {
+                                                padding: 30px 30px 70px;
+                                                .gts-value {
+                                                    h3 {
+                                                        span {
+                                                            font-size: var(--gts-large-fs);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .trending {
+                                                bottom: 30px;
+                                                .trending-duration {
+                                                    display: flex !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -291,6 +440,13 @@
                 padding: 28px 0 !important;
             }
         }
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    padding: 42px 34px;
+                }
+            }
+        }
     }
 }
 
@@ -352,6 +508,28 @@
                 }
             }
         }
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    padding: 42px 28px;
+                    
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    .gts-box {
+                                        .gts-charts {
+                                            min-height: 480px !important;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }
 
@@ -369,6 +547,7 @@
         }
 
         #gts-header {
+            padding: 0 21px !important;
             .gts-head {
                 .gts-head-right {
                     .gts-search {
@@ -406,5 +585,54 @@
                 }
             }
         }
+
+        #gts-stage {
+            .gts-container {
+                .gts-content {
+                    padding: 34px 21px;
+                    .gts-row {
+                        .gts-section {
+                            .gts-section-conatiner {
+                                .gts-flex-row {
+                                    .gts-charts {
+                                        .gts-card-title {
+                                            align-items: flex-start;
+                                            .mat-icon {
+                                                transform: translateY(2px);
+                                            }
+                                        }
+                                        .chart-legend {
+                                            padding-bottom: 0 !important;
+                                            padding-top: 0 !important;
+                                        }
+                                    }
+                                    .gts-cards {
+                                        .gts-card-container {
+                                            .gts-card {
+                                                padding: 30px 30px 70px;
+                                                .gts-value {
+                                                    h3 {
+                                                        span {
+                                                            font-size: var(--gts-heading-fs);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .trending {
+                                                bottom: 20px;
+                                                .trending-duration {
+                                                    display: none !important;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

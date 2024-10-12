@@ -7,7 +7,8 @@
         flex-direction: row;
         height: 100%;
         padding: 21px 0;
-        border-bottom: 1px var(--gts-light-color) solid;
+        border-bottom: 1px solid;
+        border-color: rgba(var(--gts-brd-color), 0.14);
         position: relative;
         .gts-title {
             h1 {
@@ -44,6 +45,7 @@
                     padding: 7px 21px 7px 60px;
                     height: 48px;
                     width: 320px;
+                    border: 0 !important;
                 }
             }
             .gts-notification {
