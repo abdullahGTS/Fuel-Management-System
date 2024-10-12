@@ -129,7 +129,9 @@
                         .gts-section {
                             .gts-section-conatiner {
                                 .gts-flex-row {
-                                    &.row-5-5 {
+                                    &.row-6-4,
+                                    &.row-5-5,
+                                    &.row-1-9 {
                                         flex-direction: column;
                                         .gts-box:first-of-type {
                                             flex-basis: 100%;
@@ -139,6 +141,9 @@
                                     .gts-cards {
                                         &.cards-3 {
                                             grid-template-columns: repeat(3, 1fr);
+                                        }
+                                        &.cards-2 {
+                                            grid-template-columns: repeat(2, 1fr);
                                         }
                                         .gts-card-container {
                                             .gts-card {
@@ -519,7 +524,7 @@
                                 .gts-flex-row {
                                     .gts-box {
                                         .gts-charts {
-                                            min-height: 480px !important;
+                                            min-height: 340px !important;
                                         }
                                     }
                                 }
@@ -549,6 +554,7 @@
         #gts-header {
             padding: 0 21px !important;
             .gts-head {
+                padding: 14px 0 !important;
                 .gts-head-right {
                     .gts-search {
                         width: 48px;
@@ -603,10 +609,13 @@
                                         }
                                         .chart-legend {
                                             padding-bottom: 0 !important;
-                                            padding-top: 0 !important;
+                                            padding-top: 15px !important;
                                         }
                                     }
                                     .gts-cards {
+                                        &.cards-2 {
+                                            grid-template-columns: repeat(1, 1fr);
+                                        }
                                         .gts-card-container {
                                             .gts-card {
                                                 padding: 30px 30px 70px;
@@ -634,5 +643,12 @@
             }
         }
 
+    }
+
+    #notification-panel {
+        .popover-body {
+            margin: 0 !important;
+            min-width: 320px !important;
+        }
     }
 }

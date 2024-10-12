@@ -135,7 +135,7 @@
                             </div>
                             <div class="gts-notification">
                                 <span class="gts-badge"></span>
-                                <button class="btn btn-icon">
+                                <button class="btn btn-icon" data-popover-target="#notification-panel">
                                     <span class="mat-icon material-symbols-sharp">notifications</span>
                                 </button>
                             </div>
@@ -144,13 +144,14 @@
                 </header>
                 <div class="gts-content custom-scroll-bar">
                     <div class="gts-row">
+                        <!-- Products -->
                         <div class="gts-section">
                             <div class="gts-section-header">
                                 <span class="mat-icon material-symbols-sharp">local_gas_station</span>
                                 <h2>Products</h2>
                             </div>
                             <div class="gts-section-conatiner">
-                                <div class="gts-flex-row row-5-5">
+                                <div class="gts-flex-row row-6-4">
                                     <div class="gts-box gts-cards cards-3">
                                         <div class="gts-card-container">
                                             <div class="gts-card gasoline95">
@@ -226,20 +227,96 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Sites -->
                         <div class="gts-section">
                             <div class="gts-section-header">
                                 <span class="mat-icon material-symbols-sharp">account_tree</span>
                                 <h2>Sites</h2>
                             </div>
+                            <div class="gts-section-conatiner">
+                                <div class="gts-flex-row row-1-9">
+                                    <div class="gts-box gts-cards cards-2">
+                                        <div class="gts-card-container">
+                                            <div class="gts-card online siteStatus">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper">
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">link</span>
+                                                    </div>
+                                                    <h3><span id="online-value">197</span> sites</h3>
+                                                    <p>Online</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="gts-card-container">
+                                            <div class="gts-card offline siteStatus">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper">
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">link_off</span>
+                                                    </div>
+                                                    <h3><span id="offline-value">14</span> sites</h3>
+                                                    <p>Offline</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">area_chart</span>
+                                                <h3>Sites Current Status Comparison</h3>
+                                            </div>
+                                            <div id="siteStatusChart" class="chartArea"></div>
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Alarms -->
+                        <div class="gts-section">
+                            <div class="gts-section-header">
+                                <span class="mat-icon material-symbols-sharp">warning</span>
+                                <h2>Alarms</h2>
+                            </div>
+                            <div class="gts-section-conatiner">
+                                <div class="gts-flex-row row-5-5">
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">grouped_bar_chart</span>
+                                                <h3>Operational Alarms</h3>
+                                            </div>
+                                            <!-- <div id="siteStatusChart" class="chartArea"></div> -->
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">equalizer</span>
+                                                <h3>System Alarms</h3>
+                                            </div>
+                                            <!-- <div id="siteStatusChart" class="chartArea"></div> -->
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Popover -->
-    <div class="popover-wrapper" id="user-profile">
+    <!-- Popover User Profile -->
+    <div class="popover-wrapper" id="user-profile" data-position="top">
         <div class="popover-body">
             <ul>
                 <li><a href="mailto:support@gts.sa?subject=Assistance%20Needed%20-%20General%20Support%20or%20Inquiry">
@@ -254,6 +331,82 @@
         </div>
     </div>
 
+    <!-- Popover Notification -->
+    <div class="popover-wrapper" id="notification-panel" data-position="bottom">
+        <div class="popover-body">
+            <div class="notification-wrapper">
+                <div class="custom-scroll-bar">
+                <ul>
+                    <li>
+                        <div class="notification-item-wrapper unread" data-notification-target="./alarms.html">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper unread">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper unread">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper unread">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="notification-item-wrapper">
+                            <div class="notification-item">
+                                <h4>Warning on Station #001</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Vendor Scripts -->
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
@@ -262,6 +415,7 @@
 
     <!-- GTS Scripts -->
     <script type="text/javascript" src="../assets/js/script.js"></script>
+    <script type="text/javascript" src="../assets/js/portal.js" async></script>
     <script type="text/javascript" src="../assets/js/dashboard.js" async></script>
 </body>
 

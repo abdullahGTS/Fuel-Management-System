@@ -2,10 +2,13 @@
 
 //dashboard.js
 // Unified Product Colors
-var productColors = {
+var sharedColors = {
   gasoline95: '#009C62',
   gasoline91: '#e55141',
-  diesel: '#FAB75C'
+  // gasoline91: '#4156e5',
+  diesel: '#FAB75C',
+  online: '#42bc74',
+  offline: '#e6395d'
 }; // Unified Product Value from the DOM
 
 var GetCurrentProductValue = {
@@ -131,7 +134,8 @@ var GasolineUsagePieChart = {
     data.addColumn('string', 'Fuel Type');
     data.addColumn('number', 'Liters'); // Add the data rows
 
-    data.addRows([['Gasoline 95', GetCurrentProductValue.currentGasoline95Value], ['Gasoline 91', GetCurrentProductValue.currentGasoline91Value], ['Diesel', GetCurrentProductValue.currentDieselValue]]); // Set chart options (no 3D and custom colors with borders)
+    data.addRows([['Gasoline 95', GetCurrentProductValue.currentGasoline95Value], ['Gasoline 91', GetCurrentProductValue.currentGasoline91Value], ['Diesel', GetCurrentProductValue.currentDieselValue]]);
+    var windowWidth = window.innerWidth; // Set chart options (no 3D and custom colors with borders)
 
     var options = {
       title: '',
@@ -142,7 +146,7 @@ var GasolineUsagePieChart = {
           textStyle: {
             color: 'white'
           },
-          color: productColors.gasoline95,
+          color: sharedColors.gasoline95,
           borderColor: '#990000',
           borderWidth: 0
         },
@@ -153,7 +157,7 @@ var GasolineUsagePieChart = {
             color: 'white'
           },
           backgroundColor: '#00ff00',
-          color: productColors.gasoline91,
+          color: sharedColors.gasoline91,
           borderColor: '#009900',
           borderWidth: 0
         },
@@ -163,14 +167,18 @@ var GasolineUsagePieChart = {
           textStyle: {
             color: 'white'
           },
-          color: productColors.diesel,
+          color: sharedColors.diesel,
           fillOpacity: 0.3,
           borderColor: '#000099',
           borderWidth: 0
         } // Diesel
 
       },
-      // chartArea: { width: '100%', height: '100%' },
+      chartArea: {
+        width: windowWidth < 769 ? '90%' : '65%',
+        height: windowWidth < 769 ? '90%' : '65%'
+      },
+      // Make chart area 80% of the wrapper size
       pieSliceText: 'percentage',
       // Show percentage in slices
       legend: {
@@ -189,13 +197,13 @@ var GasolineUsagePieChart = {
   createLegend: function createLegend(wrapper) {
     var legendData = [{
       label: 'Gasoline 95',
-      color: productColors.gasoline95
+      color: sharedColors.gasoline95
     }, {
       label: 'Gasoline 91',
-      color: productColors.gasoline91
+      color: sharedColors.gasoline91
     }, {
       label: 'Diesel',
-      color: productColors.diesel
+      color: sharedColors.diesel
     }];
     var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
     legendData.forEach(function (item) {
@@ -236,10 +244,10 @@ var FuelUsageAreaChart = {
       title: '',
       isStacked: false,
       // Stack the areas (true, false, 'relative', 'percent')
-      colors: [productColors.gasoline95, productColors.gasoline91, productColors.diesel],
+      colors: [sharedColors.gasoline95, sharedColors.gasoline91, sharedColors.diesel],
       chartArea: {
         width: '80%',
-        height: windowWidth < 769 ? '45%' : '80%'
+        height: windowWidth < 769 ? '80%' : '80%'
       },
       // Make chart area 80% of the wrapper size
       legend: {
@@ -268,19 +276,92 @@ var FuelUsageAreaChart = {
   createLegend: function createLegend(wrapper) {
     var legendData = [{
       label: 'Gasoline 95',
-      color: productColors.gasoline95
+      color: sharedColors.gasoline95
     }, {
       label: 'Gasoline 91',
-      color: productColors.gasoline91
+      color: sharedColors.gasoline91
     }, {
       label: 'Diesel',
-      color: productColors.diesel
+      color: sharedColors.diesel
     }];
     var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
     legendData.forEach(function (item) {
       var legendItem = document.createElement('div');
       legendItem.classList.add('legend-item');
       legendItem.innerHTML = "\n            <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n            <span class=\"legend-label\">").concat(item.label, "</span>\n          ");
+      legendContainer.appendChild(legendItem);
+    });
+  }
+}; // Doughnut Chart for Sites Status
+
+var SiteStatusChart = {
+  init: function init() {
+    // Load Google Charts library
+    google.charts.load('current', {
+      packages: ['corechart']
+    }); // Set callback to run when the library is loaded
+
+    google.charts.setOnLoadCallback(SiteStatusChart.drawSteppedAreaChart);
+  },
+  // Function to draw the Stepped Area Chart
+  drawSteppedAreaChart: function drawSteppedAreaChart() {
+    // Step 1: Get values from DOM
+    var onlineValue = parseInt(document.getElementById('online-value').textContent, 10);
+    var offlineValue = parseInt(document.getElementById('offline-value').textContent, 10); // Step 2: Create the data table
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Status');
+    data.addColumn('number', 'Online');
+    data.addColumn('number', 'Offline'); // Add the data rows for Online and Offline
+
+    data.addRows([['Online', onlineValue, 0], ['Offline', 0, offlineValue]]); // Step 3: Set chart options
+
+    var options = {
+      title: '',
+      isStacked: false,
+      // Stack the areas for better comparison
+      hAxis: {
+        title: '',
+        textStyle: {
+          fontSize: 12
+        }
+      },
+      vAxis: {
+        title: '',
+        minValue: 0
+      },
+      // colors: ['#288048', '#e53434'],  // Custom colors for Online and Offline
+      colors: [sharedColors.online, sharedColors.offline],
+      chartArea: {
+        width: '80%',
+        height: '80%'
+      },
+      legend: {
+        position: 'none'
+      } // Hide default legend
+
+    }; // Step 4: Draw the chart in the specified div
+
+    var chartWrapper = document.getElementById('siteStatusChart');
+    var chart = new google.visualization.SteppedAreaChart(chartWrapper);
+    chart.draw(data, options); // Step 5: Draw the custom legend below the chart
+
+    SiteStatusChart.createLegend(chartWrapper);
+  },
+  // Step 6: Create a custom legend with colored circles below the chart
+  createLegend: function createLegend(wrapper) {
+    var legendData = [{
+      label: 'Online',
+      color: sharedColors.online
+    }, {
+      label: 'Offline',
+      color: sharedColors.offline
+    }];
+    var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+    legendData.forEach(function (item) {
+      var legendItem = document.createElement('div');
+      legendItem.classList.add('legend-item');
+      legendItem.innerHTML = "\n                <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n                <span class=\"legend-label\">").concat(item.label, "</span>\n            ");
       legendContainer.appendChild(legendItem);
     });
   }
@@ -291,4 +372,5 @@ pageReady(function () {
   GasolineUsagePieChart.init();
   FuelUsageAreaChart.init();
   TrendingUpdates.init();
+  SiteStatusChart.init();
 });

@@ -123,32 +123,74 @@ const Popover = {
 
   },
 
+  // setPosition: (targetElement, popoverBody) => {
+  //   const updatePopoverPosition = () => {
+  //     const targetRect = targetElement.getBoundingClientRect(); // Get the dimensions and position of the clicked element
+  //     const targetBody = popoverBody.getBoundingClientRect(); // Get the dimensions and position of the popover body
+  //     const targetX = targetRect.left + window.scrollX; // Get the X position
+  //     const targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the Y position
+
+  //     // Set the initial position of the popover
+  //     popoverBody.style.position = "absolute";
+  //     popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
+  //     popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
+
+  //     // Check if the popover goes beyond the right edge of the screen
+  //     const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
+  //     const viewportWidth = window.innerWidth + window.scrollX;
+  //     if (popoverRightEdge > viewportWidth) {
+  //       // If the popover exceeds the screen width, move it to the left to fit within the screen
+  //       popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
+  //     }
+
+  //     // Check if the popover goes beyond the left edge of the screen
+  //     const popoverLeftEdge = targetX + 10;
+  //     if (popoverLeftEdge < window.scrollX) {
+  //       // If the popover is less than 0 (off-screen), adjust it to 10px from the left
+  //       popoverBody.style.left = `10px`;
+  //     }
+  //   };
+
+  //   // Set the initial position when the popover is created
+  //   updatePopoverPosition();
+
+  //   // Adjust the position on window resize
+  //   window.addEventListener("resize", updatePopoverPosition);
+  // },
+
   setPosition: (targetElement, popoverBody) => {
     const updatePopoverPosition = () => {
-      const targetRect = targetElement.getBoundingClientRect(); // Get the dimensions and position of the clicked element
-      const targetBody = popoverBody.getBoundingClientRect(); // Get the dimensions and position of the popover body
-      const targetX = targetRect.left + window.scrollX; // Get the X position
-      const targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the Y position
+        const targetRect = targetElement.getBoundingClientRect(); // Get dimensions of the clicked element
+        const targetBody = popoverBody.getBoundingClientRect(); // Get dimensions of the popover body
+        const targetX = targetRect.left + window.scrollX; // Get the X position
+        let targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the default Y position (top)
+        
+        const parentWrapper = popoverBody.closest('.popover-wrapper'); // Find the parent with class 'popover-wrapper'
+        
+        // Check if the 'popover-wrapper' has the 'data-position' attribute and if it's set to 'bottom'
+        if (parentWrapper && parentWrapper.dataset.position === 'bottom') {
+            targetY = (targetRect.bottom + window.scrollY); // Adjust Y for bottom position
+        }
 
-      // Set the initial position of the popover
-      popoverBody.style.position = "absolute";
-      popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
-      popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
+        // Set the initial position of the popover
+        popoverBody.style.position = "absolute";
+        popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
+        popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
 
-      // Check if the popover goes beyond the right edge of the screen
-      const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
-      const viewportWidth = window.innerWidth + window.scrollX;
-      if (popoverRightEdge > viewportWidth) {
-        // If the popover exceeds the screen width, move it to the left to fit within the screen
-        popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
-      }
+        // Check if the popover goes beyond the right edge of the screen
+        const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
+        const viewportWidth = window.innerWidth + window.scrollX;
+        if (popoverRightEdge > viewportWidth) {
+            // If the popover exceeds the screen width, move it to the left to fit within the screen
+            popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
+        }
 
-      // Check if the popover goes beyond the left edge of the screen
-      const popoverLeftEdge = targetX + 10;
-      if (popoverLeftEdge < window.scrollX) {
-        // If the popover is less than 0 (off-screen), adjust it to 10px from the left
-        popoverBody.style.left = `10px`;
-      }
+        // Check if the popover goes beyond the left edge of the screen
+        const popoverLeftEdge = targetX + 10;
+        if (popoverLeftEdge < window.scrollX) {
+            // If the popover is less than 0 (off-screen), adjust it to 10px from the left
+            popoverBody.style.left = `10px`;
+        }
     };
 
     // Set the initial position when the popover is created
@@ -156,8 +198,9 @@ const Popover = {
 
     // Adjust the position on window resize
     window.addEventListener("resize", updatePopoverPosition);
-  },
-
+},
+  
+  
   // Show the popover when clicking on the element with `data-target`
   openPopover: () => {
     const popoverTriggers = document.querySelectorAll("[data-popover-target]");
@@ -194,102 +237,8 @@ const Popover = {
   }
 };
 
-const MobileNav = {
-  init: () => {
-    const navigation = document.querySelector("#side-bar");
-
-    if (navigation && window.innerWidth < 769) {
-      MobileNav.bindMenuEvents();  // Bind events only once
-      console.log('Test');
-    }
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth < 769) {
-        MobileNav.bindMenuEvents();  // Ensure events are bound on mobile
-      } else {
-        MobileNav.unbindMenuEvents();  // Unbind events for desktop
-      }
-    });
-  },
-
-  bindMenuEvents: () => {
-    const mobileMenuTrigger = document.querySelector("#mobile-menu");
-    const navWrapper = document.querySelector("#nav-wrapper");
-    const navTag = navWrapper.querySelector('nav');
-
-    navTag.style.display = "none";
-    navTag.style.visibility = "hidden";
-    navTag.style.opacity = "0";
-
-    if (mobileMenuTrigger && navWrapper) {
-      mobileMenuTrigger.addEventListener("click", MobileNav.openMenu);
-      navTag.addEventListener("click", MobileNav.preventNavClose);
-    }
-  },
-
-  unbindMenuEvents: () => {
-    const mobileMenuTrigger = document.querySelector("#mobile-menu");
-    const navWrapper = document.querySelector("#nav-wrapper");
-    const navTag = navWrapper.querySelector('nav');
-    navTag.style.display = "block";
-    navTag.style.visibility = "visible";
-    navTag.style.opacity = "1";
-
-    if (mobileMenuTrigger && navWrapper) {
-      mobileMenuTrigger.removeEventListener("click", MobileNav.openMenu);
-      navTag.removeEventListener("click", MobileNav.preventNavClose);
-    }
-  },
-
-  openMenu: () => {
-    const navWrapper = document.querySelector("#nav-wrapper");
-    const navTag = navWrapper.querySelector('nav');
-    const navItems = navWrapper.querySelector('.nav-items');
-
-    // Show the menu
-    navTag.style.display = "block";
-    navTag.style.visibility = "visible";
-    navTag.style.opacity = "1";
-    setTimeout(() => {
-      navTag.classList.add('open');
-    }, 0);
-
-    // Create and append the backdrop
-    const backdrop = document.createElement("div");
-    backdrop.id = "navBackdrop";
-    backdrop.style.display = "block";
-    navItems.appendChild(backdrop);
-
-    backdrop.addEventListener("click", MobileNav.closeMenu);
-  },
-
-  closeMenu: () => {
-    const navWrapper = document.querySelector("#nav-wrapper");
-    const backdrop = document.querySelector("#navBackdrop");
-    const navTag = navWrapper.querySelector('nav');
-
-    // Remove the backdrop first
-    if (backdrop) {
-      backdrop.remove();
-    }
-
-    // Hide the menu
-    navTag.classList.remove('open');
-    setTimeout(() => {
-      navTag.style.display = "none";
-      navTag.style.visibility = "hidden";
-      navTag.style.opacity = "0";
-    }, 320);
-  },
-
-  preventNavClose: (e) => {
-    e.stopPropagation();  // Prevent nav clicks from closing the menu
-  }
-};
-
 pageReady(() => {
   PageLoader.init();
   Button.init();
   Popover.init();
-  MobileNav.init();
 });

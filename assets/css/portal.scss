@@ -142,3 +142,82 @@ body.loaded {
         }
     }
 }
+
+#notification-panel {
+    .popover-body {
+        min-width: 380px;
+        margin-left: -21px;
+        padding: 0 !important;
+        .notification-wrapper {
+            .custom-scroll-bar {
+                padding: 7px 34px;
+                max-height: 480px;
+                ul {
+                    li {
+                        .notification-item-wrapper {
+                            position: relative;
+                            .notification-item {
+                                padding: 35px 7px;
+                                border-top: 1px solid;
+                                border-color: rgba(var(--gts-brd-color), 0.14);
+                                position: relative;
+                                z-index: 2;
+                                cursor: pointer;
+                                h4 {
+                                    font-size: var(--gts-nomral-fs);
+                                    font-weight: 600;
+                                    color: var(--gts-dark-color);
+                                    position: relative;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 9px;
+                                    margin-bottom: 9px;
+                                }
+                                p {
+                                    font-size: var(--gts-small-fs);
+                                    font-weight: 400;
+                                    color: var(--gts-gray-color);
+                                }
+                            }
+                            &.unread {
+                                &::before {
+                                    content: '';
+                                    position: absolute;
+                                    border-radius: 50%;
+                                    background-color: var(--gts-light-color);
+                                    border-radius: var(--gts-sm-curve);
+                                    width: calc(100% + 50px);
+                                    top: 2px;
+                                    left: -25px;
+                                    height: calc(100% - 4px);
+                                    pointer-events: none;
+                                    z-index: 1;
+                                }
+                                .notification-item {
+                                    h4 {
+                                        &::before {
+                                            content: '';
+                                            position: relative;
+                                            border-radius: 50%;
+                                            background-color: var(--gts-red-color);
+                                            width: 7px;
+                                            height: 7px;
+                                            pointer-events: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &:first-of-type {
+                            .notification-item-wrapper {
+                                .notification-item {
+                                    border: 0 !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
