@@ -5,6 +5,61 @@ function pageReady(callback) {
   } else document.addEventListener("DOMContentLoaded", callback);
 }
 
+const PageLoader = {
+  progress: 0, // To keep track of current progress
+
+  init: () => {
+    // Initially start at 0%
+    PageLoader.updateProgress(0);
+    
+    // Gradually increase progress until the DOM is ready
+    const slowLoading = setInterval(() => {
+      if (PageLoader.progress < 80) {
+        PageLoader.updateProgress(PageLoader.progress + 1); // Increase slowly
+      }
+    }, 100); // Adjust the speed of the increase (100ms)
+
+    // Track when the DOM is interactive (50%)
+    document.onreadystatechange = () => {
+      if (document.readyState === 'interactive') {
+        clearInterval(slowLoading); // Stop the slow loading process
+        PageLoader.slowIncreaseTo(90); // Slow increase to 90%
+      } else if (document.readyState === 'complete') {
+        PageLoader.slowIncreaseTo(100); // Finish loading (100%)
+
+        // Hide the loader after a short delay
+        setTimeout(() => {
+          document.body.classList.add('loaded');
+        }, 1400); // 700ms delay before hiding
+      }
+    };
+
+    // Track full page load (assets like images are loaded)
+    window.addEventListener('load', () => {
+      PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
+    });
+  },
+
+  // Function to update progress bar width
+  updateProgress: (percent) => {
+    PageLoader.progress = percent;
+    const progressBar = document.querySelector('.gts-progress-bar');
+    progressBar.style.width = `${percent}%`;
+  },
+
+  // Gradually increase the progress bar to a target value
+  slowIncreaseTo: (target) => {
+    const incrementSpeed = 20; // How long each step takes (in ms)
+    const interval = setInterval(() => {
+      if (PageLoader.progress < target) {
+        PageLoader.updateProgress(PageLoader.progress + 1); // Increment by 1% at a time
+      } else {
+        clearInterval(interval); // Stop when target is reached
+      }
+    }, incrementSpeed);
+  }
+};
+
 const Button = {
   init: () => {
     const buttonsNodeList = document.querySelectorAll(".btn");
@@ -229,6 +284,7 @@ const MobileNav = {
 };
 
 pageReady(() => {
+  PageLoader.init();
   Button.init();
   Popover.init();
   MobileNav.init();

@@ -39,6 +39,19 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div id="gts-loader">
+        <div class="gts-loader-wrapper">
+            <div class="gts-logo-loader">
+                <img src="../assets/imgs/gts-logo.png" alt="Loading Logo" />
+            </div>
+            <div class="gts-page-loader">
+                <div class="gts-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page -->
     <div id="gts-wrapper">
         <div id="side-bar">
             <div class="gts-logo">
@@ -129,7 +142,95 @@
                         </div>
                     </div>
                 </header>
-                <div class="gts-content custom-scroll-bar"></div>
+                <div class="gts-content custom-scroll-bar">
+                    <div class="gts-row">
+                        <div class="gts-section">
+                            <div class="gts-section-header">
+                                <span class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                <h2>Products</h2>
+                            </div>
+                            <div class="gts-section-conatiner">
+                                <div class="gts-flex-row row-5-5">
+                                    <div class="gts-box gts-cards cards-3">
+                                        <div class="gts-card-container">
+                                            <div class="gts-card gasoline95">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper">
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                    </div>
+                                                    <h3><span id="gasoline95-value">1010038.997</span> lts</h3>
+                                                    <p>Gasoline 95</p>
+                                                </div>
+                                                <div class="trending down">
+                                                    <div class="trending-tag"></div> Down from last month
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="gts-card-container">
+                                            <div class="gts-card gasoline91">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper">
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                    </div>
+                                                    <h3><span id="gasoline91-value">211038.997</span> lts</h3>
+                                                    <p>Gasoline 91</p>
+                                                </div>
+                                                <div class="trending up">
+                                                    <div class="trending-tag"></div> Up from last month
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="gts-card-container">
+                                            <div class="gts-card diesel">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper">
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                    </div>
+                                                    <h3><span id="diesel-value">609038.997</span> lts</h3>
+                                                    <p>Diesel</p>
+                                                </div>
+                                                <div class="trending down">
+                                                    <div class="trending-tag"></div> Down from last month
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                <h3>Current Fuel Usage Comparison</h3>
+                                            </div>
+                                            <div id="currentUsageChart" class="chartArea"></div>
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="gts-flex-row row-10">
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">area_chart</span>
+                                                <h3>Comparison of Fuel Usage</h3>
+                                            </div>
+                                            <div id="comparisonUsageChart" class="chartArea"></div>
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gts-section">
+                            <div class="gts-section-header">
+                                <span class="mat-icon material-symbols-sharp">account_tree</span>
+                                <h2>Sites</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -154,6 +255,7 @@
     <!-- Vendor Scripts -->
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>
 
     <!-- GTS Scripts -->
     <script type="text/javascript" src="../assets/js/script.js" async></script>

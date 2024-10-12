@@ -136,9 +136,11 @@
         flex-direction: column-reverse;
         #side-bar {
             width: 100%;
-            height: 64px;
+            height: auto;
             flex-direction: row;
-            padding: 0 14px 14px;
+            padding: 7px 14px 14px;
+            position: relative;
+            z-index: 2147483647;
             .gts-logo {
                 margin: 0;
                 padding: 0;
@@ -195,9 +197,9 @@
                             .gts-avatar {
                                 display: inline-block !important;
                                 transform: none !important;
-                                width: 38px !important;
-                                height: 38px !important;
-                                min-width: 38px !important;
+                                width: 48px !important;
+                                height: 48px !important;
+                                min-width: 48px !important;
                             }
                         }
                     }                    
@@ -341,6 +343,13 @@
             padding: 0 28px !important;
             .gts-head {
                 padding: 21px 0 !important;
+                .gts-head-right {
+                    .gts-search {
+                        input {
+                            width: 240px !important;
+                        }
+                    }
+                }
             }
         }
     }
@@ -361,34 +370,37 @@
 
         #gts-header {
             .gts-head {
-                .gts-search {
-                    width: 38px;
-                    .mat-icon {
-                        width: 38px;
-                    }
-                    input {
-                        padding: 0;
-                        font-size: 0;
-                        cursor: pointer;
-                    }
-                    &:focus-within {
-                        position: absolute;
-                        width: 100%;
-                        z-index: 9991;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        top: 0;
-                        left: 0;
+                .gts-head-right {
+                    .gts-search {
+                        width: 48px;
                         .mat-icon {
-                            width: 58px;
+                            width: 48px;
                         }
                         input {
-                            padding: 7px 21px 7px 50px;
-                            cursor: text;
-                            font-size: var(--gts-normal-fs);
-                            height: 100% !important;
-                            background-color: var(--gts-white-color);
+                            padding: 0;
+                            font-size: 0;
+                            cursor: pointer;
+                            width: 100% !important;
+                        }
+                        &:focus-within {
+                            position: absolute;
+                            width: 100%;
+                            z-index: 9991;
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            top: 0;
+                            left: 0;
+                            .mat-icon {
+                                width: 58px;
+                            }
+                            input {
+                                padding: 7px 21px 7px 50px;
+                                cursor: text;
+                                font-size: var(--gts-normal-fs);
+                                height: 100% !important;
+                                background-color: var(--gts-white-color);
+                            }
                         }
                     }
                 }

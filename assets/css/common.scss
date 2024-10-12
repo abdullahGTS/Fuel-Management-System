@@ -25,19 +25,19 @@
 }
 
 ::-webkit-input-placeholder {
-    color: rgba(77, 77, 77, 0.3);
+    color: rgba(77, 77, 77, 0.8);
 }
 
 ::-moz-placeholder {
-    color: rgba(77, 77, 77, 0.3);
+    color: rgba(77, 77, 77, 0.8);
 }
 
 :-ms-input-placeholder {
-    color: rgba(77, 77, 77, 0.3);
+    color: rgba(77, 77, 77, 0.8);
 }
 
 :-moz-placeholder {
-    color: rgba(77, 77, 77, 0.3);
+    color: rgba(77, 77, 77, 0.8);
 }
 
 ul {
@@ -204,8 +204,8 @@ body:focus-visible::-webkit-scrollbar-thumb {
 .btn-icon {
     background-color: transparent !important;
     border-radius: 50%;
-    width: 38px !important;
-    height: 38px !important;
+    width: 48px !important;
+    height: 48px !important;
     padding: 0 !important;
     box-shadow: none !important;
     display: flex;

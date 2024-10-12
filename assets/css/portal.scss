@@ -1,6 +1,72 @@
 @import "./components/sidebar";
 @import "./components/header";
 
+/* Loader container */
+#gts-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--gts-white-color);
+    background-color: hsla(0, 0%, 100%, 1);
+    background-image:
+        radial-gradient(at 4% 91%, hsla(153, 0%, 100%, 1) 0px, transparent 50%),
+        radial-gradient(at 97% 4%, hsla(149, 67%, 25%, 0.2) 0px, transparent 50%),
+        radial-gradient(at 44% 43%, hsla(210, 6%, 94%, 1) 0px, transparent 50%),
+        radial-gradient(at 26% 99%, hsla(149, 67%, 25%, 0.1) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(355, 0%, 100%, 1) 0px, transparent 50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+
+    .gts-loader-wrapper {
+        width: 180px;
+
+        .gts-logo-loader {
+            width: 100%;
+            margin-bottom: 21px;
+        }
+
+        .gts-page-loader {
+            width: 100%;
+            height: 4px;
+            background-color: var(--gts-light-color);
+            ;
+            position: relative;
+            margin-top: 20px;
+
+            .gts-progress-bar {
+                width: 0;
+                height: 100%;
+                background-color: var(--gts-primary-color);
+                transition: width 0.2s ease;
+            }
+        }
+    }
+
+    /* Progress bar animation */
+    @keyframes loadingProgress {
+        0% {
+            width: 0;
+        }
+
+        100% {
+            width: 100%;
+        }
+    }
+}
+
+/* Hide loader once the page is loaded */
+body.loaded #gts-loader {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
 #gts-wrapper {
     display: flex;
     flex-direction: row;
@@ -13,6 +79,7 @@
         flex-direction: column;
         padding: 7px 7px 7px 0;
         height: 100%;
+
         .gts-container {
             width: 100%;
             height: 100%;
@@ -20,9 +87,51 @@
             background-color: var(--gts-white-color);
             box-shadow: 0 0 14px rgba(21, 110, 65, 0.07) !important;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+
             .gts-content {
                 width: 100%;
                 height: 100%;
+                padding: 42px 48px;
+
+                .gts-row {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 60px;
+
+                    .gts-section {
+                        display: flex;
+                        flex-direction: column;
+
+                        .gts-section-header {
+                            flex: 1;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            gap: 7px;
+                            padding-bottom: 21px;
+                            position: relative;
+
+                            h2 {
+                                font-size: var(--gts-nomral-fs);
+                                color: var(--gts-gray-color);
+                                font-weight: 600;
+                            }
+
+                            .mat-icon {
+                                font-size: var(--gts-icon-fs);
+                                color: var(--gts-gray-color);
+                            }
+                        }
+
+                        .gts-section-conatiner {
+                            flex: 1;
+                            position: relative;
+                        }
+                    }
+                }
             }
         }
     }

@@ -1,12 +1,12 @@
 #gts-header {
     width: 100%;
-    padding: 0 42px;
+    padding: 0 48px;
     .gts-head {
         display: flex;
         align-items: center;
         flex-direction: row;
         height: 100%;
-        padding: 34px 0;
+        padding: 21px 0;
         border-bottom: 1px var(--gts-light-color) solid;
         position: relative;
         .gts-title {
@@ -27,8 +27,8 @@
                     position: absolute;
                     font-size: var(--gts-icon-fs);
                     color: var(--gts-gray-color);
-                    width: 58px;
-                    height: 38px;
+                    width: 70px;
+                    height: 48px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -41,8 +41,9 @@
                     background-color: var(--gts-light-color);
                     font-size: var(--gts-normal-fs);
                     font-weight: 400;
-                    padding: 7px 21px 7px 50px;
-                    height: 38px;
+                    padding: 7px 21px 7px 60px;
+                    height: 48px;
+                    width: 320px;
                 }
             }
             .gts-notification {
@@ -58,8 +59,8 @@
                     position: absolute;
                     z-index: 9;
                     pointer-events: none;
-                    top: 4px;
-                    right: 6px;
+                    top: 9px;
+                    right: 12px;
                     border-radius: 50%;
                     
                 }
