@@ -90,6 +90,10 @@ var NotificationSystem = {
         return NotificationSystem.onClick(item);
       });
     });
+    var acknowledgeAll = document.querySelector('#acknowledge-all');
+    acknowledgeAll.addEventListener('click', function () {
+      return NotificationSystem.markAllRead();
+    });
   },
   unread: function unread() {// Here, developers can manage setting notifications as unread.
     // Example: You could toggle the 'unread' class or manage a state where unread notifications are stored.
@@ -117,7 +121,40 @@ var NotificationSystem = {
     });
   }
 };
+var CollabsedMenu = {
+  // Initialize the menu toggle functionality
+  init: function init() {
+    // Attach the click event listener to #toggle-menu
+    document.getElementById('toggle-menu').addEventListener('click', CollabsedMenu.toggle);
+  },
+  // Function to toggle the class on the body
+  toggle: function toggle() {
+    document.body.classList.toggle('gts-menu-collapsed');
+  }
+};
+var ForceResponsive = {
+  init: function init() {
+    ForceResponsive.checkWidth(); // Check width on initialization
+
+    window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
+  },
+  checkWidth: function checkWidth() {
+    if (window.innerWidth < 1361) {
+      ForceResponsive.forceCollapsed();
+    } else {
+      ForceResponsive.forceUncollapsed();
+    }
+  },
+  forceCollapsed: function forceCollapsed() {
+    document.body.classList.add('gts-menu-collapsed');
+  },
+  forceUncollapsed: function forceUncollapsed() {
+    document.body.classList.remove('gts-menu-collapsed');
+  }
+};
 pageReady(function () {
   MobileNav.init();
   NotificationSystem.init();
+  CollabsedMenu.init();
+  ForceResponsive.init();
 });

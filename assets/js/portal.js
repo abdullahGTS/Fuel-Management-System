@@ -97,6 +97,9 @@ const NotificationSystem = {
         notificationItems.forEach(item => {
             item.addEventListener('click', () => NotificationSystem.onClick(item));
         });
+
+        const acknowledgeAll = document.querySelector('#acknowledge-all');
+        acknowledgeAll.addEventListener('click', () => NotificationSystem.markAllRead());
     },
 
     unread: () => {
@@ -112,7 +115,7 @@ const NotificationSystem = {
 
         // Get the value of data-notification-target
         const targetUrl = notificationElement.getAttribute('data-notification-target');
-        
+
         // If a target URL exists, redirect to that URL
         if (targetUrl) {
             setTimeout(() => {
@@ -130,7 +133,43 @@ const NotificationSystem = {
     }
 };
 
+const CollabsedMenu = {
+    // Initialize the menu toggle functionality
+    init: () => {
+        // Attach the click event listener to #toggle-menu
+        document.getElementById('toggle-menu').addEventListener('click', CollabsedMenu.toggle);
+    },
+
+    // Function to toggle the class on the body
+    toggle: () => {
+        document.body.classList.toggle('gts-menu-collapsed');
+    }
+};
+
+const ForceResponsive = {
+    init: () => {
+        ForceResponsive.checkWidth(); // Check width on initialization
+        window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
+    },
+    checkWidth: () => {
+        if (window.innerWidth < 1361) {
+            ForceResponsive.forceCollapsed();
+        } else {
+            ForceResponsive.forceUncollapsed();
+        }
+    },
+    forceCollapsed: () => {
+        document.body.classList.add('gts-menu-collapsed');
+    },
+    forceUncollapsed: () => {
+        document.body.classList.remove('gts-menu-collapsed');
+    }
+};
+
 pageReady(() => {
     MobileNav.init();
     NotificationSystem.init();
+    CollabsedMenu.init();
+    ForceResponsive.init();
 });
+

@@ -8,14 +8,13 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--gts-white-color);
-    background-color: hsla(0, 0%, 100%, 1);
+    background-color: var(--gts-light-color);
     background-image:
-        radial-gradient(at 4% 91%, hsla(153, 0%, 100%, 1) 0px, transparent 50%),
+        radial-gradient(at 4% 91%, var(--gts-light-color) 0px, transparent 50%),
         radial-gradient(at 97% 4%, hsla(149, 67%, 25%, 0.1) 0px, transparent 50%),
-        radial-gradient(at 44% 43%, hsla(210, 6%, 94%, 1) 0px, transparent 50%),
+        radial-gradient(at 44% 43%, var(--gts-light-color) 0px, transparent 50%),
         radial-gradient(at 26% 99%, hsla(149, 67%, 25%, 0.2) 0px, transparent 50%),
-        radial-gradient(at 0% 50%, hsla(355, 0%, 100%, 1) 0px, transparent 50%);
+        radial-gradient(at 0% 50%, var(--gts-light-color) 0px, transparent 50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -99,7 +98,7 @@ body.loaded {
             .gts-content {
                 width: 100%;
                 height: 100%;
-                padding: 42px 48px;
+                padding: 42px 78px;
 
                 .gts-row {
                     width: 100%;
@@ -149,6 +148,29 @@ body.loaded {
         margin-left: -21px;
         padding: 0 !important;
         .notification-wrapper {
+            .notification-header {
+                padding: 21px 34px;
+                border-bottom: 1px rgba(var(--gts-brd-color), 0.1) solid;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                h3 {
+                    font-size: var(--gts-heading-fs);
+                }
+                #acknowledge-all {
+                    font-size: var(--gts-small-fs);
+                    color: var(--gts-primary-color);
+                    cursor: pointer;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    font-weight: 600;
+                    transition: color 210ms ease;
+                    &:hover {
+                        color: var(--gts-dark-color);
+                    }
+                }
+            }
             .custom-scroll-bar {
                 padding: 7px 34px;
                 max-height: 480px;

@@ -18,6 +18,11 @@ main {
                     padding: 0;
                     background-color: var(--gts-white-color);
                     z-index: 3;
+                    #toastr-container {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
                     .auth-form-wrapper {
                         padding: 90px 70px;
                         width: 100%;
@@ -31,7 +36,7 @@ main {
                             }
                         }
                         .auth-form-container {
-                            padding-top: 90px;
+                            padding-top: 30px;
                             h1 {
                                 font-size: var(--gts-title-fs);
                             }

@@ -7,7 +7,7 @@
     --gts-white-color: #FFFFFF;
     --gts-light-color: #F4F7FE;
 
-    --gts-red-color: #e6395d;
+    --gts-red-color: #d23050;
     --gts-green-color: #42bc74;
 
     /** Product Colors **/
@@ -33,6 +33,11 @@
     --gts-sm-curve: 7px;
 }
 
-.darkTheme {
-
+.darkMode {
+    // Dark theme goes here
+    --gts-dark-color: #aaaaaa;
+    --gts-gray-color: #F4F7FE;
+    --gts-brd-color: 156, 155, 155;
+    --gts-white-color: #090808;
+    --gts-light-color: #181717; 
 }

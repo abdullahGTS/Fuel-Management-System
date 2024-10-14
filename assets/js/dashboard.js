@@ -7,7 +7,7 @@ const sharedColors = {
     // gasoline91: '#4156e5',
     diesel: '#FAB75C',
     online: '#42bc74',
-    offline: '#e6395d'
+    offline: '#d23050'
 };
 
 // Unified Product Value from the DOM
@@ -185,8 +185,8 @@ const GasolineUsagePieChart = {
                 }   // Diesel
             },
             chartArea: { 
-                width: windowWidth < 769 ? '90%' : '65%',
-                height: windowWidth < 769 ? '90%' : '65%' 
+                width: windowWidth < 769 ? '90%' : '75%',
+                height: windowWidth < 769 ? '90%' : '75%' 
             },  // Make chart area 80% of the wrapper size
             pieSliceText: 'percentage',  // Show percentage in slices
             legend: { position: 'none' }  // Hide the default legend
@@ -264,7 +264,7 @@ const FuelUsageAreaChart = {
             ],
             chartArea: { 
                 width: '80%', 
-                height: windowWidth < 769 ? '80%' : '80%' 
+                height: windowWidth < 1281 ? '65%' : '65%' 
             },  // Make chart area 80% of the wrapper size
             legend: { position: 'none' }, // Position the legend at the bottom
             hAxis: {
@@ -346,7 +346,7 @@ const SiteStatusChart = {
                 sharedColors.online,
                 sharedColors.offline,
             ],
-            chartArea: { width: '80%', height: '80%' },
+            chartArea: { width: '70%', height: '70%' },
             legend: { position: 'none' }  // Hide default legend
         };
 
@@ -378,6 +378,39 @@ const SiteStatusChart = {
     }
 };
 
+// We will Reload Charts on Menu Collapsed
+const ReloadCharts = {
+    // Initialize the menu toggle functionality
+    init: () => {
+        // Attach the click event listener to #toggle-menu
+        document.getElementById('toggle-menu').addEventListener('click', ReloadCharts.chartReload);
+    },
+    
+    chartReload: () => {
+    // Step 1: Check if the .gts-charts element exists
+    if (document.querySelector('.gts-charts')) {
+        // Step 2: Kill current charts by clearing their containers
+        const chartContainers = document.querySelectorAll('.gts-charts .chart-area');
+        const chartLegend = document.querySelectorAll('.gts-charts .chart-legend'); // Assuming each chart has a wrapper
+        chartContainers.forEach(container => {
+            container.innerHTML = ''; // Clear the chart container
+        });
+
+        chartLegend.forEach(container => {
+            container.innerHTML = ''; // Clear the chart container
+        });
+
+        // Optional: If your charts have specific cleanup logic, call that here
+        // Example: GasolineUsagePieChart.clear(); or similar if implemented
+
+        // Step 3: Reload the charts
+        GasolineUsagePieChart.init();
+        FuelUsageAreaChart.init();
+        SiteStatusChart.init();
+    }
+    }
+};
+
 pageReady(() => {
     GetCurrentProductValue.init();
     FormatNumbers.init();
@@ -385,4 +418,5 @@ pageReady(() => {
     FuelUsageAreaChart.init();
     TrendingUpdates.init();
     SiteStatusChart.init();
+    ReloadCharts.init();
 });

@@ -4,9 +4,9 @@
     flex-direction: column;
     gap: 10px;
     .gts-flex-row {
-        display: flex;
-        flex-direction: row;
+        display: grid;
         gap: 10px;
+
         .gts-box {
             flex: 1;
 
@@ -17,7 +17,7 @@
                 display: flex;
                 flex-direction: column;
                 padding: 30px;
-                min-height: 620px;
+                min-height: 540px;
                 &.shadow-box {
                     box-shadow: 0 0 70px rgba(77, 110, 65, 0.2) !important;
                 }
@@ -47,7 +47,7 @@
                     display: flex;
                     justify-content: center;
                     gap: 21px;
-                    padding: 30px 0;
+                    padding: 30px 0 10px;
                     flex-wrap: wrap;
                     .legend-item {
                         display: flex;
@@ -66,38 +66,25 @@
                     }
                 }
 
-                .chartArea {
+                .chart-area {
                     flex: 1;
-                    // > div > div {
-                    //     width: 100% !important;
-                    //     svg, rect {
-                    //         width: 100%;
-                    //     }
-                    // }
                 }
             }
         }
-
-        &.row-6-4 {
-            .gts-box:first-of-type {
-                max-width: 55%;
-                flex-basis: 55%;
-                flex: auto;
-            }
-        }
         &.row-5-5 {
-            .gts-box:first-of-type {
-                max-width: 50%;
-                flex-basis: 50%;
-                flex: auto;
+            grid-template-columns: 50% 50%;
+        }
+        &.row-6-4 {
+            grid-template-columns: 60% 40%;
+        }
+        &.row-8-2 {
+            grid-template-columns: 1fr calc(33.33% - 6px);
+            &.reverse {
+                grid-template-columns: calc(33.33% - 6px) 1fr;
             }
         }
         &.row-1-9 {
-            .gts-box:first-of-type {
-                max-width: 25%;
-                flex-basis: 25%;
-                flex: auto;
-            }
+            grid-template-columns: 25% 75%;
         }
         &.cols {
             flex-direction: column;
@@ -125,6 +112,7 @@
 
             &.cards-3 {
                 grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
             }
 
             &.cards-2 {
@@ -141,7 +129,7 @@
                     background-color: var(--gts-light-color);
                     width: 100%;
                     height: 100%;
-                    padding: 37px 60px;
+                    padding: 40px 60px 100px;
                     position: relative;
                     display: flex;
                     flex-direction: column;
@@ -285,6 +273,7 @@
                         background-color: transparent !important;
                         align-items: center;
                         flex-direction: row;
+                        padding: 60px !important;
                         .gts-value {
                             h3 {
                                 span {

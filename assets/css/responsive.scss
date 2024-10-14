@@ -22,15 +22,60 @@
                 .auth-item {
                     &#auth-form {
                         .auth-form-wrapper {
-                            padding-top: 60px !important;
-                            padding-bottom: 60px !important;
-                            .auth-form-container {
-                                padding-top: 40px !important;
-                            }
+                            padding-top: 50px !important;
+                            padding-bottom: 50px !important;
                             footer {
-                                margin: auto -45px -40px;
+                                margin: auto -45px -25px;
+                                padding-top: 50px;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-height: 680px) {
+    main {
+        #auth-wrapper {
+            .auth-container {
+                .auth-item {
+                    &#auth-form {
+                        .auth-form-wrapper {
+                            padding-top: 40px !important;
+                            padding-bottom: 40px !important;
+                            footer {
+                                margin: auto -45px -20px;
+                                padding-top: 40px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1580px) {
+    #gts-wrapper {
+        #gts-stage {
+            .gts-container {
+                #gts-header {
+                    padding: 0 48px !important;
+                }
+                .gts-content {
+                    padding: 42px 48px !important;
+                }
+            }
+        }
+    }
+    body {
+        &.gts-menu-collapsed {
+            #gts-wrapper {
+                #side-bar {
+                    #toggle-menu {
+                        right: -60px;
                     }
                 }
             }
@@ -105,9 +150,11 @@
         }
     }
 
+    
     #gts-wrapper {
         #side-bar {
             width: 250px;
+            min-width: 250px;
             #nav-wrapper {
                 .nav-stage {
                     .nav-footer  {
@@ -131,12 +178,14 @@
                                 .gts-flex-row {
                                     &.row-6-4,
                                     &.row-5-5,
-                                    &.row-1-9 {
-                                        flex-direction: column;
-                                        .gts-box:first-of-type {
-                                            flex-basis: 100%;
-                                            max-width: 100%;
-                                        }
+                                    &.row-1-9,
+                                    &.row-8-2 {
+                                        grid-template-columns: 1fr;
+                                        // flex-direction: column;
+                                        // .gts-box:first-of-type {
+                                        //     flex-basis: 100%;
+                                        //     max-width: 100%;
+                                        // }
                                     }
                                     .gts-cards {
                                         &.cards-3 {
@@ -172,6 +221,25 @@
             }
         }
         
+    }
+
+    body.gts-menu-collapsed {
+        #gts-wrapper {
+            #side-bar {                
+                #nav-wrapper {
+                    .nav-stage {
+                        .nav-footer  {
+                            .nav-footer-wrapper {
+                                .gts-avatar  {
+                                    display: flex !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } 
     }
 }
 

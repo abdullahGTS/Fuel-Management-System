@@ -1,6 +1,6 @@
 #gts-header {
     width: 100%;
-    padding: 0 48px;
+    padding: 0 78px;
     .gts-head {
         display: flex;
         align-items: center;
@@ -11,6 +11,7 @@
         border-color: rgba(var(--gts-brd-color), 0.14);
         position: relative;
         .gts-title {
+            transition: transform 210ms ease;
             h1 {
                 font-size: var(--gts-heading-fs);
                 color: var(--gts-dark-color);

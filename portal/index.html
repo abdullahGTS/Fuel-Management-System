@@ -54,9 +54,13 @@
     <!-- Page -->
     <div id="gts-wrapper">
         <div id="side-bar">
+            <button class="btn btn-icon" id="toggle-menu">
+                <span class="mat-icon material-symbols-sharp">menu_open</span>
+            </button>
             <div class="gts-logo">
                 <a href="./index.html">
                     <img src="../assets/imgs/gts-logo.png" class="desktop" alt="GTS Logo" />
+                    <img src="../assets/imgs/gts-icon.png" class="collapsed" alt="GTS Logo" />
                     <img src="../assets/imgs/gts-logo-mobile.png" class="mobile" alt="GTS Logo" />
                 </a>
             </div>
@@ -150,8 +154,9 @@
                                 <span class="mat-icon material-symbols-sharp">local_gas_station</span>
                                 <h2>Products</h2>
                             </div>
+
                             <div class="gts-section-conatiner">
-                                <div class="gts-flex-row row-6-4">
+                                <div class="gts-flex-row row-10">
                                     <div class="gts-box gts-cards cards-3">
                                         <div class="gts-card-container">
                                             <div class="gts-card gasoline95">
@@ -202,30 +207,35 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="gts-box">
-                                        <div class="gts-charts white-box">
-                                            <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                                <h3>Current Fuel Usage Comparison</h3>
-                                            </div>
-                                            <div id="currentUsageChart" class="chartArea"></div>
-                                            <div class="chart-legend"></div>
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="gts-flex-row row-10">
+
+                                <div class="gts-flex-row row-8-2">
+
                                     <div class="gts-box">
                                         <div class="gts-charts white-box">
                                             <div class="gts-card-title">
                                                 <span class="mat-icon material-symbols-sharp">ssid_chart</span>
                                                 <h3>Comparison of Fuel Usage</h3>
                                             </div>
-                                            <div id="comparisonUsageChart" class="chartArea"></div>
+                                            <div id="comparisonUsageChart" class="chart-area"></div>
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
+
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                <h3>Current Fuel Usage Comparison</h3>
+                                            </div>
+                                            <div id="currentUsageChart" class="chart-area"></div>
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Sites -->
@@ -235,7 +245,7 @@
                                 <h2>Sites</h2>
                             </div>
                             <div class="gts-section-conatiner">
-                                <div class="gts-flex-row row-1-9">
+                                <div class="gts-flex-row row-8-2 reverse">
                                     <div class="gts-box gts-cards cards-2">
                                         <div class="gts-card-container">
                                             <div class="gts-card online siteStatus">
@@ -268,7 +278,7 @@
                                                 <span class="mat-icon material-symbols-sharp">area_chart</span>
                                                 <h3>Sites Current Status Comparison</h3>
                                             </div>
-                                            <div id="siteStatusChart" class="chartArea"></div>
+                                            <div id="siteStatusChart" class="chart-area"></div>
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
@@ -290,7 +300,7 @@
                                                 <span class="mat-icon material-symbols-sharp">grouped_bar_chart</span>
                                                 <h3>Operational Alarms</h3>
                                             </div>
-                                            <!-- <div id="siteStatusChart" class="chartArea"></div> -->
+                                            <!-- <div id="siteStatusChart" class="chart-area"></div> -->
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
@@ -300,7 +310,7 @@
                                                 <span class="mat-icon material-symbols-sharp">equalizer</span>
                                                 <h3>System Alarms</h3>
                                             </div>
-                                            <!-- <div id="siteStatusChart" class="chartArea"></div> -->
+                                            <!-- <div id="siteStatusChart" class="chart-area"></div> -->
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
@@ -335,6 +345,10 @@
     <div class="popover-wrapper" id="notification-panel" data-position="bottom">
         <div class="popover-body">
             <div class="notification-wrapper">
+                <div class="notification-header">
+                    <h3>Notifications</h3>
+                    <span id="acknowledge-all">Acknowledge All</span>
+                </div>
                 <div class="custom-scroll-bar">
                 <ul>
                     <li>

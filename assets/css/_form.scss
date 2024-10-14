@@ -206,6 +206,8 @@ form {
                         right: 0;
                         bottom: 0;
                         background-color: var(--gts-light-color);
+                        border: 1px solid;
+                        border-color: rgba( var(--gts-brd-color), 0.1);
                         transition: 0.4s;
                         border-radius: 34px;
 
@@ -215,8 +217,8 @@ form {
                             height: 14px;
                             width: 14px;
                             left: 3px;
-                            bottom: 3px;
-                            background-color: white;
+                            bottom: 2px;
+                            background-color: var(--gts-gray-color);
                             transition: 0.4s;
                             border-radius: 50%;
                         }
@@ -224,10 +226,21 @@ form {
 
                     input:checked+.slider {
                         background-color: var(--gts-primary-color);
+                        &:before {
+                            position: absolute;
+                            content: "";
+                            height: 14px;
+                            width: 14px;
+                            left: 3px;
+                            bottom: 2px;
+                            background-color: var(--gts-white-color);
+                            transition: 0.4s;
+                            border-radius: 50%;
+                        }
                     }
 
                     input:checked+.slider:before {
-                        transform: translateX(20px);
+                        transform: translateX(19px);
                     }
                 }
 

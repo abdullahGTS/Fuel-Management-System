@@ -1,45 +1,72 @@
 #gts-wrapper {
     #side-bar {
+        --menu-gap: 160px;
         width: 290px;
+        min-width: 290px;
         display: flex;
         flex-direction: column;
+        position: relative;
+
+        #toggle-menu {
+            position: absolute;
+            background-color: var(--gts-white-color) !important;
+            top: 36px;
+            right: -36px;
+            box-shadow: -30px 0 32px 0 rgba(21, 110, 65, 0.1) !important;
+        }
+
         .gts-logo {
             padding: 0 70px 0 40px;
             display: flex;
             align-items: center;
-            min-height: 160px;
+            min-height: var(--menu-gap);
             min-width: 140px;
+
             a {
                 display: flex;
                 align-items: center;
-                .desktop {display: inline-block;}
-                .mobile {display: none;}
+
+                .desktop {
+                    display: inline-block;
+                }
+
+                .mobile {
+                    display: none;
+                }
+
+                .collapsed {
+                    display: none;
+                }
             }
         }
+
         gts-sidebar {
             height: 100%;
             display: flex;
             flex-direction: column;
         }
+
         #nav-wrapper {
-            height: calc(100% - 160px);
+            height: calc(100% - var(--menu-gap));
+
             .nav-stage {
                 display: flex;
                 flex-direction: column;
                 position: relative;
                 // height: calc(100% - 160px);
                 height: 100%;
+
                 .nav-items {
                     position: relative;
-        
+
                     nav {
                         height: 100%;
-        
+
                         ul {
                             li {
                                 position: relative;
                                 padding: 14px 38px;
-        
+
                                 a {
                                     display: flex;
                                     align-items: center;
@@ -53,8 +80,10 @@
                                         color: var(--gts-gray-color);
                                         font-size: var(--gts-icon-fs);
                                     }
+
                                     .nav-item {
                                         position: relative;
+
                                         .gts-badge {
                                             position: relative;
                                             right: -7px;
@@ -70,9 +99,9 @@
                                             border: solid 0.5px var(--gts-red-color);
                                             font-weight: 600;
                                         }
-                                    }    
+                                    }
                                 }
-        
+
                                 &.active {
                                     &::before {
                                         content: '';
@@ -86,10 +115,10 @@
                                         z-index: 91;
                                         background-color: var(--gts-primary-color) !important;
                                     }
-        
+
                                     a {
                                         color: var(--gts-primary-color) !important;
-        
+
                                         .mat-icon {
                                             color: var(--gts-primary-color) !important;
                                         }
@@ -103,9 +132,10 @@
                         display: none !important;
                     }
                 }
-        
+
                 .nav-footer {
                     margin: auto 0 0;
+
                     .nav-footer-wrapper {
                         border-top: 1px rgba(var(--gts-brd-color), 0.2) solid;
                         padding: 21px;
@@ -114,7 +144,10 @@
                         align-items: center;
                         gap: 10px;
                         cursor: pointer;
-                        * {user-select: none;}
+
+                        * {
+                            user-select: none;
+                        }
 
                         .gts-avatar {
                             width: 32px;
@@ -123,6 +156,7 @@
                             border-radius: 50%;
                             overflow: hidden;
                             transform: translateY(-7px);
+
                             img {
                                 width: 100%;
                                 height: 100%;
@@ -132,6 +166,7 @@
 
                         .gts-profile {
                             position: relative;
+
                             .welcome-user {
                                 margin: 0;
                                 padding: 0;
@@ -139,9 +174,11 @@
                                 position: relative;
                                 display: flex;
                                 flex-wrap: wrap;
+
                                 strong {
                                     margin-left: 3px;
                                 }
+
                                 .mat-icon {
                                     color: var(--gts-gray-color);
                                     font-size: var(--gts-icon-fs);
@@ -149,6 +186,7 @@
                                     // transform: translateY(-1px);
                                 }
                             }
+
                             .user-email {
                                 font-size: var(--gts-xsmall-fs);
                                 opacity: 0.7;
@@ -156,6 +194,114 @@
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+/** Collapsed Menu **/
+body {
+    &.gts-menu-collapsed {
+        #gts-wrapper {
+            #side-bar {
+                width: 70px;
+                --menu-gap: 100px;
+                padding-top: 10px;
+                min-width: 70px;
+                #toggle-menu {
+                    right: -90px;
+                    box-shadow: none !important;
+                    background-color: transparent !important;
+
+                    .mat-icon {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                .gts-logo {
+                    width: 70px !important;
+                    min-width: 70px !important;
+                    padding: 0 21px;
+
+                    a {
+                        .collapsed {
+                            display: flex !important;
+                        }
+
+                        .desktop,
+                        .mobile {
+                            display: none !important;
+                        }
+                    }
+                }
+
+                #nav-wrapper {
+                    .nav-stage {
+                        .nav-items {
+                            nav {
+                                ul {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+
+                                    li {
+                                        padding: 5px;
+                                        width: 60px;
+                                        height: 60px;
+
+                                        a {
+                                            justify-content: center;
+                                            position: relative;
+                                            width: 100%;
+                                            height: 100%;
+
+                                            .nav-item {
+                                                display: none !important;
+                                            }
+                                        }
+
+                                        &.active {
+                                            &:before {
+                                                display: none !important;
+                                            }
+
+                                            a {
+
+                                                &::before {
+                                                    content: '';
+                                                    position: absolute;
+                                                    pointer-events: none;
+                                                    top: 0;
+                                                    left: 0;
+                                                    background-color: var(--gts-primary-color);
+                                                    opacity: 0.1;
+                                                    border-radius: var(--gts-sm-curve);
+                                                    width: 100%;
+                                                    height: 100%;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .nav-footer {
+                            .gts-profile {
+                                display: none !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #gts-header {
+            .gts-head {
+                .gts-title {
+                    transform: translateX(21px);
                 }
             }
         }

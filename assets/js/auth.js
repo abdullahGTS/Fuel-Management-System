@@ -104,6 +104,27 @@ const Auth = {
                     "showDuration": "300",
                     "hideDuration": "1000",
                     "timeOut": "5000",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut",
+                    "onShown": function() {
+                        $('.toast').css({
+                            transform: 'translateX(700px)',  // Initially off-screen to the right
+                            opacity: 0
+                        }).animate({ opacity: 1 }, {
+                            duration: 200,
+                            step: function(now) {
+                                $(this).css('transform', `translateX(${700 - now * 700}px)`);
+                            }
+                        });
+                    },
+                    "onHidden": function() {
+                        $('.toast').animate({ opacity: 0 }, {
+                            duration: 200,
+                            step: function(now) {
+                                $(this).css('transform', `translateX(${now * 700}px)`);
+                            }
+                        });
+                    }
                 });
             }
         });

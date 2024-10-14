@@ -116,7 +116,33 @@ var Auth = {
           "positionClass": "toast-top-right",
           "showDuration": "300",
           "hideDuration": "1000",
-          "timeOut": "5000"
+          "timeOut": "5000",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut",
+          "onShown": function onShown() {
+            $('.toast').css({
+              transform: 'translateX(700px)',
+              // Initially off-screen to the right
+              opacity: 0
+            }).animate({
+              opacity: 1
+            }, {
+              duration: 200,
+              step: function step(now) {
+                $(this).css('transform', "translateX(".concat(700 - now * 700, "px)"));
+              }
+            });
+          },
+          "onHidden": function onHidden() {
+            $('.toast').animate({
+              opacity: 0
+            }, {
+              duration: 200,
+              step: function step(now) {
+                $(this).css('transform', "translateX(".concat(now * 700, "px)"));
+              }
+            });
+          }
         });
       }
     });
