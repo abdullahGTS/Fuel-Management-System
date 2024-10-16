@@ -542,7 +542,7 @@
                             padding: 30px;
                             visibility: hidden;
                             opacity: 0;
-                            box-shadow: 0 0 20px rgba(21, 110, 65, 0.2) !important;
+                            box-shadow: var(--gts-lg-shadow) !important;
                             transform: translateY(100%);
                             transition: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
                             transition-delay: 0ms;

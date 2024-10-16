@@ -1,0 +1,20 @@
+// Dark theme goes here
+
+html {
+    body {
+        &.dark-mode {
+            --gts-dark-color: #aaaaaa;
+            --gts-gray-color: #F4F7FE;
+            --gts-brd-color: 156, 155, 155;
+            --gts-white-color: #313234;
+            --gts-light-color: #29292A;
+            --grs-lg-shadow: 0 0 20px rgba(11, 11, 11, 0.2);
+
+            .gts-section-conatiner .gts-flex-row .gts-cards .gts-card-container .gts-card {
+                background-color: var(--gts-light-color) !important;
+                // border: 1px solid;
+                // border-color: rgba(var(--gts-brd-color), 0.1);
+            }
+        }
+    }
+}

@@ -10,9 +10,13 @@
     --gts-red-color: #d23050;
     --gts-green-color: #42bc74;
 
+    --gts-red-color: #e61e45;
+    --gts-green-color: #3db16d;
+    
+
     /** Product Colors **/
     --gasoline-95: #009C62;
-    --gasoline-91: #e55141;
+    --gasoline-91: #e54141;
     // --gasoline-91: #4156e5;
     --diesel: #FAB75C;
 
@@ -31,13 +35,5 @@
     --gts-lg-curve: 21px;
     --gts-md-curve: 14px;
     --gts-sm-curve: 7px;
-}
-
-.darkMode {
-    // Dark theme goes here
-    --gts-dark-color: #aaaaaa;
-    --gts-gray-color: #F4F7FE;
-    --gts-brd-color: 156, 155, 155;
-    --gts-white-color: #090808;
-    --gts-light-color: #181717; 
+    --grs-lg-shadow: 0 0 20px rgba(21, 110, 65, 0.2);
 }

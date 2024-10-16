@@ -12,6 +12,12 @@
         position: relative;
         .gts-title {
             transition: transform 210ms ease;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            #toggle-menu {
+                margin-left: -48px;
+            }
             h1 {
                 font-size: var(--gts-heading-fs);
                 color: var(--gts-dark-color);

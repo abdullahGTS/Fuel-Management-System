@@ -3,11 +3,11 @@
 // Unified Product Colors
 const sharedColors = {
     gasoline95: '#009C62',
-    gasoline91: '#e55141',
+    gasoline91: '#e54141',
     // gasoline91: '#4156e5',
     diesel: '#FAB75C',
-    online: '#42bc74',
-    offline: '#d23050'
+    online: '#3db16d',
+    offline: '#e61e45'
 };
 
 // Unified Product Value from the DOM
@@ -129,18 +129,39 @@ const TrendingUpdates = {
     }
 };
 
+const getChartBackgroundColor = () => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            // Check for dark mode (using localStorage or body class)
+            const appearance = localStorage.getItem('gts-appearance');
+            const isDarkMode = appearance === 'dark' ||
+                (appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+                document.body.classList.contains('dark-mode');
+
+            // Resolve with the background color
+            const backgroundColor = isDarkMode ? '#313234' : '#ffffff';
+            resolve(backgroundColor);
+        }, 0); // Adjust timeout if necessary
+    });
+};
+
 // Pie Chart for Product Usage
 const GasolineUsagePieChart = {
     init: () => {
-        // Step 1: Load Google Charts library
-        google.charts.load('current', { packages: ['corechart'] });
+        const gasolineChartWrapper = document.getElementById('currentUsageChart');
+        if (gasolineChartWrapper) {
+            // Step 1: Load Google Charts library
+            google.charts.load('current', { packages: ['corechart'] });
 
-        // Step 2: Set callback to run when the library is loaded
-        google.charts.setOnLoadCallback(GasolineUsagePieChart.drawPieChart);
+            // Step 2: Set callback to run when the library is loaded
+            google.charts.setOnLoadCallback(GasolineUsagePieChart.drawPieChart);
+        }
     },
 
     // Step 4: Function to draw the Pie Chart
-    drawPieChart: () => {
+    drawPieChart: async () => {
+
+        const backgroundColor = await getChartBackgroundColor();
 
         // Create the data table
         const data = new google.visualization.DataTable();
@@ -159,34 +180,35 @@ const GasolineUsagePieChart = {
         const options = {
             title: '',
             is3D: false,
+            backgroundColor: backgroundColor,
             slices: {
                 0: {
                     offset: 0.07,
-                    textStyle: { color: 'white' },
+                    textStyle: { color: backgroundColor },
                     color: sharedColors.gasoline95,
-                    borderColor: '#990000',
+                    borderColor: backgroundColor,
                     borderWidth: 0
                 },  // Gasoline 95
                 1: {
                     offset: 0.12,
-                    textStyle: { color: 'white' },
+                    textStyle: { color: backgroundColor },
                     backgroundColor: '#00ff00',
                     color: sharedColors.gasoline91,
-                    borderColor: '#009900',
+                    borderColor: backgroundColor,
                     borderWidth: 0
                 },  // Gasoline 91
                 2: {
                     offset: 0.07,
-                    textStyle: { color: 'white' },
+                    textStyle: { color: backgroundColor },
                     color: sharedColors.diesel,
                     fillOpacity: 0.3,
-                    borderColor: '#000099',
+                    borderColor: backgroundColor,
                     borderWidth: 0,
                 }   // Diesel
             },
-            chartArea: { 
+            chartArea: {
                 width: windowWidth < 769 ? '90%' : '75%',
-                height: windowWidth < 769 ? '90%' : '75%' 
+                height: windowWidth < 769 ? '90%' : '75%'
             },  // Make chart area 80% of the wrapper size
             pieSliceText: 'percentage',  // Show percentage in slices
             legend: { position: 'none' }  // Hide the default legend
@@ -224,15 +246,20 @@ const GasolineUsagePieChart = {
 // Area Chart for Fuel Usage for the Last 4 Weeks
 const FuelUsageAreaChart = {
     init: () => {
-        // Load Google Charts library
-        google.charts.load('current', { packages: ['corechart'] });
+        const areaChartWrapper = document.getElementById('comparisonUsageChart');
+        if (areaChartWrapper) {
+            // Load Google Charts library
+            google.charts.load('current', { packages: ['corechart'] });
 
-        // Set callback to run when the library is loaded
-        google.charts.setOnLoadCallback(FuelUsageAreaChart.drawAreaChart);
+            // Set callback to run when the library is loaded
+            google.charts.setOnLoadCallback(FuelUsageAreaChart.drawAreaChart);
+        }
     },
 
     // Function to draw the Area Chart
-    drawAreaChart: () => {
+    drawAreaChart: async () => {
+        const backgroundColor = await getChartBackgroundColor();
+
         // Create the data table
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Week');
@@ -257,21 +284,22 @@ const FuelUsageAreaChart = {
         const options = {
             title: '',
             isStacked: false,  // Stack the areas (true, false, 'relative', 'percent')
+            backgroundColor: backgroundColor,
             colors: [
                 sharedColors.gasoline95,
                 sharedColors.gasoline91,
                 sharedColors.diesel
             ],
-            chartArea: { 
-                width: '80%', 
-                height: windowWidth < 1281 ? '65%' : '65%' 
+            chartArea: {
+                width: '80%',
+                height: windowWidth < 1281 ? '65%' : '65%'
             },  // Make chart area 80% of the wrapper size
             legend: { position: 'none' }, // Position the legend at the bottom
             hAxis: {
-                title: ''
+                title: '',
             },
             vAxis: {
-                title: ''
+                title: '',
             },
             keepInBounds: true,
             curveType: 'function',
@@ -310,15 +338,20 @@ const FuelUsageAreaChart = {
 // Doughnut Chart for Sites Status
 const SiteStatusChart = {
     init: () => {
-        // Load Google Charts library
-        google.charts.load('current', { packages: ['corechart'] });
+        const chartWrapper = document.getElementById('siteStatusChart');
+        if (chartWrapper) {
+            // Load Google Charts library
+            google.charts.load('current', { packages: ['corechart'] });
 
-        // Set callback to run when the library is loaded
-        google.charts.setOnLoadCallback(SiteStatusChart.drawSteppedAreaChart);
+            // Set callback to run when the library is loaded
+            google.charts.setOnLoadCallback(SiteStatusChart.drawSteppedAreaChart);
+        }
     },
 
     // Function to draw the Stepped Area Chart
-    drawSteppedAreaChart: () => {
+    drawSteppedAreaChart: async () => {
+        const backgroundColor = await getChartBackgroundColor();
+
         // Step 1: Get values from DOM
         const onlineValue = parseInt(document.getElementById('online-value').textContent, 10);
         const offlineValue = parseInt(document.getElementById('offline-value').textContent, 10);
@@ -328,7 +361,7 @@ const SiteStatusChart = {
         data.addColumn('string', 'Status');
         data.addColumn('number', 'Online');
         data.addColumn('number', 'Offline');
-        
+
         // Add the data rows for Online and Offline
         data.addRows([
             ['Online', onlineValue, 0],
@@ -339,6 +372,7 @@ const SiteStatusChart = {
         const options = {
             title: '',
             isStacked: false,  // Stack the areas for better comparison
+            backgroundColor: backgroundColor,
             hAxis: { title: '', textStyle: { fontSize: 12 } },
             vAxis: { title: '', minValue: 0 },
             // colors: ['#288048', '#e53434'],  // Custom colors for Online and Offline
@@ -384,39 +418,49 @@ const ReloadCharts = {
     init: () => {
         // Attach the click event listener to #toggle-menu
         document.getElementById('toggle-menu').addEventListener('click', ReloadCharts.chartReload);
+
+        // Attach the event listener to appearnce toggle
+        const appearanceWrapper = document.querySelector('#appearance-wrapper');
+        if (appearanceWrapper) {
+            const appearanceItems = appearanceWrapper.querySelectorAll('label');
+            console.log('appearanceItems', appearanceItems)
+            appearanceItems.forEach((item) => {
+                item.addEventListener('click', ReloadCharts.chartReload);
+            });
+        }
     },
-    
+
     chartReload: () => {
-    // Step 1: Check if the .gts-charts element exists
-    if (document.querySelector('.gts-charts')) {
-        // Step 2: Kill current charts by clearing their containers
-        const chartContainers = document.querySelectorAll('.gts-charts .chart-area');
-        const chartLegend = document.querySelectorAll('.gts-charts .chart-legend'); // Assuming each chart has a wrapper
-        chartContainers.forEach(container => {
-            container.innerHTML = ''; // Clear the chart container
-        });
+        // Step 1: Check if the .gts-charts element exists
+        if (document.querySelector('.gts-charts')) {
+            // Step 2: Kill current charts by clearing their containers
+            const chartContainers = document.querySelectorAll('.gts-charts .chart-area');
+            const chartLegend = document.querySelectorAll('.gts-charts .chart-legend'); // Assuming each chart has a wrapper
+            chartContainers.forEach(container => {
+                container.innerHTML = ''; // Clear the chart container
+            });
 
-        chartLegend.forEach(container => {
-            container.innerHTML = ''; // Clear the chart container
-        });
+            chartLegend.forEach(container => {
+                container.innerHTML = ''; // Clear the chart container
+            });
 
-        // Optional: If your charts have specific cleanup logic, call that here
-        // Example: GasolineUsagePieChart.clear(); or similar if implemented
+            // Optional: If your charts have specific cleanup logic, call that here
+            // Example: GasolineUsagePieChart.clear(); or similar if implemented
 
-        // Step 3: Reload the charts
-        GasolineUsagePieChart.init();
-        FuelUsageAreaChart.init();
-        SiteStatusChart.init();
-    }
+            // Step 3: Reload the charts
+            GasolineUsagePieChart.init();
+            FuelUsageAreaChart.init();
+            SiteStatusChart.init();
+        }
     }
 };
 
 pageReady(() => {
     GetCurrentProductValue.init();
     FormatNumbers.init();
+    TrendingUpdates.init();
     GasolineUsagePieChart.init();
     FuelUsageAreaChart.init();
-    TrendingUpdates.init();
     SiteStatusChart.init();
     ReloadCharts.init();
 });

@@ -4,11 +4,11 @@
 // Unified Product Colors
 var sharedColors = {
   gasoline95: '#009C62',
-  gasoline91: '#e55141',
+  gasoline91: '#e54141',
   // gasoline91: '#4156e5',
   diesel: '#FAB75C',
-  online: '#42bc74',
-  offline: '#d23050'
+  online: '#3db16d',
+  offline: '#e61e45'
 }; // Unified Product Value from the DOM
 
 var GetCurrentProductValue = {
@@ -116,82 +116,118 @@ var TrendingUpdates = {
       TrendingUpdates.updateTrendingElement(element, percentageChange, formattedPercentage);
     }
   }
+};
+
+var getChartBackgroundColor = function getChartBackgroundColor() {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      // Check for dark mode (using localStorage or body class)
+      var appearance = localStorage.getItem('gts-appearance');
+      var isDarkMode = appearance === 'dark' || appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches || document.body.classList.contains('dark-mode'); // Resolve with the background color
+
+      var backgroundColor = isDarkMode ? '#313234' : '#ffffff';
+      resolve(backgroundColor);
+    }, 0); // Adjust timeout if necessary
+  });
 }; // Pie Chart for Product Usage
+
 
 var GasolineUsagePieChart = {
   init: function init() {
-    // Step 1: Load Google Charts library
-    google.charts.load('current', {
-      packages: ['corechart']
-    }); // Step 2: Set callback to run when the library is loaded
+    var gasolineChartWrapper = document.getElementById('currentUsageChart');
 
-    google.charts.setOnLoadCallback(GasolineUsagePieChart.drawPieChart);
+    if (gasolineChartWrapper) {
+      // Step 1: Load Google Charts library
+      google.charts.load('current', {
+        packages: ['corechart']
+      }); // Step 2: Set callback to run when the library is loaded
+
+      google.charts.setOnLoadCallback(GasolineUsagePieChart.drawPieChart);
+    }
   },
   // Step 4: Function to draw the Pie Chart
   drawPieChart: function drawPieChart() {
-    // Create the data table
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Fuel Type');
-    data.addColumn('number', 'Liters'); // Add the data rows
+    var backgroundColor, data, windowWidth, options, gasolineChartWrapper, chart;
+    return regeneratorRuntime.async(function drawPieChart$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    data.addRows([['Gasoline 95', GetCurrentProductValue.currentGasoline95Value], ['Gasoline 91', GetCurrentProductValue.currentGasoline91Value], ['Diesel', GetCurrentProductValue.currentDieselValue]]);
-    var windowWidth = window.innerWidth; // Set chart options (no 3D and custom colors with borders)
+          case 2:
+            backgroundColor = _context.sent;
+            // Create the data table
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'Fuel Type');
+            data.addColumn('number', 'Liters'); // Add the data rows
 
-    var options = {
-      title: '',
-      is3D: false,
-      slices: {
-        0: {
-          offset: 0.07,
-          textStyle: {
-            color: 'white'
-          },
-          color: sharedColors.gasoline95,
-          borderColor: '#990000',
-          borderWidth: 0
-        },
-        // Gasoline 95
-        1: {
-          offset: 0.12,
-          textStyle: {
-            color: 'white'
-          },
-          backgroundColor: '#00ff00',
-          color: sharedColors.gasoline91,
-          borderColor: '#009900',
-          borderWidth: 0
-        },
-        // Gasoline 91
-        2: {
-          offset: 0.07,
-          textStyle: {
-            color: 'white'
-          },
-          color: sharedColors.diesel,
-          fillOpacity: 0.3,
-          borderColor: '#000099',
-          borderWidth: 0
-        } // Diesel
+            data.addRows([['Gasoline 95', GetCurrentProductValue.currentGasoline95Value], ['Gasoline 91', GetCurrentProductValue.currentGasoline91Value], ['Diesel', GetCurrentProductValue.currentDieselValue]]);
+            windowWidth = window.innerWidth; // Set chart options (no 3D and custom colors with borders)
 
-      },
-      chartArea: {
-        width: windowWidth < 769 ? '90%' : '75%',
-        height: windowWidth < 769 ? '90%' : '75%'
-      },
-      // Make chart area 80% of the wrapper size
-      pieSliceText: 'percentage',
-      // Show percentage in slices
-      legend: {
-        position: 'none'
-      } // Hide the default legend
+            options = {
+              title: '',
+              is3D: false,
+              backgroundColor: backgroundColor,
+              slices: {
+                0: {
+                  offset: 0.07,
+                  textStyle: {
+                    color: backgroundColor
+                  },
+                  color: sharedColors.gasoline95,
+                  borderColor: backgroundColor,
+                  borderWidth: 0
+                },
+                // Gasoline 95
+                1: {
+                  offset: 0.12,
+                  textStyle: {
+                    color: backgroundColor
+                  },
+                  backgroundColor: '#00ff00',
+                  color: sharedColors.gasoline91,
+                  borderColor: backgroundColor,
+                  borderWidth: 0
+                },
+                // Gasoline 91
+                2: {
+                  offset: 0.07,
+                  textStyle: {
+                    color: backgroundColor
+                  },
+                  color: sharedColors.diesel,
+                  fillOpacity: 0.3,
+                  borderColor: backgroundColor,
+                  borderWidth: 0
+                } // Diesel
 
-    }; // Draw the chart in the specified div
+              },
+              chartArea: {
+                width: windowWidth < 769 ? '90%' : '75%',
+                height: windowWidth < 769 ? '90%' : '75%'
+              },
+              // Make chart area 80% of the wrapper size
+              pieSliceText: 'percentage',
+              // Show percentage in slices
+              legend: {
+                position: 'none'
+              } // Hide the default legend
 
-    var gasolineChartWrapper = document.getElementById('currentUsageChart');
-    var chart = new google.visualization.PieChart(gasolineChartWrapper);
-    chart.draw(data, options); // Step 5: Draw the legend beneath the chart
+            }; // Draw the chart in the specified div
 
-    GasolineUsagePieChart.createLegend(gasolineChartWrapper);
+            gasolineChartWrapper = document.getElementById('currentUsageChart');
+            chart = new google.visualization.PieChart(gasolineChartWrapper);
+            chart.draw(data, options); // Step 5: Draw the legend beneath the chart
+
+            GasolineUsagePieChart.createLegend(gasolineChartWrapper);
+
+          case 13:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
   },
   // Step 6: Create a custom legend with colored circles below the chart
   createLegend: function createLegend(wrapper) {
@@ -217,60 +253,82 @@ var GasolineUsagePieChart = {
 
 var FuelUsageAreaChart = {
   init: function init() {
-    // Load Google Charts library
-    google.charts.load('current', {
-      packages: ['corechart']
-    }); // Set callback to run when the library is loaded
+    var areaChartWrapper = document.getElementById('comparisonUsageChart');
 
-    google.charts.setOnLoadCallback(FuelUsageAreaChart.drawAreaChart);
+    if (areaChartWrapper) {
+      // Load Google Charts library
+      google.charts.load('current', {
+        packages: ['corechart']
+      }); // Set callback to run when the library is loaded
+
+      google.charts.setOnLoadCallback(FuelUsageAreaChart.drawAreaChart);
+    }
   },
   // Function to draw the Area Chart
   drawAreaChart: function drawAreaChart() {
-    // Create the data table
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Week');
-    data.addColumn('number', 'Gasoline 95');
-    data.addColumn('number', 'Gasoline 91');
-    data.addColumn('number', 'Diesel'); // Add data rows for the last 4 weeks
+    var backgroundColor, data, windowWidth, options, areaChartWrapper, chart;
+    return regeneratorRuntime.async(function drawAreaChart$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    data.addRows([['Week 1', 600000, 500000, 400000], // Week 1 values
-    ['Week 2', 1020000, 310000, 615000], // Week 2 values
-    ['Week 3', 500150, 809000, 59000], // Week 3 values
-    ['Week 4', GetCurrentProductValue.currentGasoline95Value || 0, GetCurrentProductValue.currentGasoline91Value || 0, GetCurrentProductValue.currentDieselValue || 0] // Current week values
-    ]); // Set chart options
+          case 2:
+            backgroundColor = _context2.sent;
+            // Create the data table
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'Week');
+            data.addColumn('number', 'Gasoline 95');
+            data.addColumn('number', 'Gasoline 91');
+            data.addColumn('number', 'Diesel'); // Add data rows for the last 4 weeks
 
-    var windowWidth = window.innerWidth;
-    var options = {
-      title: '',
-      isStacked: false,
-      // Stack the areas (true, false, 'relative', 'percent')
-      colors: [sharedColors.gasoline95, sharedColors.gasoline91, sharedColors.diesel],
-      chartArea: {
-        width: '80%',
-        height: windowWidth < 1281 ? '65%' : '65%'
-      },
-      // Make chart area 80% of the wrapper size
-      legend: {
-        position: 'none'
-      },
-      // Position the legend at the bottom
-      hAxis: {
-        title: ''
-      },
-      vAxis: {
-        title: ''
-      },
-      keepInBounds: true,
-      curveType: 'function',
-      connectSteps: true
-    }; // Draw the chart in the specified div
+            data.addRows([['Week 1', 600000, 500000, 400000], // Week 1 values
+            ['Week 2', 1020000, 310000, 615000], // Week 2 values
+            ['Week 3', 500150, 809000, 59000], // Week 3 values
+            ['Week 4', GetCurrentProductValue.currentGasoline95Value || 0, GetCurrentProductValue.currentGasoline91Value || 0, GetCurrentProductValue.currentDieselValue || 0] // Current week values
+            ]); // Set chart options
 
-    var areaChartWrapper = document.getElementById('comparisonUsageChart');
-    var chart = new google.visualization.LineChart(areaChartWrapper); // AreaChart or LineChart or ColumnChart
+            windowWidth = window.innerWidth;
+            options = {
+              title: '',
+              isStacked: false,
+              // Stack the areas (true, false, 'relative', 'percent')
+              backgroundColor: backgroundColor,
+              colors: [sharedColors.gasoline95, sharedColors.gasoline91, sharedColors.diesel],
+              chartArea: {
+                width: '80%',
+                height: windowWidth < 1281 ? '65%' : '65%'
+              },
+              // Make chart area 80% of the wrapper size
+              legend: {
+                position: 'none'
+              },
+              // Position the legend at the bottom
+              hAxis: {
+                title: ''
+              },
+              vAxis: {
+                title: ''
+              },
+              keepInBounds: true,
+              curveType: 'function',
+              connectSteps: true
+            }; // Draw the chart in the specified div
 
-    chart.draw(data, options); // Create a custom legend below the chart
+            areaChartWrapper = document.getElementById('comparisonUsageChart');
+            chart = new google.visualization.LineChart(areaChartWrapper); // AreaChart or LineChart or ColumnChart
 
-    FuelUsageAreaChart.createLegend(areaChartWrapper);
+            chart.draw(data, options); // Create a custom legend below the chart
+
+            FuelUsageAreaChart.createLegend(areaChartWrapper);
+
+          case 15:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
   },
   // Create a custom legend with colored circles below the chart
   createLegend: function createLegend(wrapper) {
@@ -296,57 +354,79 @@ var FuelUsageAreaChart = {
 
 var SiteStatusChart = {
   init: function init() {
-    // Load Google Charts library
-    google.charts.load('current', {
-      packages: ['corechart']
-    }); // Set callback to run when the library is loaded
+    var chartWrapper = document.getElementById('siteStatusChart');
 
-    google.charts.setOnLoadCallback(SiteStatusChart.drawSteppedAreaChart);
+    if (chartWrapper) {
+      // Load Google Charts library
+      google.charts.load('current', {
+        packages: ['corechart']
+      }); // Set callback to run when the library is loaded
+
+      google.charts.setOnLoadCallback(SiteStatusChart.drawSteppedAreaChart);
+    }
   },
   // Function to draw the Stepped Area Chart
   drawSteppedAreaChart: function drawSteppedAreaChart() {
-    // Step 1: Get values from DOM
-    var onlineValue = parseInt(document.getElementById('online-value').textContent, 10);
-    var offlineValue = parseInt(document.getElementById('offline-value').textContent, 10); // Step 2: Create the data table
+    var backgroundColor, onlineValue, offlineValue, data, options, chartWrapper, chart;
+    return regeneratorRuntime.async(function drawSteppedAreaChart$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Status');
-    data.addColumn('number', 'Online');
-    data.addColumn('number', 'Offline'); // Add the data rows for Online and Offline
+          case 2:
+            backgroundColor = _context3.sent;
+            // Step 1: Get values from DOM
+            onlineValue = parseInt(document.getElementById('online-value').textContent, 10);
+            offlineValue = parseInt(document.getElementById('offline-value').textContent, 10); // Step 2: Create the data table
 
-    data.addRows([['Online', onlineValue, 0], ['Offline', 0, offlineValue]]); // Step 3: Set chart options
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'Status');
+            data.addColumn('number', 'Online');
+            data.addColumn('number', 'Offline'); // Add the data rows for Online and Offline
 
-    var options = {
-      title: '',
-      isStacked: false,
-      // Stack the areas for better comparison
-      hAxis: {
-        title: '',
-        textStyle: {
-          fontSize: 12
+            data.addRows([['Online', onlineValue, 0], ['Offline', 0, offlineValue]]); // Step 3: Set chart options
+
+            options = {
+              title: '',
+              isStacked: false,
+              // Stack the areas for better comparison
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: '',
+                textStyle: {
+                  fontSize: 12
+                }
+              },
+              vAxis: {
+                title: '',
+                minValue: 0
+              },
+              // colors: ['#288048', '#e53434'],  // Custom colors for Online and Offline
+              colors: [sharedColors.online, sharedColors.offline],
+              chartArea: {
+                width: '70%',
+                height: '70%'
+              },
+              legend: {
+                position: 'none'
+              } // Hide default legend
+
+            }; // Step 4: Draw the chart in the specified div
+
+            chartWrapper = document.getElementById('siteStatusChart');
+            chart = new google.visualization.SteppedAreaChart(chartWrapper);
+            chart.draw(data, options); // Step 5: Draw the custom legend below the chart
+
+            SiteStatusChart.createLegend(chartWrapper);
+
+          case 15:
+          case "end":
+            return _context3.stop();
         }
-      },
-      vAxis: {
-        title: '',
-        minValue: 0
-      },
-      // colors: ['#288048', '#e53434'],  // Custom colors for Online and Offline
-      colors: [sharedColors.online, sharedColors.offline],
-      chartArea: {
-        width: '70%',
-        height: '70%'
-      },
-      legend: {
-        position: 'none'
-      } // Hide default legend
-
-    }; // Step 4: Draw the chart in the specified div
-
-    var chartWrapper = document.getElementById('siteStatusChart');
-    var chart = new google.visualization.SteppedAreaChart(chartWrapper);
-    chart.draw(data, options); // Step 5: Draw the custom legend below the chart
-
-    SiteStatusChart.createLegend(chartWrapper);
+      }
+    });
   },
   // Step 6: Create a custom legend with colored circles below the chart
   createLegend: function createLegend(wrapper) {
@@ -371,7 +451,17 @@ var ReloadCharts = {
   // Initialize the menu toggle functionality
   init: function init() {
     // Attach the click event listener to #toggle-menu
-    document.getElementById('toggle-menu').addEventListener('click', ReloadCharts.chartReload);
+    document.getElementById('toggle-menu').addEventListener('click', ReloadCharts.chartReload); // Attach the event listener to appearnce toggle
+
+    var appearanceWrapper = document.querySelector('#appearance-wrapper');
+
+    if (appearanceWrapper) {
+      var appearanceItems = appearanceWrapper.querySelectorAll('label');
+      console.log('appearanceItems', appearanceItems);
+      appearanceItems.forEach(function (item) {
+        item.addEventListener('click', ReloadCharts.chartReload);
+      });
+    }
   },
   chartReload: function chartReload() {
     // Step 1: Check if the .gts-charts element exists
@@ -398,9 +488,9 @@ var ReloadCharts = {
 pageReady(function () {
   GetCurrentProductValue.init();
   FormatNumbers.init();
+  TrendingUpdates.init();
   GasolineUsagePieChart.init();
   FuelUsageAreaChart.init();
-  TrendingUpdates.init();
   SiteStatusChart.init();
   ReloadCharts.init();
 });

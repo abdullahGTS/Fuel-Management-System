@@ -38,9 +38,9 @@ const PageLoader = {
       };
 
       // Track full page load (assets like images are loaded)
-      window.addEventListener('load', () => {
-        PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
-      });
+      // window.addEventListener('load', () => {
+      //    // Final increase to 100% when fully loaded
+      // });
     }
   },
 
@@ -48,7 +48,7 @@ const PageLoader = {
   updateProgress: (percent) => {
     PageLoader.progress = percent;
     const progressBar = document.querySelector('.gts-progress-bar');
-    progressBar.style.width = `${percent}%`;
+    if ( progressBar ) progressBar.style.width = `${percent}%`;
   },
 
   // Gradually increase the progress bar to a target value
@@ -238,6 +238,7 @@ const Popover = {
 };
 
 pageReady(() => {
+  PageLoader.slowIncreaseTo(100);
   PageLoader.init();
   Button.init();
   Popover.init();

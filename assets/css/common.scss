@@ -1,5 +1,6 @@
 @import "./variables";
 @import "./form";
+@import "./darkTheme";
 
 *,
 *:before,
@@ -294,13 +295,58 @@ body #toast-container {
     display: none;
     .popover-body {
         border-radius: var(--gts-sm-curve);
-        box-shadow: 0 0 20px rgba(21, 110, 65, 0.2) !important;
+        box-shadow: var(--gts-lg-shadow) !important;
         background-color: var(--gts-white-color);
         padding: 14px 28px;
         min-width: 180px;
         max-width: 280px;
         ul {
             li {
+                #appearance-wrapper {
+                    padding: 14px 0 21px;
+                    border-bottom: 1px var(--gts-light-color) solid;
+                    display: flex;
+                    overflow: hidden;
+                    margin: 0 auto;
+                    label {
+                        flex-basis: 33.33%;
+                        max-width: 33.33%;
+                        position: relative;
+                        padding: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: rgba(var(--gts-brd-color), 0.2);
+                        &:first-of-type {
+                            border-radius: var(--gts-sm-curve) 0 0 var(--gts-sm-curve);
+                            border-right: 1px rgba(var(--gts-brd-color), 0.2) solid;
+                        }
+                        &:last-of-type {
+                            border-radius: 0 var(--gts-sm-curve) var(--gts-sm-curve) 0;
+                            border-left: 1px rgba(var(--gts-brd-color), 0.2) solid;
+                        }                        
+                        cursor: pointer;
+                        .mat-icon {
+                            color: var(--gts-gray-color);
+                            font-size: var(--gts-heading-fs);
+                            transition: color 420ms ease;
+                        }
+                        input {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            opacity: 0;
+                            &:checked + .mat-icon {
+                                color: var(--gts-primary-color);
+                            }
+                        }
+                        &:hover {
+                            .mat-icon {
+                                color: var(--gts-dark-color);
+                            }
+                        }
+                    }
+                }
                 a {
                     display: flex;
                     align-items: center;
@@ -308,13 +354,13 @@ body #toast-container {
                     color: var(--gts-dark-color);
                     font-size: var(--gts-normal-fs);
                     padding: 14px 0;
-                    border-top: 1px var(--gts-light-color) solid;
+                    border-bottom: 1px var(--gts-light-color) solid;
                     .mat-icon {
                         color: var(--gts-dark-color);
                         font-size: var(--gts-icon-fs);
                     }
                 }
-                &:first-of-type {
+                &:last-of-type {
                     a {
                         border: 0;
                     }

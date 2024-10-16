@@ -166,7 +166,112 @@ const ForceResponsive = {
     }
 };
 
+const AppearanceToggle = {
+    init: () => {
+        const savedAppearance = localStorage.getItem('gts-appearance');
+
+        // If no saved appearance, set default to light mode
+        if (!savedAppearance) {
+            localStorage.setItem('gts-appearance', 'light');
+            AppearanceToggle.applyMode('light');
+        } else {
+            // Apply the saved appearance (light, dark, or system)
+            AppearanceToggle.applyMode(savedAppearance);
+        }
+
+        const appearanceWrapper = document.querySelector('#appearance-wrapper');
+
+        if (appearanceWrapper) {
+            // Add change event listeners to checkboxes
+            document.getElementById('light-mode-checkbox').addEventListener('change', (e) => {
+                if (e.target.checked) AppearanceToggle.toggleMode('light');
+            });
+            document.getElementById('dark-mode-checkbox').addEventListener('change', (e) => {
+                if (e.target.checked) AppearanceToggle.toggleMode('dark');
+            });
+            document.getElementById('system-mode-checkbox').addEventListener('change', (e) => {
+                if (e.target.checked) AppearanceToggle.toggleMode('system');
+            });
+
+            // Ensure the correct checkbox is selected based on the saved mode
+            AppearanceToggle.setCheckedMode(savedAppearance || 'light');
+
+            // Add listener for system appearance changes if system mode is selected
+            AppearanceToggle.addSystemModeListener();
+        }
+    },
+
+    toggleMode: (mode) => {
+        // Update localStorage and apply the corresponding mode
+        localStorage.setItem('gts-appearance', mode);
+
+        if (mode === 'system') {
+            // Check system preferences for light or dark mode
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            AppearanceToggle.applyMode(systemPrefersDark ? 'dark' : 'light');
+        } else {
+            AppearanceToggle.applyMode(mode);
+        }
+
+        // Set the correct checkbox after toggling mode
+        AppearanceToggle.setCheckedMode(mode);
+    },
+
+    applyMode: (mode) => {
+        const body = document.body;
+        const logoImages = document.querySelectorAll('.gts-logo a img');
+
+        // Apply light mode
+        if (mode === 'light') {
+            body.classList.remove('dark-mode');
+            logoImages.forEach(img => {
+                img.src = img.src.replace('-dark', ''); // Remove -dark from image filenames
+            });
+        }
+
+        // Apply dark mode
+        else if (mode === 'dark') {
+            body.classList.add('dark-mode');
+            logoImages.forEach(img => {
+                if (!img.src.includes('-dark')) {
+                    const extensionIndex = img.src.lastIndexOf('.');
+                    img.src = img.src.slice(0, extensionIndex) + '-dark' + img.src.slice(extensionIndex);
+                }
+            });
+        }
+    },
+
+    setCheckedMode: (mode) => {
+        // Uncheck all checkboxes first
+        document.getElementById('light-mode-checkbox').checked = false;
+        document.getElementById('dark-mode-checkbox').checked = false;
+        document.getElementById('system-mode-checkbox').checked = false;
+
+        // Check the appropriate checkbox based on the current mode
+        if (mode === 'light') {
+            document.getElementById('light-mode-checkbox').checked = true;
+        } else if (mode === 'dark') {
+            document.getElementById('dark-mode-checkbox').checked = true;
+        } else if (mode === 'system') {
+            document.getElementById('system-mode-checkbox').checked = true;
+        }
+    },
+
+    addSystemModeListener: () => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Listen for system appearance mode changes
+        mediaQuery.addEventListener('change', (e) => {
+            const savedAppearance = localStorage.getItem('gts-appearance');
+            if (savedAppearance === 'system') {
+                AppearanceToggle.applyMode(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
+}
+
 pageReady(() => {
+    AppearanceToggle.init();
     MobileNav.init();
     NotificationSystem.init();
     CollabsedMenu.init();

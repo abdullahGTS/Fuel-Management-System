@@ -7,13 +7,13 @@
         flex-direction: column;
         position: relative;
 
-        #toggle-menu {
-            position: absolute;
-            background-color: var(--gts-white-color) !important;
-            top: 36px;
-            right: -36px;
-            box-shadow: -30px 0 32px 0 rgba(21, 110, 65, 0.1) !important;
-        }
+        // #toggle-menu {
+        //     position: absolute;
+        //     background-color: var(--gts-white-color) !important;
+        //     top: 36px;
+        //     right: -66px;
+        //     // box-shadow: -30px 0 32px 0 rgba(21, 110, 65, 0.1) !important;
+        // }
 
         .gts-logo {
             padding: 0 70px 0 40px;
@@ -203,22 +203,21 @@
 /** Collapsed Menu **/
 body {
     &.gts-menu-collapsed {
+        #toggle-menu {
+            // right: -90px;
+            // box-shadow: none !important;
+            // background-color: transparent !important;
+
+            .mat-icon {
+                transform: rotate(180deg);
+            }
+        }
         #gts-wrapper {
             #side-bar {
                 width: 70px;
                 --menu-gap: 100px;
                 padding-top: 10px;
                 min-width: 70px;
-                #toggle-menu {
-                    right: -90px;
-                    box-shadow: none !important;
-                    background-color: transparent !important;
-
-                    .mat-icon {
-                        transform: rotate(180deg);
-                    }
-                }
-
                 .gts-logo {
                     width: 70px !important;
                     min-width: 70px !important;
@@ -294,14 +293,6 @@ body {
                             }
                         }
                     }
-                }
-            }
-        }
-
-        #gts-header {
-            .gts-head {
-                .gts-title {
-                    transform: translateX(21px);
                 }
             }
         }

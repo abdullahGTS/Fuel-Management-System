@@ -38,18 +38,17 @@ var PageLoader = {
           }, 1400); // 1400ms delay before hiding
         }
       }; // Track full page load (assets like images are loaded)
+      // window.addEventListener('load', () => {
+      //    // Final increase to 100% when fully loaded
+      // });
 
-
-      window.addEventListener('load', function () {
-        PageLoader.slowIncreaseTo(100); // Final increase to 100% when fully loaded
-      });
     }
   },
   // Function to update progress bar width
   updateProgress: function updateProgress(percent) {
     PageLoader.progress = percent;
     var progressBar = document.querySelector('.gts-progress-bar');
-    progressBar.style.width = "".concat(percent, "%");
+    if (progressBar) progressBar.style.width = "".concat(percent, "%");
   },
   // Gradually increase the progress bar to a target value
   slowIncreaseTo: function slowIncreaseTo(target) {
@@ -224,6 +223,7 @@ var Popover = {
   }
 };
 pageReady(function () {
+  PageLoader.slowIncreaseTo(100);
   PageLoader.init();
   Button.init();
   Popover.init();

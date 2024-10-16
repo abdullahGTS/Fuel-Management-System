@@ -1,4 +1,5 @@
-input,
+input:not(:checkbox),
+input:not(:radio),
 button,
 select,
 textarea {
