@@ -302,12 +302,14 @@ body #toast-container {
         max-width: 280px;
         ul {
             li {
-                #appearance-wrapper {
+                .role-href {
                     padding: 14px 0 21px;
                     border-bottom: 1px var(--gts-light-color) solid;
                     display: flex;
+                    align-items: center;
                     overflow: hidden;
                     margin: 0 auto;
+
                     label {
                         flex-basis: 33.33%;
                         max-width: 33.33%;
@@ -368,6 +370,10 @@ body #toast-container {
             }
         }
     }
+}
+
+.hide {
+    display: none;
 }
 
 .snackbar-container {

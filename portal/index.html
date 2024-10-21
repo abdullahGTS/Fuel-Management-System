@@ -214,9 +214,19 @@
                                     <div class="gts-box">
                                         <div class="gts-charts white-box">
                                             <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">ssid_chart</span>
-                                                <h3>Comparison of Fuel Usage</h3>
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">ssid_chart</span>
+                                                    <h3>Comparison of Fuel Usage</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
                                             </div>
+
+
                                             <div id="comparisonUsageChart" class="chart-area"></div>
                                             <div class="chart-legend"></div>
                                         </div>
@@ -225,9 +235,20 @@
                                     <div class="gts-box">
                                         <div class="gts-charts white-box">
                                             <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                                <h3>Current Fuel Usage Comparison</h3>
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                    <h3>Usage Comparison</h3>
+                                                </div>
+
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
                                             </div>
+
+
                                             <div id="currentUsageChart" class="chart-area"></div>
                                             <div class="chart-legend"></div>
                                         </div>
@@ -273,9 +294,18 @@
                                     <div class="gts-box">
                                         <div class="gts-charts white-box">
                                             <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">area_chart</span>
-                                                <h3>Sites Current Status Comparison</h3>
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">area_chart</span>
+                                                    <h3>Sites Current Status Comparison</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
                                             </div>
+
                                             <div id="siteStatusChart" class="chart-area"></div>
                                             <div class="chart-legend"></div>
                                         </div>
@@ -291,31 +321,70 @@
                                 <h2>Alarms</h2>
                             </div>
                             <div class="gts-section-conatiner">
-                                <div class="gts-flex-row row-5-5">
+                                <div class="gts-flex-row row-6-4">
+                                    <!-- System Alarms -->
                                     <div class="gts-box">
-                                        <div class="gts-charts white-box">
+                                        <div class="gts-charts white-box lg-chart">
                                             <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">grouped_bar_chart</span>
-                                                <h3>Operational Alarms</h3>
+                                                <div class="gts-card-title-wrapper">
+                                                    <span
+                                                        class="mat-icon material-symbols-sharp">grouped_bar_chart</span>
+                                                    <h3>System Alarms</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                    <button class="btn btn-icon toggle-chart-btn" id="toggle-system">
+                                                        <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <!-- <div id="siteStatusChart" class="chart-area"></div> -->
-                                            <div class="chart-legend"></div>
-                                        </div>
-                                    </div>
-                                    <div class="gts-box">
-                                        <div class="gts-charts white-box">
-                                            <div class="gts-card-title">
-                                                <span class="mat-icon material-symbols-sharp">equalizer</span>
-                                                <h3>System Alarms</h3>
-                                            </div>
-                                            <!-- <div id="siteStatusChart" class="chart-area"></div> -->
+
+                                            <div id="systemAlarmsChart" class="chart-area"></div>
+                                            <div id="systemAlarmsDonutChart" class="chart-area hide"></div>
+
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
 
+                                    <!-- Operational Alarms -->
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box lg-chart">
+
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span
+                                                        class="mat-icon material-symbols-sharp">bar_chart</span>
+                                                    <h3>Operational Alarms</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                    <button class="btn btn-icon toggle-chart-btn" id="toggle-operational">
+                                                        <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+
+
+
+                                            <div id="operationalAlarmsChart" class="chart-area"></div>
+                                            <div id="operationalDonutChart" class="chart-area hide"></div>
+
+                                            <div class="chart-legend"></div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -328,7 +397,7 @@
         <div class="popover-body">
             <ul>
                 <li>
-                    <div id="appearance-wrapper">
+                    <div id="appearance-wrapper" class="role-href">
                         <label for="light-mode-checkbox">
                             <input type="radio" id="light-mode-checkbox" name="appearance-mode" />
                             <span class="mat-icon material-symbols-sharp">wb_sunny</span>
@@ -353,6 +422,31 @@
                         <span class="mat-icon material-symbols-sharp">logout</span>
                         <span>Logout</span>
                     </a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Popover Download Chart -->
+    <div class="popover-wrapper" id="download-chart" data-position="bottom">
+        <div class="popover-body">
+            <ul>
+                <li>
+                    <div id="download-image" class="role-href">
+                        <div class="download-item">
+                            <span class="mat-icon material-symbols-sharp">photo_library</span>
+                            Image Download
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div id="download-pdf" class="role-href">
+                        <div class="download-item">
+                            <span class="mat-icon material-symbols-sharp">picture_as_pdf</span>
+                            PDF Download
+                        </div>
+                    </div>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -438,15 +532,16 @@
     </div>
 
 
-    <!-- Vendor Scripts -->
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/html2canvas.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/jspdf.umd.min.js" defer></script>
 
     <!-- GTS Scripts -->
-    <script type="text/javascript" src="../assets/js/script.js"></script>
-    <script type="text/javascript" src="../assets/js/portal.js" async></script>
-    <script type="text/javascript" src="../assets/js/dashboard.js" async></script>
+    <script type="text/javascript" src="../assets/js/script.js" defer></script>
+    <script type="text/javascript" src="../assets/js/dashboard.js" defer></script>
+    <script type="text/javascript" src="../assets/js/portal.js" defer></script>
 
 </body>
 

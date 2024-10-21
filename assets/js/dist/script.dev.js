@@ -117,35 +117,6 @@ var Popover = {
 
     window.addEventListener("resize", updatePopoverWidth);
   },
-  // setPosition: (targetElement, popoverBody) => {
-  //   const updatePopoverPosition = () => {
-  //     const targetRect = targetElement.getBoundingClientRect(); // Get the dimensions and position of the clicked element
-  //     const targetBody = popoverBody.getBoundingClientRect(); // Get the dimensions and position of the popover body
-  //     const targetX = targetRect.left + window.scrollX; // Get the X position
-  //     const targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the Y position
-  //     // Set the initial position of the popover
-  //     popoverBody.style.position = "absolute";
-  //     popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
-  //     popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
-  //     // Check if the popover goes beyond the right edge of the screen
-  //     const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
-  //     const viewportWidth = window.innerWidth + window.scrollX;
-  //     if (popoverRightEdge > viewportWidth) {
-  //       // If the popover exceeds the screen width, move it to the left to fit within the screen
-  //       popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
-  //     }
-  //     // Check if the popover goes beyond the left edge of the screen
-  //     const popoverLeftEdge = targetX + 10;
-  //     if (popoverLeftEdge < window.scrollX) {
-  //       // If the popover is less than 0 (off-screen), adjust it to 10px from the left
-  //       popoverBody.style.left = `10px`;
-  //     }
-  //   };
-  //   // Set the initial position when the popover is created
-  //   updatePopoverPosition();
-  //   // Adjust the position on window resize
-  //   window.addEventListener("resize", updatePopoverPosition);
-  // },
   setPosition: function setPosition(targetElement, popoverBody) {
     var updatePopoverPosition = function updatePopoverPosition() {
       var targetRect = targetElement.getBoundingClientRect(); // Get dimensions of the clicked element
@@ -218,6 +189,10 @@ var Popover = {
       });
       popoverWrapper.addEventListener("click", function (e) {
         popoverWrapper.style.display = "none";
+
+        if (popoverWrapper.hasAttribute('data-download-target')) {
+          popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
+        }
       });
     });
   }

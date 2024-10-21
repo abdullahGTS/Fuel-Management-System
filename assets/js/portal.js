@@ -176,7 +176,12 @@ const AppearanceToggle = {
             AppearanceToggle.applyMode('light');
         } else {
             // Apply the saved appearance (light, dark, or system)
-            AppearanceToggle.applyMode(savedAppearance);
+            if (savedAppearance === 'system') {
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                AppearanceToggle.applyMode(systemPrefersDark ? 'dark' : 'light');
+            } else {
+                AppearanceToggle.applyMode(savedAppearance);
+            }
         }
 
         const appearanceWrapper = document.querySelector('#appearance-wrapper');
@@ -232,13 +237,13 @@ const AppearanceToggle = {
         // Apply dark mode
         else if (mode === 'dark') {
             body.classList.add('dark-mode');
-            logoImages.forEach(img => {
-                if (!img.src.includes('-dark')) {
-                    const extensionIndex = img.src.lastIndexOf('.');
-                    img.src = img.src.slice(0, extensionIndex) + '-dark' + img.src.slice(extensionIndex);
-                }
-            });
-        }
+            // logoImages.forEach(img => {
+            //     if (!img.src.includes('-dark')) {
+            //         const extensionIndex = img.src.lastIndexOf('.');
+            //         img.src = img.src.slice(0, extensionIndex) + '-dark' + img.src.slice(extensionIndex);
+            //     }
+            // });
+        } 
     },
 
     setCheckedMode: (mode) => {

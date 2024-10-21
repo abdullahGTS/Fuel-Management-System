@@ -2,13 +2,71 @@
 
 //dashboard.js
 // Unified Product Colors
-var sharedColors = {
+var SharedColors = {
   gasoline95: '#009C62',
   gasoline91: '#e54141',
-  // gasoline91: '#4156e5',
   diesel: '#FAB75C',
   online: '#3db16d',
   offline: '#e61e45'
+};
+var AlarmsValues = {
+  DISCONNECTED: {
+    value: 6,
+    color: '#7E66F5'
+  },
+  LOW_FLOW_HOSE_2: {
+    value: 11,
+    color: '#3A75B7'
+  },
+  PRODUCT_HIGH: {
+    value: 2,
+    color: '#008E84'
+  },
+  WATER_HIGH: {
+    value: 4,
+    color: '#EABD3B'
+  },
+  OVERFLOW: {
+    value: 13,
+    color: '#EB548B'
+  },
+  SUCTION: {
+    value: 1,
+    color: '#18D4D3'
+  },
+  SUDDEN_LOSS: {
+    value: 6,
+    color: "#0393B2"
+  },
+  PRODUCT_LOW: {
+    value: 2,
+    color: '#263049'
+  },
+  LOW_FLOW_HOSE_1: {
+    value: 9,
+    color: "#3F5C58"
+  },
+  DELIVERY_RECONCILIATION: {
+    value: 7,
+    color: "#F06635"
+  },
+  TANK_NO_LEVEL: {
+    value: 7,
+    color: "#B81337"
+  }
+};
+var AlarmLabelMap = {
+  DISCONNECTED: 'Disconnected',
+  LOW_FLOW_HOSE_2: 'Low Flow Hose 2',
+  PRODUCT_HIGH: 'High Product Level',
+  WATER_HIGH: 'High Water Level',
+  OVERFLOW: 'Overflow',
+  SUCTION: 'Suction',
+  LOW_FLOW_HOSE_1: 'Low Flow Hose 1',
+  SUDDEN_LOSS: 'Sudden Loss',
+  PRODUCT_LOW: 'Low Product Level',
+  DELIVERY_RECONCILIATION: 'Delivery Reconciliation',
+  TANK_NO_LEVEL: 'No Level Tank'
 }; // Unified Product Value from the DOM
 
 var GetCurrentProductValue = {
@@ -59,14 +117,32 @@ var FormatNumbers = {
       }
     });
   }
+};
+
+var getChartBackgroundColor = function getChartBackgroundColor() {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      // Check for dark mode (using localStorage or body class)
+      var appearance = localStorage.getItem('gts-appearance');
+      var isDarkMode = appearance === 'dark' || appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches || document.body.classList.contains('dark-mode'); // Resolve with the background color
+
+      var backgroundColor = isDarkMode ? '#171721' : '#ffffff';
+      resolve(backgroundColor);
+    }, 0); // Adjust timeout if necessary
+  });
 }; // Tending Value for Product Usage from Last Monther
+
 
 var TrendingUpdates = {
   init: function init() {
-    // Call the applyTrendingUpdates function
-    TrendingUpdates.applyTrendingUpdates(1020038.997, GetCurrentProductValue.currentGasoline95Value, 'gasoline95');
-    TrendingUpdates.applyTrendingUpdates(221038.997, GetCurrentProductValue.currentGasoline91Value, 'gasoline91');
-    TrendingUpdates.applyTrendingUpdates(608038.997, GetCurrentProductValue.currentDieselValue, 'diesel');
+    var trendingElement = document.querySelectorAll('.trending');
+
+    if (trendingElement.length) {
+      // Call the applyTrendingUpdates function
+      TrendingUpdates.applyTrendingUpdates(1020038.997, GetCurrentProductValue.currentGasoline95Value, 'gasoline95');
+      TrendingUpdates.applyTrendingUpdates(221038.997, GetCurrentProductValue.currentGasoline91Value, 'gasoline91');
+      TrendingUpdates.applyTrendingUpdates(608038.997, GetCurrentProductValue.currentDieselValue, 'diesel');
+    }
   },
   calculatePercentageChange: function calculatePercentageChange(firstWeek, lastWeek) {
     // Handle the case where the first week value is zero to avoid division by zero
@@ -116,21 +192,7 @@ var TrendingUpdates = {
       TrendingUpdates.updateTrendingElement(element, percentageChange, formattedPercentage);
     }
   }
-};
-
-var getChartBackgroundColor = function getChartBackgroundColor() {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      // Check for dark mode (using localStorage or body class)
-      var appearance = localStorage.getItem('gts-appearance');
-      var isDarkMode = appearance === 'dark' || appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches || document.body.classList.contains('dark-mode'); // Resolve with the background color
-
-      var backgroundColor = isDarkMode ? '#313234' : '#ffffff';
-      resolve(backgroundColor);
-    }, 0); // Adjust timeout if necessary
-  });
 }; // Pie Chart for Product Usage
-
 
 var GasolineUsagePieChart = {
   init: function init() {
@@ -175,7 +237,7 @@ var GasolineUsagePieChart = {
                   textStyle: {
                     color: backgroundColor
                   },
-                  color: sharedColors.gasoline95,
+                  color: SharedColors.gasoline95,
                   borderColor: backgroundColor,
                   borderWidth: 0
                 },
@@ -186,7 +248,7 @@ var GasolineUsagePieChart = {
                     color: backgroundColor
                   },
                   backgroundColor: '#00ff00',
-                  color: sharedColors.gasoline91,
+                  color: SharedColors.gasoline91,
                   borderColor: backgroundColor,
                   borderWidth: 0
                 },
@@ -196,7 +258,7 @@ var GasolineUsagePieChart = {
                   textStyle: {
                     color: backgroundColor
                   },
-                  color: sharedColors.diesel,
+                  color: SharedColors.diesel,
                   fillOpacity: 0.3,
                   borderColor: backgroundColor,
                   borderWidth: 0
@@ -204,8 +266,8 @@ var GasolineUsagePieChart = {
 
               },
               chartArea: {
-                width: windowWidth < 769 ? '90%' : '75%',
-                height: windowWidth < 769 ? '90%' : '75%'
+                width: windowWidth < 769 ? '90%' : '80%',
+                height: windowWidth < 769 ? '90%' : '80%'
               },
               // Make chart area 80% of the wrapper size
               pieSliceText: 'percentage',
@@ -233,13 +295,13 @@ var GasolineUsagePieChart = {
   createLegend: function createLegend(wrapper) {
     var legendData = [{
       label: 'Gasoline 95',
-      color: sharedColors.gasoline95
+      color: SharedColors.gasoline95
     }, {
       label: 'Gasoline 91',
-      color: sharedColors.gasoline91
+      color: SharedColors.gasoline91
     }, {
       label: 'Diesel',
-      color: sharedColors.diesel
+      color: SharedColors.diesel
     }];
     var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
     legendData.forEach(function (item) {
@@ -295,9 +357,9 @@ var FuelUsageAreaChart = {
               isStacked: false,
               // Stack the areas (true, false, 'relative', 'percent')
               backgroundColor: backgroundColor,
-              colors: [sharedColors.gasoline95, sharedColors.gasoline91, sharedColors.diesel],
+              colors: [SharedColors.gasoline95, SharedColors.gasoline91, SharedColors.diesel],
               chartArea: {
-                width: '80%',
+                width: '75%',
                 height: windowWidth < 1281 ? '65%' : '65%'
               },
               // Make chart area 80% of the wrapper size
@@ -334,13 +396,13 @@ var FuelUsageAreaChart = {
   createLegend: function createLegend(wrapper) {
     var legendData = [{
       label: 'Gasoline 95',
-      color: sharedColors.gasoline95
+      color: SharedColors.gasoline95
     }, {
       label: 'Gasoline 91',
-      color: sharedColors.gasoline91
+      color: SharedColors.gasoline91
     }, {
       label: 'Diesel',
-      color: sharedColors.diesel
+      color: SharedColors.diesel
     }];
     var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
     legendData.forEach(function (item) {
@@ -404,7 +466,7 @@ var SiteStatusChart = {
                 minValue: 0
               },
               // colors: ['#288048', '#e53434'],  // Custom colors for Online and Offline
-              colors: [sharedColors.online, sharedColors.offline],
+              colors: [SharedColors.online, SharedColors.offline],
               chartArea: {
                 width: '70%',
                 height: '70%'
@@ -432,10 +494,10 @@ var SiteStatusChart = {
   createLegend: function createLegend(wrapper) {
     var legendData = [{
       label: 'Online',
-      color: sharedColors.online
+      color: SharedColors.online
     }, {
       label: 'Offline',
-      color: sharedColors.offline
+      color: SharedColors.offline
     }];
     var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
     legendData.forEach(function (item) {
@@ -444,6 +506,479 @@ var SiteStatusChart = {
       legendItem.innerHTML = "\n                <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n                <span class=\"legend-label\">").concat(item.label, "</span>\n            ");
       legendContainer.appendChild(legendItem);
     });
+  }
+}; // System Alarms Bar Chart
+
+var SystemAlarmsChart = {
+  init: function init() {
+    var systemAlarmsChart = document.getElementById('systemAlarmsChart');
+
+    if (systemAlarmsChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(SystemAlarmsChart.drawChart);
+    }
+  },
+  drawChart: function drawChart() {
+    var data = new google.visualization.DataTable();
+    var systemAlarmsChart = document.getElementById('systemAlarmsChart'); // Define columns for alarm types and values
+
+    data.addColumn('string', 'Alarm Type');
+    data.addColumn('number', 'Count');
+    data.addColumn({
+      type: 'string',
+      role: 'style'
+    }); // For bar colors
+    // Add rows with alarm values and user-friendly labels
+
+    Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
+      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+
+      data.addRow([displayLabel, AlarmsValues[alarmType].value, "color: ".concat(AlarmsValues[alarmType].color)]);
+    }); // Chart options for vertical bars
+
+    var options = {
+      title: '',
+      chartArea: {
+        width: '80%',
+        height: '80%'
+      },
+      hAxis: {
+        title: ''
+      },
+      vAxis: {
+        title: '',
+        minValue: 0
+      },
+      legend: 'none'
+    }; // Draw the chart
+
+    var chart = new google.visualization.ColumnChart(systemAlarmsChart);
+    chart.draw(data, options); // Create the custom legend
+
+    SystemAlarmsChart.createLegend(systemAlarmsChart);
+  },
+  // Create custom legend with colors and labels
+  createLegend: function createLegend(wrapper) {
+    // Add rows with alarm values and user-friendly labels
+    var legendData = Object.keys(AlarmsValues).slice(0, 6).map(function (alarmType) {
+      return {
+        label: alarmType,
+        color: AlarmsValues[alarmType].color
+      };
+    });
+    var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+    legendContainer.innerHTML = ''; // Clear existing legend
+
+    legendData.forEach(function (item) {
+      var legendItem = document.createElement('div');
+      legendItem.classList.add('legend-item');
+      legendItem.innerHTML = "\n          <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n          <span class=\"legend-label\">").concat(AlarmLabelMap[item.label] || item.label, "</span>\n        ");
+      legendContainer.appendChild(legendItem);
+    });
+  }
+}; // System Alarms Donut Chart
+
+var SystemAlarmsDonutChart = {
+  init: function init() {
+    var systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
+
+    if (systemAlarmsChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(SystemAlarmsDonutChart.drawChart);
+    }
+  },
+  drawChart: function drawChart() {
+    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+
+    data.addColumn('string', 'Alarm Type');
+    data.addColumn('number', 'Count'); // Add rows with alarm values and user-friendly labels
+
+    Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
+      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+
+      data.addRow([displayLabel, AlarmsValues[alarmType].value]);
+    }); // Chart options for donut chart
+
+    var options = {
+      title: '',
+      pieHole: 0.4,
+      // To make it a donut chart
+      chartArea: {
+        width: '80%',
+        height: '80%'
+      },
+      colors: Object.keys(AlarmsValues).map(function (alarmType) {
+        return AlarmsValues[alarmType].color;
+      }),
+      legend: 'none',
+      pieSliceText: 'percentage',
+      // Show percentage on the slices
+      pieSliceTextStyle: {
+        color: '#fff'
+      },
+      slices: {
+        offset: 0.07
+      } // width: 699
+
+    }; // Draw the chart
+
+    var systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
+    var chart = new google.visualization.PieChart(systemAlarmsChart);
+    chart.draw(data, options); // Create the custom legend
+
+    SystemAlarmsDonutChart.createLegend(systemAlarmsChart);
+  },
+  // Create custom legend with colors and labels
+  createLegend: function createLegend(wrapper) {
+    // Add rows with alarm values and user-friendly labels
+    var legendData = Object.keys(AlarmsValues).slice(0, 6).map(function (alarmType) {
+      return {
+        label: alarmType,
+        color: AlarmsValues[alarmType].color
+      };
+    });
+    var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+    legendContainer.innerHTML = ''; // Clear existing legend
+
+    legendData.forEach(function (item) {
+      var legendItem = document.createElement('div');
+      legendItem.classList.add('legend-item');
+      legendItem.innerHTML = "\n          <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n          <span class=\"legend-label\">").concat(AlarmLabelMap[item.label] || item.label, "</span>\n        ");
+      legendContainer.appendChild(legendItem);
+    });
+  }
+};
+var OperationalAlarmsBarChart = {
+  init: function init() {
+    var operationalAlarmsBarChart = document.getElementById('operationalAlarmsChart');
+
+    if (operationalAlarmsBarChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(OperationalAlarmsBarChart.drawChart);
+    }
+  },
+  drawChart: function drawChart() {
+    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+
+    data.addColumn('string', 'Alarm Type');
+    data.addColumn('number', 'Count');
+    data.addColumn({
+      type: 'string',
+      role: 'style'
+    }); // Filter the AlarmsValues to include only the two desired alarm types
+
+    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+    alarmsToDisplay.forEach(function (alarmType) {
+      // Retrieve the values, colors, and labels from AlarmsValues
+      var alarmValue = AlarmsValues[alarmType].value || 0; // Fallback to 0 if undefined
+
+      var alarmColor = AlarmsValues[alarmType].color || '#000000'; // Default color if undefined
+
+      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+
+      data.addRow([displayLabel, alarmValue, "color: ".concat(alarmColor)]);
+    }); // Chart options
+
+    var options = {
+      title: '',
+      chartArea: {
+        width: '60%',
+        height: '50%'
+      },
+      legend: 'none',
+      hAxis: {
+        title: ''
+      },
+      vAxis: {
+        title: '',
+        minValue: 0
+      }
+    }; // Draw the chart
+
+    var operationalAlarmsBarChart = document.getElementById('operationalAlarmsChart');
+    var chart = new google.visualization.ColumnChart(operationalAlarmsBarChart);
+    chart.draw(data, options); // Create legend for the chart using the shared object
+
+    OperationalAlarmsBarChart.createLegend(operationalAlarmsBarChart);
+  },
+  // Create custom legend with colors and labels for specific alarms
+  createLegend: function createLegend(wrapper) {
+    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+    var legendData = alarmsToDisplay.map(function (alarmType) {
+      return {
+        label: alarmType,
+        color: AlarmsValues[alarmType].color
+      };
+    });
+    var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+    legendContainer.innerHTML = ''; // Clear existing legend
+
+    legendData.forEach(function (item) {
+      var legendItem = document.createElement('div');
+      legendItem.classList.add('legend-item');
+      legendItem.innerHTML = "\n                <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n                <span class=\"legend-label\">").concat(AlarmLabelMap[item.label] || item.label, "</span>\n            ");
+      legendContainer.appendChild(legendItem);
+    });
+  }
+};
+var OperationalAlarmsDonutChart = {
+  init: function init() {
+    var operationalAlarmsChart = document.getElementById('operationalDonutChart');
+
+    if (operationalAlarmsChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(OperationalAlarmsDonutChart.drawChart);
+    }
+  },
+  drawChart: function drawChart() {
+    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+
+    data.addColumn('string', 'Alarm Type');
+    data.addColumn('number', 'Count'); // Use only the two specific alarms (SUDDEN_LOSS and DELIVERY_RECONCILIATION)
+
+    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+    alarmsToDisplay.forEach(function (alarmType) {
+      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+
+      data.addRow([displayLabel, AlarmsValues[alarmType].value]);
+    }); // Chart options for donut chart
+
+    var options = {
+      title: '',
+      pieHole: 0,
+      // To make it a donut chart
+      chartArea: {
+        width: '70%',
+        height: '70%'
+      },
+      colors: alarmsToDisplay.map(function (alarmType) {
+        return AlarmsValues[alarmType].color;
+      }),
+      legend: 'none',
+      pieSliceText: 'percentage',
+      // Show percentage on the slices
+      pieSliceTextStyle: {
+        color: '#fff'
+      },
+      slices: {
+        offset: 0.07
+      }
+    }; // Draw the chart
+
+    var operationalAlarmsChart = document.getElementById('operationalDonutChart');
+    var chart = new google.visualization.PieChart(operationalAlarmsChart);
+    chart.draw(data, options); // Create the custom legend
+
+    OperationalAlarmsDonutChart.createLegend(operationalAlarmsChart);
+  },
+  // Create custom legend with colors and labels
+  createLegend: function createLegend(wrapper) {
+    // Use only the two specific alarms (SUDDEN_LOSS and DELIVERY_RECONCILIATION)
+    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+    var legendData = alarmsToDisplay.map(function (alarmType) {
+      return {
+        label: alarmType,
+        color: AlarmsValues[alarmType].color
+      };
+    });
+    var legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+    legendContainer.innerHTML = ''; // Clear existing legend
+
+    legendData.forEach(function (item) {
+      var legendItem = document.createElement('div');
+      legendItem.classList.add('legend-item');
+      legendItem.innerHTML = "\n          <span class=\"legend-color\" style=\"background-color: ".concat(item.color, ";\"></span>\n          <span class=\"legend-label\">").concat(AlarmLabelMap[item.label] || item.label, "</span>\n        ");
+      legendContainer.appendChild(legendItem);
+    });
+  }
+};
+var DownloadChart = {
+  init: function init() {
+    // Select all download buttons and loop through them
+    var downloadButtons = document.querySelectorAll('[data-popover-target="#download-chart"]');
+
+    if (downloadButtons) {
+      downloadButtons.forEach(function (button) {
+        button.addEventListener('click', DownloadChart.openPopover);
+      }); // Select and set up event listeners for download options
+
+      var downloadImageButton = document.getElementById('download-image');
+      var downloadPDFButton = document.getElementById('download-pdf');
+
+      if (downloadImageButton) {
+        downloadImageButton.addEventListener('click', function () {
+          return DownloadChart.download('image');
+        });
+      }
+
+      if (downloadPDFButton) {
+        downloadPDFButton.addEventListener('click', function () {
+          return DownloadChart.download('pdf');
+        });
+      }
+    }
+  },
+  openPopover: function openPopover(e) {
+    var chartsWrapper = e.currentTarget.closest('.gts-charts');
+    var chartArea = chartsWrapper.querySelector('.chart-area:not(.hide)'); // Find visible chart area
+
+    if (chartArea) {
+      var chartId = chartArea.id;
+      var popover = document.querySelector('#download-chart'); // Assuming you have a popover with this ID
+
+      popover.setAttribute('data-download-target', "#".concat(chartId)); // Set data attribute with chart ID
+      // Open the popover
+
+      var popoverBody = popover.querySelector('.popover-body');
+      popover.style.display = 'block'; // Set position and width (using your existing popover functions)
+
+      Popover.setWidth(e.currentTarget, popoverBody);
+      Popover.setPosition(e.currentTarget, popoverBody);
+    }
+  },
+  download: function download(type) {
+    var popover = document.querySelector('#download-chart');
+    var chartId = popover.getAttribute('data-download-target').slice(1);
+    var chartsWrapper = document.querySelector(popover.getAttribute('data-download-target')).closest('.gts-charts');
+    var chartElement = document.getElementById(chartId);
+    var legendArea = chartsWrapper.querySelector('.chart-legend');
+
+    if (type === 'image') {
+      DownloadChart.downloadImage(chartsWrapper);
+    } else if (type === 'pdf') {
+      DownloadChart.downloadPDF(chartsWrapper);
+    }
+  },
+  downloadImage: function downloadImage(chartsWrapper) {
+    // Use html2canvas or similar library to convert the chart to an image
+    var excludeElement = chartsWrapper.querySelector('.gts-card-title');
+    var chartTitle = excludeElement.querySelector('h3').textContent.trim();
+    html2canvas(chartsWrapper, {
+      ignoreElements: function ignoreElements(element) {
+        return element === excludeElement; // Exclude the specified element
+      }
+    }).then(function (canvas) {
+      var link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      var currentDate = new Date();
+      var formattedDate = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(currentDate.getDate()).padStart(2, '0'));
+      var imageFileName = "".concat(chartTitle.replace(/\s+/g, '_'), "_").concat(formattedDate, ".png");
+      link.download = imageFileName; // Set the download file name
+
+      link.click();
+    });
+  },
+  downloadPDF: function downloadPDF(chartsWrapper) {
+    // Use jsPDF or similar library to convert the chart to a PDF
+    var excludeElement = chartsWrapper.querySelector('.gts-card-title');
+    var chartTitle = excludeElement.querySelector('h3').textContent.trim();
+    html2canvas(chartsWrapper, {
+      ignoreElements: function ignoreElements(element) {
+        return element === excludeElement; // Exclude the specified element
+      }
+    }).then(function (canvas) {
+      var imgData = canvas.toDataURL('image/png'); // Create a new jsPDF instance
+
+      window.jsPDF = window.jspdf.jsPDF;
+      var pdf = new jsPDF(); // Add the image to the PDF
+
+      pdf.addImage(imgData, 'PNG', 10, 10, 190, 0); // Adjust width and height as needed
+
+      var currentDate = new Date();
+      var formattedDate = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(currentDate.getDate()).padStart(2, '0'));
+      var imageFileName = "".concat(chartTitle.replace(/\s+/g, '_'), "_").concat(formattedDate, ".pdf"); // Save the PDF
+
+      pdf.save(imageFileName);
+    });
+  }
+};
+var ToggleAlarmsCharts = {
+  init: function init() {
+    var _this = this;
+
+    // Attach event listeners to all toggle buttons
+    var toggleChartNodes = document.querySelectorAll('.toggle-chart-btn');
+
+    if (toggleChartNodes.length) {
+      toggleChartNodes.forEach(function (button) {
+        button.addEventListener('click', function () {
+          return _this.toggleCharts(button);
+        });
+      });
+    }
+  },
+  toggleCharts: function toggleCharts(button) {
+    // Identify the chartsWrapper based on the button clicked
+    var chartsWrapper = button.closest('.gts-charts');
+    if (!chartsWrapper) return; // Exit if no parent found
+    // Get the button ID to determine the context (system or operational)
+
+    var buttonId = button.id;
+    var iconTitle = chartsWrapper.querySelector('.gts-card-title-wrapper .mat-icon');
+    var iconButton = button.querySelector('.mat-icon'); // Define the icon and chart elements based on the button ID
+
+    var chart, donutChart, chartIcon, donutIcon;
+
+    if (buttonId === 'toggle-system') {
+      // Icons for system alarms chart
+      chartIcon = 'grouped_bar_chart';
+      donutIcon = 'pie_chart';
+      chart = chartsWrapper.querySelector('#systemAlarmsChart');
+      donutChart = chartsWrapper.querySelector('#systemAlarmsDonutChart');
+    } else if (buttonId === 'toggle-operational') {
+      // Icons for operational alarms chart
+      chartIcon = 'bar_chart';
+      donutIcon = 'pie_chart';
+      chart = chartsWrapper.querySelector('#operationalAlarmsChart');
+      donutChart = chartsWrapper.querySelector('#operationalDonutChart');
+    } else {
+      return; // Exit if no valid button ID is found
+    } // Determine which chart is currently displayed
+
+
+    var isChartHidden = chart.classList.contains('hide');
+
+    if (isChartHidden) {
+      // Switch to the Bar chart
+      iconTitle.innerHTML = chartIcon; // Change the icon in the title to bar chart
+
+      iconButton.innerHTML = donutIcon; // Change the button icon to pie chart (for next toggle)
+      // Hide the donut chart and show the bar chart
+
+      donutChart.classList.add('hide');
+      donutChart.innerHTML = '';
+      chart.classList.remove('hide'); // Only initialize the Bar chart if it's being displayed for the first time
+
+      if (buttonId === 'toggle-system') {
+        SystemAlarmsChart.init();
+      } else {
+        OperationalAlarmsBarChart.init();
+      }
+    } else {
+      // Switch to the Donut chart
+      iconTitle.innerHTML = donutIcon; // Change the icon in the title to pie chart
+
+      iconButton.innerHTML = chartIcon; // Change the button icon to bar chart (for next toggle)
+      // Hide the bar chart and show the donut chart
+
+      chart.classList.add('hide');
+      chart.innerHTML = '';
+      donutChart.classList.remove('hide'); // Only initialize the Donut chart if it's being displayed for the first time
+
+      if (buttonId === 'toggle-system') {
+        SystemAlarmsDonutChart.init();
+      } else {
+        OperationalAlarmsDonutChart.init();
+      }
+    }
   }
 }; // We will Reload Charts on Menu Collapsed
 
@@ -457,7 +992,6 @@ var ReloadCharts = {
 
     if (appearanceWrapper) {
       var appearanceItems = appearanceWrapper.querySelectorAll('label');
-      console.log('appearanceItems', appearanceItems);
       appearanceItems.forEach(function (item) {
         item.addEventListener('click', ReloadCharts.chartReload);
       });
@@ -479,18 +1013,38 @@ var ReloadCharts = {
       // Example: GasolineUsagePieChart.clear(); or similar if implemented
       // Step 3: Reload the charts
 
-      GasolineUsagePieChart.init();
-      FuelUsageAreaChart.init();
-      SiteStatusChart.init();
+      setTimeout(function () {
+        RunCharts.init();
+        var systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
+
+        if (!systemAlarmsChart.classList.contains('hide')) {
+          SystemAlarmsDonutChart.init();
+        }
+
+        var operationalAlarmsChart = document.getElementById('operationalDonutChart');
+
+        if (!operationalAlarmsChart.classList.contains('hide')) {
+          OperationalAlarmsDonutChart.init();
+        }
+      }, 0);
     }
+  }
+};
+var RunCharts = {
+  init: function init() {
+    GasolineUsagePieChart.init();
+    FuelUsageAreaChart.init();
+    SiteStatusChart.init();
+    SystemAlarmsChart.init();
+    OperationalAlarmsBarChart.init();
   }
 };
 pageReady(function () {
   GetCurrentProductValue.init();
   FormatNumbers.init();
   TrendingUpdates.init();
-  GasolineUsagePieChart.init();
-  FuelUsageAreaChart.init();
-  SiteStatusChart.init();
+  RunCharts.init();
   ReloadCharts.init();
+  ToggleAlarmsCharts.init();
+  DownloadChart.init();
 });
