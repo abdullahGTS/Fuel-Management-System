@@ -14,7 +14,7 @@ const AlarmsValues = {
     LOW_FLOW_HOSE_2: { value: 11, color: '#3A75B7' },
     PRODUCT_HIGH: { value: 2, color: '#008E84' },
     WATER_HIGH: { value: 4, color: '#EABD3B' },
-    OVERFLOW: { value: 13, color: '#EB548B' },
+    OVERFLOW: { value: 13, color: '#CB548C' },
     SUCTION: { value: 1, color: '#18D4D3' },
     SUDDEN_LOSS: { value: 6, color: "#0393B2" },
     PRODUCT_LOW: { value: 2, color: '#263049' },
@@ -110,7 +110,7 @@ const getChartBackgroundColor = () => {
 const TrendingUpdates = {
     init: () => {
         const trendingElement = document.querySelectorAll('.trending');
-        if ( trendingElement.length ) {
+        if (trendingElement.length) {
             // Call the applyTrendingUpdates function
             TrendingUpdates.applyTrendingUpdates(1020038.997, GetCurrentProductValue.currentGasoline95Value, 'gasoline95');
             TrendingUpdates.applyTrendingUpdates(221038.997, GetCurrentProductValue.currentGasoline91Value, 'gasoline91');
@@ -448,7 +448,7 @@ const SiteStatusChart = {
 const SystemAlarmsChart = {
     init: () => {
         const systemAlarmsChart = document.getElementById('systemAlarmsChart');
-        if ( systemAlarmsChart ) {
+        if (systemAlarmsChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(SystemAlarmsChart.drawChart);
         }
@@ -472,7 +472,7 @@ const SystemAlarmsChart = {
         // Chart options for vertical bars
         const options = {
             title: '',
-            chartArea: { width: '80%', height: '80%' },
+            chartArea: { width: '80%', height: '70%' },
             hAxis: {
                 title: '',
             },
@@ -519,7 +519,7 @@ const SystemAlarmsChart = {
 const SystemAlarmsDonutChart = {
     init: () => {
         const systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
-        if ( systemAlarmsChart ) {
+        if (systemAlarmsChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(SystemAlarmsDonutChart.drawChart);
         }
@@ -620,7 +620,7 @@ const OperationalAlarmsBarChart = {
         // Chart options
         const options = {
             title: '',
-            chartArea: { width: '60%', height: '50%' },
+            chartArea: { width: '70%', height: '50%' },
             legend: 'none',
             hAxis: {
                 title: '',
@@ -633,7 +633,7 @@ const OperationalAlarmsBarChart = {
 
         // Draw the chart
         const operationalAlarmsBarChart = document.getElementById('operationalAlarmsChart');
-        const chart = new google.visualization.ColumnChart(operationalAlarmsBarChart);
+        const chart = new google.visualization.BarChart(operationalAlarmsBarChart);
         chart.draw(data, options);
 
         // Create legend for the chart using the shared object
@@ -691,7 +691,7 @@ const OperationalAlarmsDonutChart = {
         const options = {
             title: '',
             pieHole: 0, // To make it a donut chart
-            chartArea: { width: '70%', height: '70%' },
+            chartArea: { width: '65%', height: '65%' },
             colors: alarmsToDisplay.map(alarmType => AlarmsValues[alarmType].color),
             legend: 'none',
             pieSliceText: 'percentage', // Show percentage on the slices
@@ -844,29 +844,29 @@ const DownloadChart = {
 };
 
 const ToggleAlarmsCharts = {
-    init: function() {
+    init: function () {
         // Attach event listeners to all toggle buttons
         const toggleChartNodes = document.querySelectorAll('.toggle-chart-btn');
-        if ( toggleChartNodes.length ) {
+        if (toggleChartNodes.length) {
             toggleChartNodes.forEach(button => {
                 button.addEventListener('click', () => this.toggleCharts(button));
             });
         }
     },
 
-    toggleCharts: function(button) {
+    toggleCharts: function (button) {
         // Identify the chartsWrapper based on the button clicked
         const chartsWrapper = button.closest('.gts-charts');
         if (!chartsWrapper) return; // Exit if no parent found
-    
+
         // Get the button ID to determine the context (system or operational)
         const buttonId = button.id;
         const iconTitle = chartsWrapper.querySelector('.gts-card-title-wrapper .mat-icon');
         const iconButton = button.querySelector('.mat-icon');
-    
+
         // Define the icon and chart elements based on the button ID
         let chart, donutChart, chartIcon, donutIcon;
-    
+
         if (buttonId === 'toggle-system') {
             // Icons for system alarms chart
             chartIcon = 'grouped_bar_chart';
@@ -882,38 +882,38 @@ const ToggleAlarmsCharts = {
         } else {
             return; // Exit if no valid button ID is found
         }
-    
+
         // Determine which chart is currently displayed
         const isChartHidden = chart.classList.contains('hide');
-    
+
         if (isChartHidden) {
             // Switch to the Bar chart
             iconTitle.innerHTML = chartIcon; // Change the icon in the title to bar chart
             iconButton.innerHTML = donutIcon; // Change the button icon to pie chart (for next toggle)
-    
+
             // Hide the donut chart and show the bar chart
             donutChart.classList.add('hide');
             donutChart.innerHTML = '';
-            
+
             chart.classList.remove('hide');
-    
+
             // Only initialize the Bar chart if it's being displayed for the first time
             if (buttonId === 'toggle-system') {
                 SystemAlarmsChart.init();
             } else {
                 OperationalAlarmsBarChart.init();
             }
-    
+
         } else {
             // Switch to the Donut chart
             iconTitle.innerHTML = donutIcon; // Change the icon in the title to pie chart
             iconButton.innerHTML = chartIcon; // Change the button icon to bar chart (for next toggle)
-    
+
             // Hide the bar chart and show the donut chart
             chart.classList.add('hide');
             chart.innerHTML = '';
             donutChart.classList.remove('hide');
-    
+
             // Only initialize the Donut chart if it's being displayed for the first time
             if (buttonId === 'toggle-system') {
                 SystemAlarmsDonutChart.init();
@@ -922,8 +922,267 @@ const ToggleAlarmsCharts = {
             }
         }
     }
-    
+
 };
+
+const TankVolumeBarChart = {
+    init: () => {
+        const tankVolumeChart = document.getElementById('tankVolumeChart');
+        if (tankVolumeChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(TankVolumeBarChart.fetchTankData);
+        }
+    },
+
+    fetchTankData: (siteName) => {
+        // Fetch the tank data from the JSON file
+        fetch('../../data/sites.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Find the site data based on the passed siteName
+                const siteData = data.sites.find(site => site.siteName === siteName);
+
+                if (siteData) {
+                    // Draw the chart using the tanks data for the selected site
+                    TankVolumeBarChart.drawChart(siteData.tanks);
+                } else {
+                    console.warn('Site not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching tank data:', error);
+            });
+    },
+
+    drawChart: (tanks) => {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', 'Tank Type');
+        data.addColumn('number', 'Count');
+        data.addColumn({ type: 'string', role: 'style' });
+
+        // Populate the data table with tank information
+        tanks.forEach(tank => {
+            data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+        });
+
+        const options = {
+            title: '',
+            chartArea: { width: '70%', height: '60%' },
+            hAxis: {
+                title: '',
+            },
+            vAxis: {
+                title: '',
+                minValue: 0
+            },
+            legend: 'none',
+        };
+
+        // Draw the chart
+        const tankVolumeChart = document.getElementById('tankVolumeChart');
+        const chart = new google.visualization.ColumnChart(tankVolumeChart);
+        chart.draw(data, options);
+    }
+};
+
+const DeliveryBarChart = {
+    init: () => {
+        const deliveryVolumeChart = document.getElementById('deliveryVolumeChart');
+        if (deliveryVolumeChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(DeliveryBarChart.fetchDeliveryData);
+        }
+    },
+
+    fetchDeliveryData: (siteName) => {
+        // Fetch the tank data from the JSON file
+        fetch('../../data/sites.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Find the site data based on the passed siteName
+                const siteData = data.sites.find(site => site.siteName === siteName);
+
+                if (siteData) {
+                    // Draw the chart using the tanks data for the selected site
+                    DeliveryBarChart.drawChart(siteData.tanks);
+                } else {
+                    console.warn('Site not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching tank data:', error);
+            });
+    },
+
+    drawChart: (tanks) => {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', 'Tank Type');
+        data.addColumn('number', 'Count');
+        data.addColumn({ type: 'string', role: 'style' });
+
+        // Populate the data table with tank information
+        tanks.forEach(tank => {
+            data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+        });
+
+        const options = {
+            title: '',
+            chartArea: { width: '70%', height: '60%' },
+            hAxis: {
+                title: '',
+            },
+            vAxis: {
+                title: '',
+                minValue: 0
+            },
+            legend: 'none',
+        };
+
+        // Draw the chart
+        const deliveryVolumeChart = document.getElementById('deliveryVolumeChart');
+        const chart = new google.visualization.ColumnChart(deliveryVolumeChart);
+        chart.draw(data, options);
+    }
+};
+
+// **** Demo Fetch Sites Into Page **** //
+    const PopulateSiteLists = {
+        // Initialization function to fetch data and populate lists
+        init: async function () {
+            try {
+                const siteData = await this.fetchSiteData();
+                this.populateLists(siteData);
+                this.addEventListeners();
+            } catch (error) {
+                console.error("Error loading site data:", error);
+            }
+        },
+
+        // Fetch site data from the JSON file
+        fetchSiteData: async function () {
+            const response = await fetch('../../data/sites.json');
+            if (!response.ok) {
+                throw new Error('Failed to fetch site data');
+            }
+            return await response.json();
+        },
+
+        // Populate the sites lists with fetched data
+        populateLists: function (siteData) {
+            const tanksListContainer = document.querySelector('#tanks-sites-list .sites-list ul');
+            const deliveryListContainer = document.querySelector('#delivery-sites-list .sites-list ul');
+
+            // Helper function to create site list items
+            const createSiteListItem = (site, index, target) => {
+                const listItem = document.createElement('li');
+                const siteName = document.createElement('span');
+                siteName.classList.add('site-name');
+                siteName.textContent = site.siteName;
+
+                const tankCount = document.createElement('span');
+                tankCount.classList.add('tanks-length');
+                tankCount.textContent = site.tanks.length;
+
+                listItem.appendChild(siteName);
+                listItem.appendChild(tankCount);
+                if (index === 0) {
+                    listItem.classList.add('selected');
+                    const tankSiteName = listItem.querySelector('.site-name').textContent.trim();
+                    TankVolumeBarChart.fetchTankData(tankSiteName);
+                    const deliverySiteName = listItem.querySelector('.site-name').textContent.trim();
+                    DeliveryBarChart.fetchDeliveryData(deliverySiteName);
+                }
+
+                return listItem;
+            };
+
+            // Populate both site lists with siteData
+            siteData.sites.forEach((site, index, target) => {
+                // Check if there's enough storage before adding new items
+                try {                
+                    tanksListContainer.appendChild(createSiteListItem(site, index, 'tanks'));
+                    deliveryListContainer.appendChild(createSiteListItem(site, index, 'delivery'));
+                } catch (e) {
+                    if (e.name === 'QuotaExceededError') {
+                        console.error('Storage limit exceeded. Consider clearing unused data.');
+                        // Implement cleanup or notify user here
+                    }
+                }
+            });
+            
+        },
+
+        // Add event listeners for filtering
+        addEventListeners: function () {
+            const tanksFilterInput = document.querySelector('#tanks-sites-list .site-filter input');
+            const deliveryFilterInput = document.querySelector('#delivery-sites-list .site-filter input');
+            const tanksListContainer = document.querySelector('#tanks-sites-list .sites-list ul');
+            const deliveryListContainer = document.querySelector('#delivery-sites-list .sites-list ul');
+
+            // Add input event listener to each filter input
+            tanksFilterInput.addEventListener('input', () => this.filterSites(tanksFilterInput, tanksListContainer));
+            deliveryFilterInput.addEventListener('input', () => this.filterSites(deliveryFilterInput, deliveryListContainer));
+
+            const tankListItems = document.querySelectorAll('#tanks-sites-list .sites-list li');
+            tankListItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Remove 'selected' class from all items
+                    tankListItems.forEach(i => i.classList.remove('selected'));
+
+                    // Add 'selected' class to the clicked item
+                    this.classList.add('selected');
+
+                    // Get the site name from the clicked item
+                    const tankSiteName = this.querySelector('.site-name').textContent.trim(); // Get the site name
+
+                    // Call fetchTankData to update the chart based on the selected site
+                    TankVolumeBarChart.fetchTankData(tankSiteName);
+                });
+            });
+
+            const deliveryListItems = document.querySelectorAll('#delivery-sites-list .sites-list li');
+            deliveryListItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Remove 'selected' class from all items
+                    deliveryListItems.forEach(i => i.classList.remove('selected'));
+
+                    // Add 'selected' class to the clicked item
+                    this.classList.add('selected');
+
+                    // Get the site name from the clicked item
+                    const deliverySiteName = this.querySelector('.site-name').textContent.trim();
+
+                    // Call fetchDeliveryData to update the chart based on the selected site
+                    DeliveryBarChart.fetchDeliveryData(deliverySiteName);
+
+                });
+            });
+        },
+
+        // Filter function for site lists
+        filterSites: function (input, container) {
+            const filterValue = input.value.toLowerCase();
+            const listItems = container.querySelectorAll('li');
+
+            listItems.forEach((item) => {
+                // Get the site name by excluding .tanks-length content
+                const siteName = item.childNodes[0].textContent.toLowerCase().trim();
+                item.style.display = siteName.includes(filterValue) ? '' : 'none';
+            });
+        }
+
+    };
+// **** End Demo Fetch Sites Into Page **** //
 
 
 // We will Reload Charts on Menu Collapsed
@@ -967,9 +1226,22 @@ const ReloadCharts = {
                 if (!systemAlarmsChart.classList.contains('hide')) {
                     SystemAlarmsDonutChart.init();
                 }
+
                 const operationalAlarmsChart = document.getElementById('operationalDonutChart');
                 if (!operationalAlarmsChart.classList.contains('hide')) {
                     OperationalAlarmsDonutChart.init();
+                }
+
+                const selectedTankSiteElement = document.querySelector('#tanks-sites-list .sites-list li.selected');
+                if (selectedTankSiteElement) {
+                    const siteName = selectedTankSiteElement.querySelector('.site-name').textContent.trim();
+                    TankVolumeBarChart.fetchTankData(siteName);
+                }
+
+                const selectedDeliverySiteElement = document.querySelector('#delivery-sites-list .sites-list li.selected');
+                if (selectedDeliverySiteElement) {
+                    const siteName = selectedDeliverySiteElement.querySelector('.site-name').textContent.trim();
+                    DeliveryBarChart.fetchDeliveryData(siteName);
                 }
 
             }, 0);
@@ -984,10 +1256,15 @@ const RunCharts = {
         SiteStatusChart.init();
         SystemAlarmsChart.init();
         OperationalAlarmsBarChart.init();
+        TankVolumeBarChart.init();
     }
 }
 
 pageReady(() => {
+    // Demo Function
+        PopulateSiteLists.init();
+    // End Demo
+
     GetCurrentProductValue.init();
     FormatNumbers.init();
     TrendingUpdates.init();

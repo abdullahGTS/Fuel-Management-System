@@ -160,38 +160,43 @@
                                     <div class="gts-box gts-cards cards-3">
                                         <div class="gts-card-container">
                                             <div class="gts-card gasoline95">
-                                                <div class="gts-value">
-                                                    <div class="icon-wrapper">
-                                                        <span
-                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                <div class="card-padding">
+                                                    <div class="gts-value">
+                                                        <div class="icon-wrapper">
+                                                            <span
+                                                                class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                        </div>
+                                                        <h3><span id="gasoline95-value">1010038.997</span> lts</h3>
+                                                        <p>Gasoline 95</p>
                                                     </div>
-                                                    <h3><span id="gasoline95-value">1010038.997</span> lts</h3>
-                                                    <p>Gasoline 95</p>
-                                                </div>
-                                                <div class="trending down">
-                                                    <div class="trending-tag"></div>
-                                                    <span class="trending-duration">Down from last month</span>
+                                                    <div class="trending down">
+                                                        <div class="trending-tag"></div>
+                                                        <span class="trending-duration">Down from last month</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="gts-card-container">
                                             <div class="gts-card gasoline91">
-                                                <div class="gts-value">
-                                                    <div class="icon-wrapper">
-                                                        <span
-                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                <div class="card-padding">
+                                                    <div class="gts-value">
+                                                        <div class="icon-wrapper">
+                                                            <span
+                                                                class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                        </div>
+                                                        <h3><span id="gasoline91-value">211038.997</span> lts</h3>
+                                                        <p>Gasoline 91</p>
                                                     </div>
-                                                    <h3><span id="gasoline91-value">211038.997</span> lts</h3>
-                                                    <p>Gasoline 91</p>
-                                                </div>
-                                                <div class="trending up">
-                                                    <div class="trending-tag"></div>
-                                                    <span class="trending-duration">Down from last month</span>
+                                                    <div class="trending up">
+                                                        <div class="trending-tag"></div>
+                                                        <span class="trending-duration">Down from last month</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="gts-card-container">
                                             <div class="gts-card diesel">
+                                                <div class="card-padding">
                                                 <div class="gts-value">
                                                     <div class="icon-wrapper">
                                                         <span
@@ -203,6 +208,7 @@
                                                 <div class="trending down">
                                                     <div class="trending-tag"></div>
                                                     <span class="trending-duration">Down from last month</span>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -352,11 +358,9 @@
                                     <!-- Operational Alarms -->
                                     <div class="gts-box">
                                         <div class="gts-charts white-box lg-chart">
-
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
-                                                    <span
-                                                        class="mat-icon material-symbols-sharp">bar_chart</span>
+                                                    <span class="mat-icon material-symbols-sharp">bar_chart</span>
                                                     <h3>Operational Alarms</h3>
                                                 </div>
                                                 <div class="chart-controls">
@@ -364,22 +368,130 @@
                                                         data-popover-target="#download-chart">
                                                         <span class="mat-icon material-symbols-sharp">download</span>
                                                     </button>
-                                                    <button class="btn btn-icon toggle-chart-btn" id="toggle-operational">
+                                                    <button class="btn btn-icon toggle-chart-btn"
+                                                        id="toggle-operational">
                                                         <span class="mat-icon material-symbols-sharp">pie_chart</span>
                                                     </button>
 
                                                 </div>
                                             </div>
-
-
-
                                             <div id="operationalAlarmsChart" class="chart-area"></div>
                                             <div id="operationalDonutChart" class="chart-area hide"></div>
-
                                             <div class="chart-legend"></div>
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tanks -->
+                        <div class="gts-section">
+                            <div class="gts-section-header">
+                                <span class="mat-icon material-symbols-sharp">gas_meter</span>
+                                <h2>Tanks</h2>
+                            </div>
+                            <div class="gts-section-conatiner">
+                                <div class="gts-flex-row row-2-9">
+                                    <div class="gts-box gts-cards">
+                                        <div class="gts-card-container">
+                                            <div class="gts-card">
+                                                <div class="sites-list-wrapper" id="tanks-sites-list">
+                                                    <div class="site-filter">
+                                                        <input type="text" placeholder="Find site..." />
+                                                    </div>
+                                                    <div class="sites-list custom-scroll-bar">
+                                                        <ul>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">equalizer</span>
+                                                    <h3>Product volume per tank</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="tankVolumeChart" class="chart-area"></div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span
+                                                        class="mat-icon material-symbols-sharp">incomplete_circle</span>
+                                                    <h3>Tank product above and below <span id="predefind-vol">50%</span>
+                                                    </h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Delivery -->
+                        <div class="gts-section">
+                            <div class="gts-section-header">
+                                <span class="mat-icon material-symbols-sharp">local_shipping</span>
+                                <h2>Delivery</h2>
+                            </div>
+                            <div class="gts-section-conatiner">
+                                <div class="gts-flex-row row-2-9">
+                                    <div class="gts-box gts-cards">
+                                        <div class="gts-card-container">
+                                            <div class="gts-card">
+                                                <div class="sites-list-wrapper" id="delivery-sites-list">
+                                                    <div class="site-filter">
+                                                        <input type="text" placeholder="Find site..." />
+                                                    </div>
+                                                    <div class="sites-list">
+                                                        <ul>
+                                                            <!-- JavaScript will populate this with <li> elements, like:
+                                                            <li>2346<span class="tanks-length">5</span></li> -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="gts-box">
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">equalizer</span>
+                                                    <h3>Product volume per tank</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="deliveryVolumeChart" class="chart-area"></div>
+                                            
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -446,7 +558,6 @@
                         </div>
                     </div>
                 </li>
-
             </ul>
         </div>
     </div>

@@ -1,0 +1,144 @@
+{
+    "sites": [
+      {
+        "siteName": "1012",
+        "tanks": [
+          {
+            "productName": "Gasoline 95",
+            "value": 25000,
+            "delivery": 4000
+          },
+          {
+            "productName": "Diesel",
+            "value": 32000,
+            "delivery": 2000
+          },
+          {
+            "productName": "Gasoline 92",
+            "value": 15000,
+            "delivery": 5000
+          }
+        ]
+      },
+      {
+        "siteName": "2025",
+        "tanks": [
+          {
+            "productName": "Gasoline 95",
+            "value": 28000,
+            "delivery": 3000
+          },
+          {
+            "productName": "Diesel",
+            "value": 35000,
+            "delivery": 1500
+          }
+        ]
+      },
+      {
+        "siteName": "3039",
+        "tanks": [
+          {
+            "productName": "Gasoline 92",
+            "value": 10000,
+            "delivery": 4500
+          },
+          {
+            "productName": "Diesel",
+            "value": 40000,
+            "delivery": 1000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 18000,
+            "delivery": 3000
+          },
+          {
+            "productName": "Gasoline 92",
+            "value": 21000,
+            "delivery": 2500
+          }
+        ]
+      },
+      {
+        "siteName": "4046",
+        "tanks": [
+          {
+            "productName": "Diesel",
+            "value": 36000,
+            "delivery": 4000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 12000,
+            "delivery": 1000
+          }
+        ]
+      },
+      {
+        "siteName": "5052",
+        "tanks": [
+          {
+            "productName": "Gasoline 92",
+            "value": 27000,
+            "delivery": 4500
+          },
+          {
+            "productName": "Diesel",
+            "value": 34000,
+            "delivery": 3000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 22000,
+            "delivery": 2000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 19000,
+            "delivery": 5000
+          },
+          {
+            "productName": "Diesel",
+            "value": 30000,
+            "delivery": 2500
+          }
+        ]
+      },
+      {
+        "siteName": "6063",
+        "tanks": [
+          {
+            "productName": "Gasoline 92",
+            "value": 15000,
+            "delivery": 4000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 24000,
+            "delivery": 2000
+          },
+          {
+            "productName": "Diesel",
+            "value": 38000,
+            "delivery": 1500
+          },
+          {
+            "productName": "Gasoline 92",
+            "value": 20000,
+            "delivery": 5000
+          },
+          {
+            "productName": "Gasoline 95",
+            "value": 17000,
+            "delivery": 1000
+          },
+          {
+            "productName": "Diesel",
+            "value": 33000,
+            "delivery": 4500
+          }
+        ]
+      }
+    ]
+  }  

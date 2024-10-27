@@ -15,7 +15,9 @@
                 border-radius: var(--gts-sm-curve);
                 display: flex;
                 flex-direction: column;
-                padding: 30px;
+                align-items: stretch;
+                justify-content: stretch;
+                padding: 20px 25px 30px 30px;
                 min-height: 520px;
                 &.lg-chart {
                     min-height: 595px;
@@ -89,6 +91,9 @@
 
                 .chart-area {
                     flex: 1;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
         }
@@ -97,6 +102,9 @@
         }
         &.row-6-4 {
             grid-template-columns: calc(60% - 10px) calc(40% - 10px);
+            &.reverse {
+                grid-template-columns: calc(40% - 10px) calc(60% - 10px);
+            }
         }
         &.row-8-2 {
             grid-template-columns: 1fr calc(33.33% - 6px);
@@ -104,8 +112,14 @@
                 grid-template-columns: calc(33.33% - 6px) 1fr;
             }
         }
+        &.row-2-6-2 {
+            grid-template-columns: calc(25% - 6px) 1fr calc(25% - 6px);
+        }
         &.row-1-9 {
             grid-template-columns: calc(25% - 10px) calc(75% - 10px);
+        }
+        &.row-2-9 {
+            grid-template-columns: calc(30% - 10px) calc(70% - 10px);
         }
         &.cols {
             flex-direction: column;
@@ -150,13 +164,15 @@
                     background-color: var(--gts-light-color);
                     width: 100%;
                     height: 100%;
-                    padding: 40px 60px 100px;
+                    padding: 0;
                     position: relative;
                     display: flex;
                     flex-direction: column;
                     gap: 21px;
                     overflow: hidden;
-
+                    .card-padding {
+                        padding: 40px 60px 100px;
+                    }
                     .gts-value {
                         .icon-wrapper {
                             border-radius: var(--gts-sm-curve);
@@ -337,6 +353,66 @@
                             }
                             &::before {
                                 background-color: var(--gts-red-color) !important;
+                            }
+                        }
+                    }
+
+                    .sites-list-wrapper {
+                        display: flex;
+                        flex-direction: column;
+                        height: 100%;
+                        .site-filter {
+                            padding: 20px 20px 0;
+                            input {
+                                background-color: var(--gts-white-color) !important;
+                            }
+                        }
+                        .sites-list {
+                            padding: 20px;
+                            ul {
+                                li {
+                                    padding: 10px 10px 10px 15px;
+                                    font-weight: 400;
+                                    display: flex;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    transition: all 320ms ease;
+
+                                    .tanks-length {
+                                        position: relative;
+                                        right: 0;
+                                        top: 0;
+                                        min-width: 10px;
+                                        min-height: 10px;
+                                        line-height: 10px;
+                                        padding: 7px;
+                                        color: var(--gts-white-color);
+                                        background-color: var(--gts-dark-color);
+                                        font-size: var(--gts-small-fs);
+                                        border-radius: 20px;
+                                        border: solid 0.5px var(--gts-dark-color);
+                                        font-weight: 500;
+                                        margin: 0 0 0 auto;
+                                        transition: all 320ms ease;
+                                    }
+                                    &:hover {
+                                        color: var(--gts-primary-color);
+                                        .tanks-length {
+                                            background-color: var(--gts-primary-color);
+                                            border: solid 0.5px var(--gts-primary-color);
+                                        }
+                                    }
+                                    &.selected {
+                                        color: var(--gts-primary-color);
+                                        background-color: rgba(var(--gts-brd-color), 0.1);
+                                        border-radius: var(--gts-sm-curve);
+                                    
+                                        .tanks-length {
+                                            background-color: var(--gts-primary-color);
+                                            border: solid 0.5px var(--gts-primary-color);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
