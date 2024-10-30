@@ -11,15 +11,15 @@ const SharedColors = {
 
 const AlarmsValues = {
     DISCONNECTED: { value: 6, color: '#7E66F5' },
-    LOW_FLOW_HOSE_2: { value: 11, color: '#3A75B7' },
-    PRODUCT_HIGH: { value: 2, color: '#008E84' },
+    LOW_FLOW_HOSE_2: { value: 11, color: '#FFB63C' },
+    PRODUCT_HIGH: { value: 2, color: '#6CDAB4' },
     WATER_HIGH: { value: 4, color: '#EABD3B' },
     OVERFLOW: { value: 13, color: '#CB548C' },
     SUCTION: { value: 1, color: '#18D4D3' },
-    SUDDEN_LOSS: { value: 6, color: "#0393B2" },
+    SUDDEN_LOSS: { value: 6, color: "#3B76FC" },
     PRODUCT_LOW: { value: 2, color: '#263049' },
     LOW_FLOW_HOSE_1: { value: 9, color: "#3F5C58" },
-    DELIVERY_RECONCILIATION: { value: 7, color: "#F06635" },
+    DELIVERY_RECONCILIATION: { value: 7, color: "#FF8E66" },
     TANK_NO_LEVEL: { value: 7, color: "#B81337" },
 };
 
@@ -38,6 +38,8 @@ const AlarmLabelMap = {
 
 
 };
+
+const predefinedPercentage = 90;
 
 // Unified Product Value from the DOM
 const GetCurrentProductValue = {
@@ -454,7 +456,7 @@ const SystemAlarmsChart = {
         }
     },
 
-    drawChart: () => {
+    drawChart: async () => {
         const data = new google.visualization.DataTable();
         const systemAlarmsChart = document.getElementById('systemAlarmsChart');
 
@@ -462,6 +464,7 @@ const SystemAlarmsChart = {
         data.addColumn('string', 'Alarm Type');
         data.addColumn('number', 'Count');
         data.addColumn({ type: 'string', role: 'style' }); // For bar colors
+        const backgroundColor = await getChartBackgroundColor();
 
         // Add rows with alarm values and user-friendly labels
         Object.keys(AlarmsValues).slice(0, 6).forEach(alarmType => {
@@ -473,6 +476,7 @@ const SystemAlarmsChart = {
         const options = {
             title: '',
             chartArea: { width: '80%', height: '70%' },
+            backgroundColor: backgroundColor,
             hAxis: {
                 title: '',
             },
@@ -525,12 +529,13 @@ const SystemAlarmsDonutChart = {
         }
     },
 
-    drawChart: () => {
+    drawChart: async () => {
         const data = new google.visualization.DataTable();
 
         // Define columns for alarm types and values
         data.addColumn('string', 'Alarm Type');
         data.addColumn('number', 'Count');
+        const backgroundColor = await getChartBackgroundColor();
 
         // Add rows with alarm values and user-friendly labels
         Object.keys(AlarmsValues).slice(0, 6).forEach(alarmType => {
@@ -543,6 +548,7 @@ const SystemAlarmsDonutChart = {
             title: '',
             pieHole: 0.4, // To make it a donut chart
             chartArea: { width: '80%', height: '80%' },
+            backgroundColor: backgroundColor,
             colors: Object.keys(AlarmsValues).map(alarmType => AlarmsValues[alarmType].color),
             legend: 'none',
             pieSliceText: 'percentage', // Show percentage on the slices
@@ -597,13 +603,14 @@ const OperationalAlarmsBarChart = {
         }
     },
 
-    drawChart: () => {
+    drawChart: async () => {
         const data = new google.visualization.DataTable();
 
         // Define columns for alarm types and values
         data.addColumn('string', 'Alarm Type');
         data.addColumn('number', 'Count');
         data.addColumn({ type: 'string', role: 'style' });
+        const backgroundColor = await getChartBackgroundColor();
 
         // Filter the AlarmsValues to include only the two desired alarm types
         const alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
@@ -622,6 +629,7 @@ const OperationalAlarmsBarChart = {
             title: '',
             chartArea: { width: '70%', height: '50%' },
             legend: 'none',
+            backgroundColor: backgroundColor,
             hAxis: {
                 title: '',
             },
@@ -673,12 +681,13 @@ const OperationalAlarmsDonutChart = {
         }
     },
 
-    drawChart: () => {
+    drawChart: async () => {
         const data = new google.visualization.DataTable();
 
         // Define columns for alarm types and values
         data.addColumn('string', 'Alarm Type');
         data.addColumn('number', 'Count');
+        const backgroundColor = await getChartBackgroundColor();
 
         // Use only the two specific alarms (SUDDEN_LOSS and DELIVERY_RECONCILIATION)
         const alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
@@ -694,6 +703,7 @@ const OperationalAlarmsDonutChart = {
             chartArea: { width: '65%', height: '65%' },
             colors: alarmsToDisplay.map(alarmType => AlarmsValues[alarmType].color),
             legend: 'none',
+            backgroundColor: backgroundColor,
             pieSliceText: 'percentage', // Show percentage on the slices
             pieSliceTextStyle: {
                 color: '#fff',
@@ -950,6 +960,7 @@ const TankVolumeBarChart = {
                 if (siteData) {
                     // Draw the chart using the tanks data for the selected site
                     TankVolumeBarChart.drawChart(siteData.tanks);
+                    PercentagePieChart.init(siteData);
                 } else {
                     console.warn('Site not found');
                 }
@@ -959,11 +970,12 @@ const TankVolumeBarChart = {
             });
     },
 
-    drawChart: (tanks) => {
+    drawChart: async (tanks) => {
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Tank Type');
         data.addColumn('number', 'Count');
         data.addColumn({ type: 'string', role: 'style' });
+        const backgroundColor = await getChartBackgroundColor();
 
         // Populate the data table with tank information
         tanks.forEach(tank => {
@@ -972,7 +984,8 @@ const TankVolumeBarChart = {
 
         const options = {
             title: '',
-            chartArea: { width: '70%', height: '60%' },
+            chartArea: { width: '70%', height: '70%' },
+            backgroundColor: backgroundColor,
             hAxis: {
                 title: '',
             },
@@ -1024,11 +1037,12 @@ const DeliveryBarChart = {
             });
     },
 
-    drawChart: (tanks) => {
+    drawChart: async (tanks) => {
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Tank Type');
         data.addColumn('number', 'Count');
         data.addColumn({ type: 'string', role: 'style' });
+        const backgroundColor = await getChartBackgroundColor();
 
         // Populate the data table with tank information
         tanks.forEach(tank => {
@@ -1037,7 +1051,8 @@ const DeliveryBarChart = {
 
         const options = {
             title: '',
-            chartArea: { width: '70%', height: '60%' },
+            chartArea: { width: '70%', height: '80%' },
+            backgroundColor: backgroundColor,
             hAxis: {
                 title: '',
             },
@@ -1052,6 +1067,101 @@ const DeliveryBarChart = {
         const deliveryVolumeChart = document.getElementById('deliveryVolumeChart');
         const chart = new google.visualization.ColumnChart(deliveryVolumeChart);
         chart.draw(data, options);
+    }
+};
+
+const PercentagePieChart = {
+    init: (siteData) => {
+        const siteName = siteData.siteName;
+        document.querySelector('#threshold').textContent = predefinedPercentage + '%';
+        PercentagePieChart.fetchTankData(siteName, predefinedPercentage, siteData.tanks);
+    },
+
+    fetchTankData: (siteName, predefinedPercentage, tanksData) => {
+        // const selectedSite = data.sites.find(site => site.siteName === siteName);
+
+        if (siteName) {
+            const { aboveCount, belowCount } = PercentagePieChart.getAboveBelowCounts(predefinedPercentage, tanksData);
+
+            const pieChartData = [
+                { label: "Above 50%", value: aboveCount },
+                { label: "Below 50%", value: belowCount }
+            ];
+
+            PercentagePieChart.renderChart(pieChartData);
+        } else {
+            console.log("Site not found.");
+        }
+    },
+
+    getAboveBelowCounts: (predefinedPercentage, tanksData) => {
+        let aboveCount = 0;
+        let belowCount = 0;
+
+        tanksData.forEach((tank) => {
+            const percentageChange = PercentagePieChart.calculatePercentageChange(tank.value, tank.oldValue);
+            if (percentageChange >= predefinedPercentage) {
+                aboveCount++;
+            } else {
+                belowCount++;
+            }
+        });
+
+        return { aboveCount, belowCount };
+    },
+
+    calculatePercentageChange: (current, old) => {
+        if (old === 0) return 0;
+        return ((current - old) / old) * 100;
+    },
+
+    renderChart: async (pieChartData) => {
+        const tankPercentageChart = document.getElementById('tankPercentageChart');
+        const chart = new google.visualization.PieChart(tankPercentageChart);
+        const windowWidth = window.innerWidth;
+        const backgroundColor = await getChartBackgroundColor();
+    
+        // Convert `pieChartData` to Google Charts DataTable format
+        const dataTable = new google.visualization.DataTable();
+        dataTable.addColumn('string', 'Category');
+        dataTable.addColumn('number', 'Count');
+        
+        // Add rows to the DataTable
+        pieChartData.forEach(item => {
+            dataTable.addRow([item.label, item.value]);
+        });
+    
+        // Set chart options
+        const options = {
+            title: '',
+            is3D: false,
+            backgroundColor: backgroundColor,
+            slices: {
+                0: {
+                    offset: 0.07,
+                    textStyle: { color: backgroundColor },
+                    color: '#9C9B9B',
+                    borderColor: backgroundColor,
+                    borderWidth: 0
+                },
+                1: {
+                    offset: 0.07,
+                    textStyle: { color: backgroundColor },
+                    color: '#3B76FC',
+                    borderColor: backgroundColor,
+                    borderWidth: 0
+                }
+            },
+            chartArea: {
+                width: windowWidth < 769 ? '90%' : '80%',
+                height: windowWidth < 769 ? '90%' : '80%'
+            },
+            pieSliceText: 'percentage',
+            legend: { position: 'none' }
+        };
+    
+        // Draw the chart with the DataTable
+        chart.draw(dataTable, options);
     }
 };
 
@@ -1098,8 +1208,17 @@ const DeliveryBarChart = {
                 if (index === 0) {
                     listItem.classList.add('selected');
                     const tankSiteName = listItem.querySelector('.site-name').textContent.trim();
+                    const tankSiteLength = listItem.querySelector('.tanks-length').textContent.trim();
+                    const tankSiteNameButton = document.querySelector('[data-popover-target="#tanks-sites-list-target"]');
+                    tankSiteNameButton.querySelector('.selected-site .site-name').textContent = tankSiteName;
+                    tankSiteNameButton.querySelector('.selected-site .site-tanks').textContent = tankSiteLength;
                     TankVolumeBarChart.fetchTankData(tankSiteName);
+
                     const deliverySiteName = listItem.querySelector('.site-name').textContent.trim();
+                    const deliverySiteLength = listItem.querySelector('.tanks-length').textContent.trim();
+                    const deliverySiteNameButton = document.querySelector('[data-popover-target="#delivery-sites-list-target"]');
+                    deliverySiteNameButton.querySelector('.selected-site .site-name').textContent = deliverySiteName;
+                    deliverySiteNameButton.querySelector('.selected-site .site-tanks').textContent = deliverySiteLength;
                     DeliveryBarChart.fetchDeliveryData(deliverySiteName);
                 }
 
@@ -1144,9 +1263,15 @@ const DeliveryBarChart = {
 
                     // Get the site name from the clicked item
                     const tankSiteName = this.querySelector('.site-name').textContent.trim(); // Get the site name
-
+                    const tankSiteLength = this.querySelector('.tanks-length').textContent.trim();
+                    const tankSiteNameButton = document.querySelector('[data-popover-target="#tanks-sites-list-target"]');
+                    tankSiteNameButton.querySelector('.selected-site .site-name').textContent = tankSiteName;
+                    tankSiteNameButton.querySelector('.selected-site .site-tanks').textContent = tankSiteLength;
+                    const popoverWrapper = this.closest(".popover-wrapper");
+                    Popover.handleClose(popoverWrapper);
                     // Call fetchTankData to update the chart based on the selected site
                     TankVolumeBarChart.fetchTankData(tankSiteName);
+
                 });
             });
 
@@ -1161,7 +1286,12 @@ const DeliveryBarChart = {
 
                     // Get the site name from the clicked item
                     const deliverySiteName = this.querySelector('.site-name').textContent.trim();
-
+                    const deliverySiteLength = this.querySelector('.tanks-length').textContent.trim();
+                    const deliverySiteNameButton = document.querySelector('[data-popover-target="#delivery-sites-list-target"]');
+                    deliverySiteNameButton.querySelector('.selected-site .site-name').textContent = deliverySiteName;
+                    deliverySiteNameButton.querySelector('.selected-site .site-tanks').textContent = deliverySiteLength;
+                    const popoverWrapper = this.closest(".popover-wrapper");
+                    Popover.handleClose(popoverWrapper);
                     // Call fetchDeliveryData to update the chart based on the selected site
                     DeliveryBarChart.fetchDeliveryData(deliverySiteName);
 
@@ -1236,6 +1366,7 @@ const ReloadCharts = {
                 if (selectedTankSiteElement) {
                     const siteName = selectedTankSiteElement.querySelector('.site-name').textContent.trim();
                     TankVolumeBarChart.fetchTankData(siteName);
+                    TankVolumeBarChart.fetchTankData(siteName);
                 }
 
                 const selectedDeliverySiteElement = document.querySelector('#delivery-sites-list .sites-list li.selected');
@@ -1262,7 +1393,9 @@ const RunCharts = {
 
 pageReady(() => {
     // Demo Function
+    setTimeout(() => {
         PopulateSiteLists.init();
+    }, 1000)
     // End Demo
 
     GetCurrentProductValue.init();

@@ -6,16 +6,19 @@
           {
             "productName": "Gasoline 95",
             "value": 25000,
+            "oldValue": 20000,
             "delivery": 4000
           },
           {
             "productName": "Diesel",
             "value": 32000,
+            "oldValue": 10000,
             "delivery": 2000
           },
           {
             "productName": "Gasoline 92",
             "value": 15000,
+            "oldValue": 25000,
             "delivery": 5000
           }
         ]
@@ -26,11 +29,13 @@
           {
             "productName": "Gasoline 95",
             "value": 28000,
+            "oldValue": 29000,
             "delivery": 3000
           },
           {
             "productName": "Diesel",
             "value": 35000,
+            "oldValue": 19000,
             "delivery": 1500
           }
         ]
@@ -41,21 +46,25 @@
           {
             "productName": "Gasoline 92",
             "value": 10000,
+            "oldValue": 14200,
             "delivery": 4500
           },
           {
             "productName": "Diesel",
             "value": 40000,
+            "oldValue": 140000,
             "delivery": 1000
           },
           {
             "productName": "Gasoline 95",
             "value": 18000,
+            "oldValue": 17000,
             "delivery": 3000
           },
           {
             "productName": "Gasoline 92",
             "value": 21000,
+            "oldValue": 1000,
             "delivery": 2500
           }
         ]
@@ -66,11 +75,13 @@
           {
             "productName": "Diesel",
             "value": 36000,
+            "oldValue": 16000,
             "delivery": 4000
           },
           {
             "productName": "Gasoline 95",
             "value": 12000,
+            "oldValue": 52000,
             "delivery": 1000
           }
         ]
@@ -81,26 +92,31 @@
           {
             "productName": "Gasoline 92",
             "value": 27000,
+            "oldValue": 29000,
             "delivery": 4500
           },
           {
             "productName": "Diesel",
             "value": 34000,
+            "oldValue": 31000,
             "delivery": 3000
           },
           {
             "productName": "Gasoline 95",
             "value": 22000,
+            "oldValue": 72000,
             "delivery": 2000
           },
           {
             "productName": "Gasoline 95",
             "value": 19000,
+            "oldValue": 99000,
             "delivery": 5000
           },
           {
             "productName": "Diesel",
             "value": 30000,
+            "oldValue": 34000,
             "delivery": 2500
           }
         ]
@@ -111,31 +127,37 @@
           {
             "productName": "Gasoline 92",
             "value": 15000,
+            "oldValue": 15500,
             "delivery": 4000
           },
           {
             "productName": "Gasoline 95",
             "value": 24000,
+            "oldValue": 4000,
             "delivery": 2000
           },
           {
             "productName": "Diesel",
             "value": 38000,
+            "oldValue": 78000,
             "delivery": 1500
           },
           {
             "productName": "Gasoline 92",
             "value": 20000,
+            "oldValue": 60000,
             "delivery": 5000
           },
           {
             "productName": "Gasoline 95",
             "value": 17000,
+            "oldValue": 3000,
             "delivery": 1000
           },
           {
             "productName": "Diesel",
             "value": 33000,
+            "oldValue": 53000,
             "delivery": 4500
           }
         ]

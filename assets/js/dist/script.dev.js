@@ -188,13 +188,16 @@ var Popover = {
         e.stopPropagation(); // Prevent click from reaching the popoverWrapper
       });
       popoverWrapper.addEventListener("click", function (e) {
-        popoverWrapper.style.display = "none";
-
-        if (popoverWrapper.hasAttribute('data-download-target')) {
-          popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
-        }
+        Popover.handleClose(popoverWrapper);
       });
     });
+  },
+  handleClose: function handleClose(popoverWrapper) {
+    popoverWrapper.style.display = "none";
+
+    if (popoverWrapper.hasAttribute('data-download-target')) {
+      popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
+    }
   }
 };
 pageReady(function () {

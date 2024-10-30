@@ -115,19 +115,64 @@ body.loaded {
                             display: flex;
                             flex-direction: row;
                             align-items: center;
+                            justify-content: space-between;
                             gap: 7px;
                             position: relative;
-                            padding: 0 3px 21px;
+                            padding: 0 10px;
+                            min-height: 50px;
+                            .gts-section-header-name {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                gap: 7px;
+                                flex: 1;
+                                h2 {
+                                    font-size: var(--gts-nomral-fs);
+                                    color: var(--gts-gray-color);
+                                    font-weight: 600;
+                                }
 
-                            h2 {
-                                font-size: var(--gts-nomral-fs);
-                                color: var(--gts-gray-color);
-                                font-weight: 600;
+                                .mat-icon {
+                                    font-size: var(--gts-icon-fs);
+                                    color: var(--gts-gray-color);
+                                }
                             }
-
-                            .mat-icon {
-                                font-size: var(--gts-icon-fs);
-                                color: var(--gts-gray-color);
+                            .gts-section-header-ctrl {
+                                margin: 0 0 0 auto;
+                                button {
+                                    margin: 0 !important;
+                                    display: flex;
+                                    align-items: center;
+                                    background-color: transparent !important;
+                                    padding: 0 !important;
+                                    box-shadow: none !important;
+                                    border: 0 !important;
+                                    gap: 10px;
+                                    .selected-site {
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 7px;
+                                        .site-tanks {
+                                            margin-left: 30px;
+                                            position: relative;
+                                            right: 0;
+                                            top: 0;
+                                            min-width: 10px;
+                                            min-height: 10px;
+                                            line-height: 10px;
+                                            padding: 6px;
+                                            color: var(--gts-white-color);
+                                            background-color: var(--gts-primary-color);
+                                            font-size: var(--gts-small-fs);
+                                            border-radius: 20px;
+                                            border: solid 0.5px var(--gts-primary-color);
+                                            font-weight: 500;
+                                        }
+                                    }
+                                    * {
+                                        color: var(--gts-dark-color);
+                                    }
+                                }
                             }
                         }
 

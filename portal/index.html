@@ -151,8 +151,10 @@
                         <!-- Products -->
                         <div class="gts-section">
                             <div class="gts-section-header">
-                                <span class="mat-icon material-symbols-sharp">local_gas_station</span>
-                                <h2>Products</h2>
+                                <div class="gts-section-header-name">
+                                    <span class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                    <h2>Products</h2>
+                                </div>
                             </div>
 
                             <div class="gts-section-conatiner">
@@ -268,8 +270,10 @@
                         <!-- Sites -->
                         <div class="gts-section">
                             <div class="gts-section-header">
-                                <span class="mat-icon material-symbols-sharp">account_tree</span>
-                                <h2>Sites</h2>
+                                <div class="gts-section-header-name">
+                                    <span class="mat-icon material-symbols-sharp">account_tree</span>
+                                    <h2>Sites</h2>
+                                </div>
                             </div>
                             <div class="gts-section-conatiner">
                                 <div class="gts-flex-row row-8-2 reverse">
@@ -323,8 +327,10 @@
                         <!-- Alarms -->
                         <div class="gts-section">
                             <div class="gts-section-header">
-                                <span class="mat-icon material-symbols-sharp">warning</span>
-                                <h2>Alarms</h2>
+                                <div class="gts-section-header-name">
+                                    <span class="mat-icon material-symbols-sharp">warning</span>
+                                    <h2>Alarms</h2>
+                                </div>
                             </div>
                             <div class="gts-section-conatiner">
                                 <div class="gts-flex-row row-6-4">
@@ -388,24 +394,38 @@
                         <!-- Tanks -->
                         <div class="gts-section">
                             <div class="gts-section-header">
-                                <span class="mat-icon material-symbols-sharp">gas_meter</span>
-                                <h2>Tanks</h2>
+                                <div class="gts-section-header-name">
+                                    <span class="mat-icon material-symbols-sharp">gas_meter</span>
+                                    <h2>Tanks</h2>
+                                </div>
+                                <div class="gts-section-header-ctrl">
+                                    <button data-popover-target="#tanks-sites-list-target">
+                                        
+                                        <span class="selected-site"><strong>Selected Site:</strong> 
+                                            <div class="site-name">Select Site...</div>
+                                            <div class="site-tanks">0</div>
+                                        </span>
+                                        <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="gts-section-conatiner">
                                 <div class="gts-flex-row row-2-9">
                                     <div class="gts-box gts-cards">
-                                        <div class="gts-card-container">
-                                            <div class="gts-card">
-                                                <div class="sites-list-wrapper" id="tanks-sites-list">
-                                                    <div class="site-filter">
-                                                        <input type="text" placeholder="Find site..." />
-                                                    </div>
-                                                    <div class="sites-list custom-scroll-bar">
-                                                        <ul>
-                                                        </ul>
-                                                    </div>
+                                        <div class="gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                                    <h3>Volume <span id="threshold">(50%)</span> Threshold</h3>
+                                                </div>
+                                                <div class="chart-controls">
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
                                                 </div>
                                             </div>
+                                            <div id="tankPercentageChart" class="chart-area"></div>
                                         </div>
                                     </div>
                                     <div class="gts-box">
@@ -413,7 +433,7 @@
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
                                                     <span class="mat-icon material-symbols-sharp">equalizer</span>
-                                                    <h3>Product volume per tank</h3>
+                                                    <h3>Tanks Volume Distribution</h3>
                                                 </div>
                                                 <div class="chart-controls">
                                                     <button class="btn btn-icon download-chart"
@@ -425,25 +445,6 @@
                                             <div id="tankVolumeChart" class="chart-area"></div>
                                         </div>
                                     </div>
-                                    <!-- <div class="gts-box">
-                                        <div class="gts-charts white-box">
-                                            <div class="gts-card-title">
-                                                <div class="gts-card-title-wrapper">
-                                                    <span
-                                                        class="mat-icon material-symbols-sharp">incomplete_circle</span>
-                                                    <h3>Tank product above and below <span id="predefind-vol">50%</span>
-                                                    </h3>
-                                                </div>
-                                                <div class="chart-controls">
-                                                    <button class="btn btn-icon download-chart"
-                                                        data-popover-target="#download-chart">
-                                                        <span class="mat-icon material-symbols-sharp">download</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
                                 </div>
                             </div>
                         </div>
@@ -452,34 +453,29 @@
                         <!-- Delivery -->
                         <div class="gts-section">
                             <div class="gts-section-header">
-                                <span class="mat-icon material-symbols-sharp">local_shipping</span>
-                                <h2>Delivery</h2>
+                                <div class="gts-section-header-name">
+                                    <span class="mat-icon material-symbols-sharp">local_shipping</span>
+                                    <h2>Delivery</h2>
+                                </div>
+                                <div class="gts-section-header-ctrl">
+                                    <button data-popover-target="#delivery-sites-list-target">
+                                        
+                                        <span class="selected-site"><strong>Selected Site:</strong> 
+                                            <div class="site-name">Select Site...</div>
+                                            <div class="site-tanks">0</div>
+                                        </span>
+                                        <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="gts-section-conatiner">
-                                <div class="gts-flex-row row-2-9">
-                                    <div class="gts-box gts-cards">
-                                        <div class="gts-card-container">
-                                            <div class="gts-card">
-                                                <div class="sites-list-wrapper" id="delivery-sites-list">
-                                                    <div class="site-filter">
-                                                        <input type="text" placeholder="Find site..." />
-                                                    </div>
-                                                    <div class="sites-list">
-                                                        <ul>
-                                                            <!-- JavaScript will populate this with <li> elements, like:
-                                                            <li>2346<span class="tanks-length">5</span></li> -->
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="gts-flex-row row-10">
                                     <div class="gts-box">
                                         <div class="gts-charts white-box">
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
                                                     <span class="mat-icon material-symbols-sharp">equalizer</span>
-                                                    <h3>Product volume per tank</h3>
+                                                    <h3>Delivery Volume Distribution</h3>
                                                 </div>
                                                 <div class="chart-controls">
                                                     <button class="btn btn-icon download-chart"
@@ -639,6 +635,36 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Popover Tanks Sites List -->
+    <div class="popover-wrapper" id="tanks-sites-list-target" data-position="bottom">
+        <div class="popover-body popover-list">
+            <div class="sites-list-wrapper" id="tanks-sites-list">
+                <div class="site-filter">
+                    <input type="text" placeholder="Find site..." />
+                </div>
+                <div class="sites-list custom-scroll-bar">
+                    <ul>
+                    </ul>
+                </div>
+            </div>        
+        </div>
+    </div>
+
+    <!-- Popover Tanks Sites List -->
+    <div class="popover-wrapper" id="delivery-sites-list-target" data-position="bottom">
+        <div class="popover-body popover-list">
+            <div class="sites-list-wrapper" id="delivery-sites-list">
+                <div class="site-filter">
+                    <input type="text" placeholder="Find site..." />
+                </div>
+                <div class="sites-list custom-scroll-bar">
+                    <ul>
+                    </ul>
+                </div>
+            </div>        
         </div>
     </div>
 

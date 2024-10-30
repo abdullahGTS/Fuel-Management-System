@@ -195,13 +195,19 @@ const Popover = {
       popoverBody.addEventListener("click", (e) => {
         e.stopPropagation(); // Prevent click from reaching the popoverWrapper
       });
+
       popoverWrapper.addEventListener("click", (e) => {
-        popoverWrapper.style.display = "none";
-        if (popoverWrapper.hasAttribute('data-download-target')) {
-          popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
-        }
+        Popover.handleClose(popoverWrapper);
       });
+
     });
+  },
+
+  handleClose: (popoverWrapper) => {
+    popoverWrapper.style.display = "none";
+    if (popoverWrapper.hasAttribute('data-download-target')) {
+      popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
+    }
   }
 };
 

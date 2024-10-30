@@ -16,11 +16,11 @@ var AlarmsValues = {
   },
   LOW_FLOW_HOSE_2: {
     value: 11,
-    color: '#3A75B7'
+    color: '#FFB63C'
   },
   PRODUCT_HIGH: {
     value: 2,
-    color: '#008E84'
+    color: '#6CDAB4'
   },
   WATER_HIGH: {
     value: 4,
@@ -36,7 +36,7 @@ var AlarmsValues = {
   },
   SUDDEN_LOSS: {
     value: 6,
-    color: "#0393B2"
+    color: "#3B76FC"
   },
   PRODUCT_LOW: {
     value: 2,
@@ -48,7 +48,7 @@ var AlarmsValues = {
   },
   DELIVERY_RECONCILIATION: {
     value: 7,
-    color: "#F06635"
+    color: "#FF8E66"
   },
   TANK_NO_LEVEL: {
     value: 7,
@@ -67,7 +67,8 @@ var AlarmLabelMap = {
   PRODUCT_LOW: 'Low Product Level',
   DELIVERY_RECONCILIATION: 'Delivery Reconciliation',
   TANK_NO_LEVEL: 'No Level Tank'
-}; // Unified Product Value from the DOM
+};
+var predefinedPercentage = 90; // Unified Product Value from the DOM
 
 var GetCurrentProductValue = {
   currentGasoline95Value: null,
@@ -521,43 +522,61 @@ var SystemAlarmsChart = {
     }
   },
   drawChart: function drawChart() {
-    var data = new google.visualization.DataTable();
-    var systemAlarmsChart = document.getElementById('systemAlarmsChart'); // Define columns for alarm types and values
+    var data, systemAlarmsChart, backgroundColor, options, chart;
+    return regeneratorRuntime.async(function drawChart$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            data = new google.visualization.DataTable();
+            systemAlarmsChart = document.getElementById('systemAlarmsChart'); // Define columns for alarm types and values
 
-    data.addColumn('string', 'Alarm Type');
-    data.addColumn('number', 'Count');
-    data.addColumn({
-      type: 'string',
-      role: 'style'
-    }); // For bar colors
-    // Add rows with alarm values and user-friendly labels
+            data.addColumn('string', 'Alarm Type');
+            data.addColumn('number', 'Count');
+            data.addColumn({
+              type: 'string',
+              role: 'style'
+            }); // For bar colors
 
-    Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
-      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+            _context4.next = 7;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-      data.addRow([displayLabel, AlarmsValues[alarmType].value, "color: ".concat(AlarmsValues[alarmType].color)]);
-    }); // Chart options for vertical bars
+          case 7:
+            backgroundColor = _context4.sent;
+            // Add rows with alarm values and user-friendly labels
+            Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
+              var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
 
-    var options = {
-      title: '',
-      chartArea: {
-        width: '80%',
-        height: '70%'
-      },
-      hAxis: {
-        title: ''
-      },
-      vAxis: {
-        title: '',
-        minValue: 0
-      },
-      legend: 'none'
-    }; // Draw the chart
+              data.addRow([displayLabel, AlarmsValues[alarmType].value, "color: ".concat(AlarmsValues[alarmType].color)]);
+            }); // Chart options for vertical bars
 
-    var chart = new google.visualization.ColumnChart(systemAlarmsChart);
-    chart.draw(data, options); // Create the custom legend
+            options = {
+              title: '',
+              chartArea: {
+                width: '80%',
+                height: '70%'
+              },
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: ''
+              },
+              vAxis: {
+                title: '',
+                minValue: 0
+              },
+              legend: 'none'
+            }; // Draw the chart
 
-    SystemAlarmsChart.createLegend(systemAlarmsChart);
+            chart = new google.visualization.ColumnChart(systemAlarmsChart);
+            chart.draw(data, options); // Create the custom legend
+
+            SystemAlarmsChart.createLegend(systemAlarmsChart);
+
+          case 13:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    });
   },
   // Create custom legend with colors and labels
   createLegend: function createLegend(wrapper) {
@@ -592,45 +611,63 @@ var SystemAlarmsDonutChart = {
     }
   },
   drawChart: function drawChart() {
-    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+    var data, backgroundColor, options, systemAlarmsChart, chart;
+    return regeneratorRuntime.async(function drawChart$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            data = new google.visualization.DataTable(); // Define columns for alarm types and values
 
-    data.addColumn('string', 'Alarm Type');
-    data.addColumn('number', 'Count'); // Add rows with alarm values and user-friendly labels
+            data.addColumn('string', 'Alarm Type');
+            data.addColumn('number', 'Count');
+            _context5.next = 5;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
-      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+          case 5:
+            backgroundColor = _context5.sent;
+            // Add rows with alarm values and user-friendly labels
+            Object.keys(AlarmsValues).slice(0, 6).forEach(function (alarmType) {
+              var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
 
-      data.addRow([displayLabel, AlarmsValues[alarmType].value]);
-    }); // Chart options for donut chart
+              data.addRow([displayLabel, AlarmsValues[alarmType].value]);
+            }); // Chart options for donut chart
 
-    var options = {
-      title: '',
-      pieHole: 0.4,
-      // To make it a donut chart
-      chartArea: {
-        width: '80%',
-        height: '80%'
-      },
-      colors: Object.keys(AlarmsValues).map(function (alarmType) {
-        return AlarmsValues[alarmType].color;
-      }),
-      legend: 'none',
-      pieSliceText: 'percentage',
-      // Show percentage on the slices
-      pieSliceTextStyle: {
-        color: '#fff'
-      },
-      slices: {
-        offset: 0.07
-      } // width: 699
+            options = {
+              title: '',
+              pieHole: 0.4,
+              // To make it a donut chart
+              chartArea: {
+                width: '80%',
+                height: '80%'
+              },
+              backgroundColor: backgroundColor,
+              colors: Object.keys(AlarmsValues).map(function (alarmType) {
+                return AlarmsValues[alarmType].color;
+              }),
+              legend: 'none',
+              pieSliceText: 'percentage',
+              // Show percentage on the slices
+              pieSliceTextStyle: {
+                color: '#fff'
+              },
+              slices: {
+                offset: 0.07
+              } // width: 699
 
-    }; // Draw the chart
+            }; // Draw the chart
 
-    var systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
-    var chart = new google.visualization.PieChart(systemAlarmsChart);
-    chart.draw(data, options); // Create the custom legend
+            systemAlarmsChart = document.getElementById('systemAlarmsDonutChart');
+            chart = new google.visualization.PieChart(systemAlarmsChart);
+            chart.draw(data, options); // Create the custom legend
 
-    SystemAlarmsDonutChart.createLegend(systemAlarmsChart);
+            SystemAlarmsDonutChart.createLegend(systemAlarmsChart);
+
+          case 12:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    });
   },
   // Create custom legend with colors and labels
   createLegend: function createLegend(wrapper) {
@@ -664,48 +701,66 @@ var OperationalAlarmsBarChart = {
     }
   },
   drawChart: function drawChart() {
-    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+    var data, backgroundColor, alarmsToDisplay, options, operationalAlarmsBarChart, chart;
+    return regeneratorRuntime.async(function drawChart$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            data = new google.visualization.DataTable(); // Define columns for alarm types and values
 
-    data.addColumn('string', 'Alarm Type');
-    data.addColumn('number', 'Count');
-    data.addColumn({
-      type: 'string',
-      role: 'style'
-    }); // Filter the AlarmsValues to include only the two desired alarm types
+            data.addColumn('string', 'Alarm Type');
+            data.addColumn('number', 'Count');
+            data.addColumn({
+              type: 'string',
+              role: 'style'
+            });
+            _context6.next = 6;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
-    alarmsToDisplay.forEach(function (alarmType) {
-      // Retrieve the values, colors, and labels from AlarmsValues
-      var alarmValue = AlarmsValues[alarmType].value || 0; // Fallback to 0 if undefined
+          case 6:
+            backgroundColor = _context6.sent;
+            // Filter the AlarmsValues to include only the two desired alarm types
+            alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+            alarmsToDisplay.forEach(function (alarmType) {
+              // Retrieve the values, colors, and labels from AlarmsValues
+              var alarmValue = AlarmsValues[alarmType].value || 0; // Fallback to 0 if undefined
 
-      var alarmColor = AlarmsValues[alarmType].color || '#000000'; // Default color if undefined
+              var alarmColor = AlarmsValues[alarmType].color || '#000000'; // Default color if undefined
 
-      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+              var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
 
-      data.addRow([displayLabel, alarmValue, "color: ".concat(alarmColor)]);
-    }); // Chart options
+              data.addRow([displayLabel, alarmValue, "color: ".concat(alarmColor)]);
+            }); // Chart options
 
-    var options = {
-      title: '',
-      chartArea: {
-        width: '70%',
-        height: '50%'
-      },
-      legend: 'none',
-      hAxis: {
-        title: ''
-      },
-      vAxis: {
-        title: '',
-        minValue: 0
+            options = {
+              title: '',
+              chartArea: {
+                width: '70%',
+                height: '50%'
+              },
+              legend: 'none',
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: ''
+              },
+              vAxis: {
+                title: '',
+                minValue: 0
+              }
+            }; // Draw the chart
+
+            operationalAlarmsBarChart = document.getElementById('operationalAlarmsChart');
+            chart = new google.visualization.BarChart(operationalAlarmsBarChart);
+            chart.draw(data, options); // Create legend for the chart using the shared object
+
+            OperationalAlarmsBarChart.createLegend(operationalAlarmsBarChart);
+
+          case 14:
+          case "end":
+            return _context6.stop();
+        }
       }
-    }; // Draw the chart
-
-    var operationalAlarmsBarChart = document.getElementById('operationalAlarmsChart');
-    var chart = new google.visualization.BarChart(operationalAlarmsBarChart);
-    chart.draw(data, options); // Create legend for the chart using the shared object
-
-    OperationalAlarmsBarChart.createLegend(operationalAlarmsBarChart);
+    });
   },
   // Create custom legend with colors and labels for specific alarms
   createLegend: function createLegend(wrapper) {
@@ -739,45 +794,63 @@ var OperationalAlarmsDonutChart = {
     }
   },
   drawChart: function drawChart() {
-    var data = new google.visualization.DataTable(); // Define columns for alarm types and values
+    var data, backgroundColor, alarmsToDisplay, options, operationalAlarmsChart, chart;
+    return regeneratorRuntime.async(function drawChart$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            data = new google.visualization.DataTable(); // Define columns for alarm types and values
 
-    data.addColumn('string', 'Alarm Type');
-    data.addColumn('number', 'Count'); // Use only the two specific alarms (SUDDEN_LOSS and DELIVERY_RECONCILIATION)
+            data.addColumn('string', 'Alarm Type');
+            data.addColumn('number', 'Count');
+            _context7.next = 5;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    var alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
-    alarmsToDisplay.forEach(function (alarmType) {
-      var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
+          case 5:
+            backgroundColor = _context7.sent;
+            // Use only the two specific alarms (SUDDEN_LOSS and DELIVERY_RECONCILIATION)
+            alarmsToDisplay = ['SUDDEN_LOSS', 'DELIVERY_RECONCILIATION'];
+            alarmsToDisplay.forEach(function (alarmType) {
+              var displayLabel = AlarmLabelMap[alarmType] || alarmType; // Map technical label to user-friendly label
 
-      data.addRow([displayLabel, AlarmsValues[alarmType].value]);
-    }); // Chart options for donut chart
+              data.addRow([displayLabel, AlarmsValues[alarmType].value]);
+            }); // Chart options for donut chart
 
-    var options = {
-      title: '',
-      pieHole: 0,
-      // To make it a donut chart
-      chartArea: {
-        width: '65%',
-        height: '65%'
-      },
-      colors: alarmsToDisplay.map(function (alarmType) {
-        return AlarmsValues[alarmType].color;
-      }),
-      legend: 'none',
-      pieSliceText: 'percentage',
-      // Show percentage on the slices
-      pieSliceTextStyle: {
-        color: '#fff'
-      },
-      slices: {
-        offset: 0.07
+            options = {
+              title: '',
+              pieHole: 0,
+              // To make it a donut chart
+              chartArea: {
+                width: '65%',
+                height: '65%'
+              },
+              colors: alarmsToDisplay.map(function (alarmType) {
+                return AlarmsValues[alarmType].color;
+              }),
+              legend: 'none',
+              backgroundColor: backgroundColor,
+              pieSliceText: 'percentage',
+              // Show percentage on the slices
+              pieSliceTextStyle: {
+                color: '#fff'
+              },
+              slices: {
+                offset: 0.07
+              }
+            }; // Draw the chart
+
+            operationalAlarmsChart = document.getElementById('operationalDonutChart');
+            chart = new google.visualization.PieChart(operationalAlarmsChart);
+            chart.draw(data, options); // Create the custom legend
+
+            OperationalAlarmsDonutChart.createLegend(operationalAlarmsChart);
+
+          case 13:
+          case "end":
+            return _context7.stop();
+        }
       }
-    }; // Draw the chart
-
-    var operationalAlarmsChart = document.getElementById('operationalDonutChart');
-    var chart = new google.visualization.PieChart(operationalAlarmsChart);
-    chart.draw(data, options); // Create the custom legend
-
-    OperationalAlarmsDonutChart.createLegend(operationalAlarmsChart);
+    });
   },
   // Create custom legend with colors and labels
   createLegend: function createLegend(wrapper) {
@@ -1009,6 +1082,7 @@ var TankVolumeBarChart = {
       if (siteData) {
         // Draw the chart using the tanks data for the selected site
         TankVolumeBarChart.drawChart(siteData.tanks);
+        PercentagePieChart.init(siteData);
       } else {
         console.warn('Site not found');
       }
@@ -1017,36 +1091,54 @@ var TankVolumeBarChart = {
     });
   },
   drawChart: function drawChart(tanks) {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Tank Type');
-    data.addColumn('number', 'Count');
-    data.addColumn({
-      type: 'string',
-      role: 'style'
-    }); // Populate the data table with tank information
+    var data, backgroundColor, options, tankVolumeChart, chart;
+    return regeneratorRuntime.async(function drawChart$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'Tank Type');
+            data.addColumn('number', 'Count');
+            data.addColumn({
+              type: 'string',
+              role: 'style'
+            });
+            _context8.next = 6;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    tanks.forEach(function (tank) {
-      data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+          case 6:
+            backgroundColor = _context8.sent;
+            // Populate the data table with tank information
+            tanks.forEach(function (tank) {
+              data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+            });
+            options = {
+              title: '',
+              chartArea: {
+                width: '70%',
+                height: '70%'
+              },
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: ''
+              },
+              vAxis: {
+                title: '',
+                minValue: 0
+              },
+              legend: 'none'
+            }; // Draw the chart
+
+            tankVolumeChart = document.getElementById('tankVolumeChart');
+            chart = new google.visualization.ColumnChart(tankVolumeChart);
+            chart.draw(data, options);
+
+          case 12:
+          case "end":
+            return _context8.stop();
+        }
+      }
     });
-    var options = {
-      title: '',
-      chartArea: {
-        width: '70%',
-        height: '60%'
-      },
-      hAxis: {
-        title: ''
-      },
-      vAxis: {
-        title: '',
-        minValue: 0
-      },
-      legend: 'none'
-    }; // Draw the chart
-
-    var tankVolumeChart = document.getElementById('tankVolumeChart');
-    var chart = new google.visualization.ColumnChart(tankVolumeChart);
-    chart.draw(data, options);
   }
 };
 var DeliveryBarChart = {
@@ -1085,36 +1177,167 @@ var DeliveryBarChart = {
     });
   },
   drawChart: function drawChart(tanks) {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Tank Type');
-    data.addColumn('number', 'Count');
-    data.addColumn({
-      type: 'string',
-      role: 'style'
-    }); // Populate the data table with tank information
+    var data, backgroundColor, options, deliveryVolumeChart, chart;
+    return regeneratorRuntime.async(function drawChart$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            data = new google.visualization.DataTable();
+            data.addColumn('string', 'Tank Type');
+            data.addColumn('number', 'Count');
+            data.addColumn({
+              type: 'string',
+              role: 'style'
+            });
+            _context9.next = 6;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
 
-    tanks.forEach(function (tank) {
-      data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+          case 6:
+            backgroundColor = _context9.sent;
+            // Populate the data table with tank information
+            tanks.forEach(function (tank) {
+              data.addRow([tank.product, tank.value, 'color: #3B76FD']); // You can adjust the color as needed
+            });
+            options = {
+              title: '',
+              chartArea: {
+                width: '70%',
+                height: '80%'
+              },
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: ''
+              },
+              vAxis: {
+                title: '',
+                minValue: 0
+              },
+              legend: 'none'
+            }; // Draw the chart
+
+            deliveryVolumeChart = document.getElementById('deliveryVolumeChart');
+            chart = new google.visualization.ColumnChart(deliveryVolumeChart);
+            chart.draw(data, options);
+
+          case 12:
+          case "end":
+            return _context9.stop();
+        }
+      }
     });
-    var options = {
-      title: '',
-      chartArea: {
-        width: '70%',
-        height: '60%'
-      },
-      hAxis: {
-        title: ''
-      },
-      vAxis: {
-        title: '',
-        minValue: 0
-      },
-      legend: 'none'
-    }; // Draw the chart
+  }
+};
+var PercentagePieChart = {
+  init: function init(siteData) {
+    var siteName = siteData.siteName;
+    document.querySelector('#threshold').textContent = predefinedPercentage + '%';
+    PercentagePieChart.fetchTankData(siteName, predefinedPercentage, siteData.tanks);
+  },
+  fetchTankData: function fetchTankData(siteName, predefinedPercentage, tanksData) {
+    // const selectedSite = data.sites.find(site => site.siteName === siteName);
+    if (siteName) {
+      var _PercentagePieChart$g = PercentagePieChart.getAboveBelowCounts(predefinedPercentage, tanksData),
+          aboveCount = _PercentagePieChart$g.aboveCount,
+          belowCount = _PercentagePieChart$g.belowCount;
 
-    var deliveryVolumeChart = document.getElementById('deliveryVolumeChart');
-    var chart = new google.visualization.ColumnChart(deliveryVolumeChart);
-    chart.draw(data, options);
+      var pieChartData = [{
+        label: "Above 50%",
+        value: aboveCount
+      }, {
+        label: "Below 50%",
+        value: belowCount
+      }];
+      PercentagePieChart.renderChart(pieChartData);
+    } else {
+      console.log("Site not found.");
+    }
+  },
+  getAboveBelowCounts: function getAboveBelowCounts(predefinedPercentage, tanksData) {
+    var aboveCount = 0;
+    var belowCount = 0;
+    tanksData.forEach(function (tank) {
+      var percentageChange = PercentagePieChart.calculatePercentageChange(tank.value, tank.oldValue);
+
+      if (percentageChange >= predefinedPercentage) {
+        aboveCount++;
+      } else {
+        belowCount++;
+      }
+    });
+    return {
+      aboveCount: aboveCount,
+      belowCount: belowCount
+    };
+  },
+  calculatePercentageChange: function calculatePercentageChange(current, old) {
+    if (old === 0) return 0;
+    return (current - old) / old * 100;
+  },
+  renderChart: function renderChart(pieChartData) {
+    var tankPercentageChart, chart, windowWidth, backgroundColor, dataTable, options;
+    return regeneratorRuntime.async(function renderChart$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            tankPercentageChart = document.getElementById('tankPercentageChart');
+            chart = new google.visualization.PieChart(tankPercentageChart);
+            windowWidth = window.innerWidth;
+            _context10.next = 5;
+            return regeneratorRuntime.awrap(getChartBackgroundColor());
+
+          case 5:
+            backgroundColor = _context10.sent;
+            // Convert `pieChartData` to Google Charts DataTable format
+            dataTable = new google.visualization.DataTable();
+            dataTable.addColumn('string', 'Category');
+            dataTable.addColumn('number', 'Count'); // Add rows to the DataTable
+
+            pieChartData.forEach(function (item) {
+              dataTable.addRow([item.label, item.value]);
+            }); // Set chart options
+
+            options = {
+              title: '',
+              is3D: false,
+              backgroundColor: backgroundColor,
+              slices: {
+                0: {
+                  offset: 0.07,
+                  textStyle: {
+                    color: backgroundColor
+                  },
+                  color: '#9C9B9B',
+                  borderColor: backgroundColor,
+                  borderWidth: 0
+                },
+                1: {
+                  offset: 0.07,
+                  textStyle: {
+                    color: backgroundColor
+                  },
+                  color: '#3B76FC',
+                  borderColor: backgroundColor,
+                  borderWidth: 0
+                }
+              },
+              chartArea: {
+                width: windowWidth < 769 ? '90%' : '80%',
+                height: windowWidth < 769 ? '90%' : '80%'
+              },
+              pieSliceText: 'percentage',
+              legend: {
+                position: 'none'
+              }
+            }; // Draw the chart with the DataTable
+
+            chart.draw(dataTable, options);
+
+          case 12:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    });
   }
 }; // **** Demo Fetch Sites Into Page **** //
 
@@ -1122,29 +1345,29 @@ var PopulateSiteLists = {
   // Initialization function to fetch data and populate lists
   init: function init() {
     var siteData;
-    return regeneratorRuntime.async(function init$(_context4) {
+    return regeneratorRuntime.async(function init$(_context11) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
+            _context11.prev = 0;
+            _context11.next = 3;
             return regeneratorRuntime.awrap(this.fetchSiteData());
 
           case 3:
-            siteData = _context4.sent;
+            siteData = _context11.sent;
             this.populateLists(siteData);
             this.addEventListeners();
-            _context4.next = 11;
+            _context11.next = 11;
             break;
 
           case 8:
-            _context4.prev = 8;
-            _context4.t0 = _context4["catch"](0);
-            console.error("Error loading site data:", _context4.t0);
+            _context11.prev = 8;
+            _context11.t0 = _context11["catch"](0);
+            console.error("Error loading site data:", _context11.t0);
 
           case 11:
           case "end":
-            return _context4.stop();
+            return _context11.stop();
         }
       }
     }, null, this, [[0, 8]]);
@@ -1152,33 +1375,33 @@ var PopulateSiteLists = {
   // Fetch site data from the JSON file
   fetchSiteData: function fetchSiteData() {
     var response;
-    return regeneratorRuntime.async(function fetchSiteData$(_context5) {
+    return regeneratorRuntime.async(function fetchSiteData$(_context12) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context5.next = 2;
+            _context12.next = 2;
             return regeneratorRuntime.awrap(fetch('../../data/sites.json'));
 
           case 2:
-            response = _context5.sent;
+            response = _context12.sent;
 
             if (response.ok) {
-              _context5.next = 5;
+              _context12.next = 5;
               break;
             }
 
             throw new Error('Failed to fetch site data');
 
           case 5:
-            _context5.next = 7;
+            _context12.next = 7;
             return regeneratorRuntime.awrap(response.json());
 
           case 7:
-            return _context5.abrupt("return", _context5.sent);
+            return _context12.abrupt("return", _context12.sent);
 
           case 8:
           case "end":
-            return _context5.stop();
+            return _context12.stop();
         }
       }
     });
@@ -1202,8 +1425,16 @@ var PopulateSiteLists = {
       if (index === 0) {
         listItem.classList.add('selected');
         var tankSiteName = listItem.querySelector('.site-name').textContent.trim();
+        var tankSiteLength = listItem.querySelector('.tanks-length').textContent.trim();
+        var tankSiteNameButton = document.querySelector('[data-popover-target="#tanks-sites-list-target"]');
+        tankSiteNameButton.querySelector('.selected-site .site-name').textContent = tankSiteName;
+        tankSiteNameButton.querySelector('.selected-site .site-tanks').textContent = tankSiteLength;
         TankVolumeBarChart.fetchTankData(tankSiteName);
         var deliverySiteName = listItem.querySelector('.site-name').textContent.trim();
+        var deliverySiteLength = listItem.querySelector('.tanks-length').textContent.trim();
+        var deliverySiteNameButton = document.querySelector('[data-popover-target="#delivery-sites-list-target"]');
+        deliverySiteNameButton.querySelector('.selected-site .site-name').textContent = deliverySiteName;
+        deliverySiteNameButton.querySelector('.selected-site .site-tanks').textContent = deliverySiteLength;
         DeliveryBarChart.fetchDeliveryData(deliverySiteName);
       }
 
@@ -1249,7 +1480,13 @@ var PopulateSiteLists = {
         this.classList.add('selected'); // Get the site name from the clicked item
 
         var tankSiteName = this.querySelector('.site-name').textContent.trim(); // Get the site name
-        // Call fetchTankData to update the chart based on the selected site
+
+        var tankSiteLength = this.querySelector('.tanks-length').textContent.trim();
+        var tankSiteNameButton = document.querySelector('[data-popover-target="#tanks-sites-list-target"]');
+        tankSiteNameButton.querySelector('.selected-site .site-name').textContent = tankSiteName;
+        tankSiteNameButton.querySelector('.selected-site .site-tanks').textContent = tankSiteLength;
+        var popoverWrapper = this.closest(".popover-wrapper");
+        Popover.handleClose(popoverWrapper); // Call fetchTankData to update the chart based on the selected site
 
         TankVolumeBarChart.fetchTankData(tankSiteName);
       });
@@ -1264,7 +1501,13 @@ var PopulateSiteLists = {
 
         this.classList.add('selected'); // Get the site name from the clicked item
 
-        var deliverySiteName = this.querySelector('.site-name').textContent.trim(); // Call fetchDeliveryData to update the chart based on the selected site
+        var deliverySiteName = this.querySelector('.site-name').textContent.trim();
+        var deliverySiteLength = this.querySelector('.tanks-length').textContent.trim();
+        var deliverySiteNameButton = document.querySelector('[data-popover-target="#delivery-sites-list-target"]');
+        deliverySiteNameButton.querySelector('.selected-site .site-name').textContent = deliverySiteName;
+        deliverySiteNameButton.querySelector('.selected-site .site-tanks').textContent = deliverySiteLength;
+        var popoverWrapper = this.closest(".popover-wrapper");
+        Popover.handleClose(popoverWrapper); // Call fetchDeliveryData to update the chart based on the selected site
 
         DeliveryBarChart.fetchDeliveryData(deliverySiteName);
       });
@@ -1333,6 +1576,7 @@ var ReloadCharts = {
         if (selectedTankSiteElement) {
           var siteName = selectedTankSiteElement.querySelector('.site-name').textContent.trim();
           TankVolumeBarChart.fetchTankData(siteName);
+          TankVolumeBarChart.fetchTankData(siteName);
         }
 
         var selectedDeliverySiteElement = document.querySelector('#delivery-sites-list .sites-list li.selected');
@@ -1358,7 +1602,9 @@ var RunCharts = {
 };
 pageReady(function () {
   // Demo Function
-  PopulateSiteLists.init(); // End Demo
+  setTimeout(function () {
+    PopulateSiteLists.init();
+  }, 1000); // End Demo
 
   GetCurrentProductValue.init();
   FormatNumbers.init();
