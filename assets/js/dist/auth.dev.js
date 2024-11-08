@@ -1,5 +1,7 @@
 "use strict";
 
+var _script = require("./script.js");
+
 var Auth = {
   // Validation rules object
   validations: {
@@ -186,7 +188,11 @@ var Auth = {
   }
 }; // Initialize when page is ready
 
-pageReady(function () {
+(0, _script.pageReady)(function () {
+  _script.Modal.init();
+
+  _script.Button.init();
+
   Auth.togglePasswordVisibility();
   Auth.updateYear();
   Auth.submit();

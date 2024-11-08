@@ -271,6 +271,24 @@ body #toast-container {
         font-size: var(--gts-icon-fs);
         color: var(--gts-gray-color);
     }
+    &:after {
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: opacity 420ms ease;
+        background: var(--gts-gray-color) !important;
+        opacity: 0;
+    }
+    &:hover {
+        &:after {
+            opacity: 0.15;
+        }
+    }
 }
 
 #backdrop,
@@ -410,5 +428,39 @@ body #toast-container {
             background-color: var(--gts-primary-color);
             opacity: 0.1;
         }
+    }
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2147483647;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(22, 22, 22, 0.3);
+    cursor: pointer;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    &.fade-in {
+        display: block;
+        opacity: 1;
+    }
+    &.fade-out {
+        opacity: 0;
+    }
+    .modal-body {
+        border-radius: var(--gts-lg-curve);
+        background-color: var(--gts-white-color);
+        padding: 0px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 920px;
+        max-height: calc(100vh - 90px);
+        width: 100%;
+        height: 100%;
     }
 }

@@ -1,3 +1,4 @@
+import { pageReady, Modal, Button } from './script.js';
 const Auth = {
     // Validation rules object
     validations: {
@@ -172,6 +173,8 @@ const Auth = {
 
 // Initialize when page is ready
 pageReady(() => {
+    Modal.init();
+    Button.init();
     Auth.togglePasswordVisibility();
     Auth.updateYear();
     Auth.submit();

@@ -1,0 +1,734 @@
+{
+    "sales_by_hour": [
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T00:00:00",
+            "total_money": "1142.527"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T00:00:00",
+            "total_money": "2881.520"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T00:00:00",
+            "total_money": "14615.290"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T00:00:00",
+            "total_money": "4481.560"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T01:00:00",
+            "total_money": "523.444"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T01:00:00",
+            "total_money": "1895.680"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T01:00:00",
+            "total_money": "10708.190"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T01:00:00",
+            "total_money": "2030.330"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T02:00:00",
+            "total_money": "159.051"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T02:00:00",
+            "total_money": "1565.440"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T02:00:00",
+            "total_money": "5149.840"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T02:00:00",
+            "total_money": "1263.480"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T03:00:00",
+            "total_money": "179.264"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T03:00:00",
+            "total_money": "1045.600"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T03:00:00",
+            "total_money": "3522.120"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T03:00:00",
+            "total_money": "247.250"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T04:00:00",
+            "total_money": "475.098"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T04:00:00",
+            "total_money": "1072.640"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T04:00:00",
+            "total_money": "2758.500"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T05:00:00",
+            "total_money": "436.482"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T05:00:00",
+            "total_money": "1361.440"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T05:00:00",
+            "total_money": "3537.440"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T05:00:00",
+            "total_money": "724.710"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T06:00:00",
+            "total_money": "1173.351"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T06:00:00",
+            "total_money": "1353.760"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T06:00:00",
+            "total_money": "7537.730"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T06:00:00",
+            "total_money": "704.260"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T07:00:00",
+            "total_money": "2390.566"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T07:00:00",
+            "total_money": "3598.480"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T07:00:00",
+            "total_money": "16483.830"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T07:00:00",
+            "total_money": "4681.000"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T08:00:00",
+            "total_money": "3158.375"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T08:00:00",
+            "total_money": "5324.800"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T08:00:00",
+            "total_money": "22872.560"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T08:00:00",
+            "total_money": "5006.110"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T09:00:00",
+            "total_money": "3235.340"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T09:00:00",
+            "total_money": "1771.840"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T09:00:00",
+            "total_money": "27186.080"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T09:00:00",
+            "total_money": "5231.560"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T10:00:00",
+            "total_money": "4657.777"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T10:00:00",
+            "total_money": "3103.040"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T10:00:00",
+            "total_money": "23693.180"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T10:00:00",
+            "total_money": "3196.090"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T11:00:00",
+            "total_money": "1866.997"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T11:00:00",
+            "total_money": "3335.120"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T11:00:00",
+            "total_money": "21983.970"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T11:00:00",
+            "total_money": "4277.400"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T12:00:00",
+            "total_money": "2699.391"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T12:00:00",
+            "total_money": "3863.280"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T12:00:00",
+            "total_money": "24910.390"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T12:00:00",
+            "total_money": "3192.370"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T13:00:00",
+            "total_money": "2398.463"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T13:00:00",
+            "total_money": "4470.400"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T13:00:00",
+            "total_money": "25976.490"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T13:00:00",
+            "total_money": "3282.270"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T14:00:00",
+            "total_money": "1348.350"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T14:00:00",
+            "total_money": "5488.280"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T14:00:00",
+            "total_money": "32582.910"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T14:00:00",
+            "total_money": "5947.450"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T15:00:00",
+            "total_money": "1530.022"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T15:00:00",
+            "total_money": "5872.000"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T15:00:00",
+            "total_money": "32500.540"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T15:00:00",
+            "total_money": "6818.060"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T16:00:00",
+            "total_money": "2886.146"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T16:00:00",
+            "total_money": "4792.080"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T16:00:00",
+            "total_money": "31781.890"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T16:00:00",
+            "total_money": "4577.010"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T17:00:00",
+            "total_money": "1967.050"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T17:00:00",
+            "total_money": "5418.800"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T17:00:00",
+            "total_money": "28441.630"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T17:00:00",
+            "total_money": "6020.890"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T18:00:00",
+            "total_money": "1915.431"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T18:00:00",
+            "total_money": "5623.600"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T18:00:00",
+            "total_money": "28047.620"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T18:00:00",
+            "total_money": "4198.380"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T19:00:00",
+            "total_money": "2976.821"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T19:00:00",
+            "total_money": "4981.040"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T19:00:00",
+            "total_money": "34058.780"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T19:00:00",
+            "total_money": "5050.020"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T20:00:00",
+            "total_money": "2280.357"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T20:00:00",
+            "total_money": "5607.600"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T20:00:00",
+            "total_money": "31327.960"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T20:00:00",
+            "total_money": "5914.110"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T21:00:00",
+            "total_money": "1706.523"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T21:00:00",
+            "total_money": "3440.400"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T21:00:00",
+            "total_money": "30031.940"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T21:00:00",
+            "total_money": "3450.420"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T22:00:00",
+            "total_money": "1068.549"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T22:00:00",
+            "total_money": "3419.360"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T22:00:00",
+            "total_money": "21653.370"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T22:00:00",
+            "total_money": "2417.900"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-07T23:00:00",
+            "total_money": "2030.141"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-07T23:00:00",
+            "total_money": "2775.920"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-07T23:00:00",
+            "total_money": "18391.020"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-07T23:00:00",
+            "total_money": "2125.180"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T00:00:00",
+            "total_money": "1346.346"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T00:00:00",
+            "total_money": "2572.720"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T00:00:00",
+            "total_money": "13866.380"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T00:00:00",
+            "total_money": "3868.460"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T01:00:00",
+            "total_money": "930.344"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T01:00:00",
+            "total_money": "1677.040"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T01:00:00",
+            "total_money": "9830.180"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T01:00:00",
+            "total_money": "1372.780"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T02:00:00",
+            "total_money": "348.000"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T02:00:00",
+            "total_money": "1066.400"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T02:00:00",
+            "total_money": "5631.060"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T02:00:00",
+            "total_money": "714.660"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T03:00:00",
+            "total_money": "754.747"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T03:00:00",
+            "total_money": "371.760"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T03:00:00",
+            "total_money": "3631.730"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T03:00:00",
+            "total_money": "1425.560"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T04:00:00",
+            "total_money": "88.509"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T04:00:00",
+            "total_money": "534.880"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T04:00:00",
+            "total_money": "1927.440"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T04:00:00",
+            "total_money": "147.000"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T05:00:00",
+            "total_money": "700.960"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T05:00:00",
+            "total_money": "935.360"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T05:00:00",
+            "total_money": "4284.900"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T06:00:00",
+            "total_money": "1104.480"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T06:00:00",
+            "total_money": "2097.680"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T06:00:00",
+            "total_money": "11566.020"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T06:00:00",
+            "total_money": "862.100"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T07:00:00",
+            "total_money": "1801.918"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T07:00:00",
+            "total_money": "3959.080"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T07:00:00",
+            "total_money": "22027.780"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T07:00:00",
+            "total_money": "3267.530"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T08:00:00",
+            "total_money": "3055.378"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T08:00:00",
+            "total_money": "4297.120"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T08:00:00",
+            "total_money": "24509.210"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T08:00:00",
+            "total_money": "5421.720"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T09:00:00",
+            "total_money": "2659.894"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T09:00:00",
+            "total_money": "3192.880"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T09:00:00",
+            "total_money": "20117.560"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T09:00:00",
+            "total_money": "1314.110"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T10:00:00",
+            "total_money": "5028.938"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T10:00:00",
+            "total_money": "4678.240"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T10:00:00",
+            "total_money": "18455.230"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T10:00:00",
+            "total_money": "2514.430"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T11:00:00",
+            "total_money": "2061.531"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T11:00:00",
+            "total_money": "5285.320"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T11:00:00",
+            "total_money": "19534.000"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T11:00:00",
+            "total_money": "2299.110"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "hour": "2022-12-08T12:00:00",
+            "total_money": "2591.488"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "hour": "2022-12-08T12:00:00",
+            "total_money": "3839.400"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "hour": "2022-12-08T12:00:00",
+            "total_money": "22837.460"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "hour": "2022-12-08T12:00:00",
+            "total_money": "3379.340"
+        }
+    ]
+}

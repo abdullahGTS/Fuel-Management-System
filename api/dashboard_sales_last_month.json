@@ -1,0 +1,104 @@
+{
+    "sales_by_week": [
+        {
+            "gradeid__name": "Diesel",
+            "week": "2022-11-07T00:00:00",
+            "total_money": "250571.871"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "week": "2022-11-07T00:00:00",
+            "total_money": "507218.880"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "week": "2022-11-07T00:00:00",
+            "total_money": "2761321.980"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "week": "2022-11-07T00:00:00",
+            "total_money": "452685.810"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "week": "2022-11-14T00:00:00",
+            "total_money": "306914.446"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "week": "2022-11-14T00:00:00",
+            "total_money": "582331.560"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "week": "2022-11-14T00:00:00",
+            "total_money": "3280631.820"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "week": "2022-11-14T00:00:00",
+            "total_money": "580631.350"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "week": "2022-11-21T00:00:00",
+            "total_money": "308794.895"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "week": "2022-11-21T00:00:00",
+            "total_money": "576617.680"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "week": "2022-11-21T00:00:00",
+            "total_money": "3364362.440"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "week": "2022-11-21T00:00:00",
+            "total_money": "591793.250"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "week": "2022-11-28T00:00:00",
+            "total_money": "295159.554"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "week": "2022-11-28T00:00:00",
+            "total_money": "594802.200"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "week": "2022-11-28T00:00:00",
+            "total_money": "3403365.390"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "week": "2022-11-28T00:00:00",
+            "total_money": "600003.130"
+        },
+        {
+            "gradeid__name": "Diesel",
+            "week": "2022-12-05T00:00:00",
+            "total_money": "163199.406"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "week": "2022-12-05T00:00:00",
+            "total_money": "286012.160"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "week": "2022-12-05T00:00:00",
+            "total_money": "1648580.900"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "week": "2022-12-05T00:00:00",
+            "total_money": "273426.240"
+        }
+    ]
+}

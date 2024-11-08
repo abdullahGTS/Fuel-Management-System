@@ -127,7 +127,7 @@ const Popover = {
     const updatePopoverPosition = () => {
         const targetRect = targetElement.getBoundingClientRect(); // Get dimensions of the clicked element
         const targetBody = popoverBody.getBoundingClientRect(); // Get dimensions of the popover body
-        const targetX = targetRect.left + window.scrollX; // Get the X position
+        const targetX = (targetRect.left - popoverBody.offsetWidth) + targetRect.width + window.scrollX; // Get the X position
         let targetY = (targetRect.top - targetBody.height) + window.scrollY; // Get the default Y position (top)
         
         const parentWrapper = popoverBody.closest('.popover-wrapper'); // Find the parent with class 'popover-wrapper'
@@ -140,14 +140,15 @@ const Popover = {
         // Set the initial position of the popover
         popoverBody.style.position = "absolute";
         popoverBody.style.top = `${targetY + 10}px`; // Offset of 10px from the target element
-        popoverBody.style.left = `${targetX + 10}px`; // Offset of 10px from the target element
+        popoverBody.style.left = `${targetX}px`; // Offset of 10px from the target element
 
         // Check if the popover goes beyond the right edge of the screen
         const popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
         const viewportWidth = window.innerWidth + window.scrollX;
         if (popoverRightEdge > viewportWidth) {
             // If the popover exceeds the screen width, move it to the left to fit within the screen
-            popoverBody.style.left = `${viewportWidth - popoverBody.offsetWidth - 10}px`;
+            // popoverBody.style.left = `${ viewportWidth - ( targetRect.left + popoverBody.offsetWidth) }px`;
+            popoverBody.style.left = `${ targetRect.left - popoverBody.offsetWidth + targetRect.width }px`;
         }
 
         // Check if the popover goes beyond the left edge of the screen
@@ -211,9 +212,64 @@ const Popover = {
   }
 };
 
-pageReady(() => {
-  PageLoader.slowIncreaseTo(100);
-  PageLoader.init();
-  Button.init();
-  Popover.init();
-});
+const Modal = {
+  init: () => {
+    const modalNodeList = document.querySelectorAll(".modal-wrapper");
+    if (modalNodeList.length) {
+      Modal.openModal();
+      Modal.closeModal();
+    }
+  },
+
+  openModal: () => {
+    const modalTriggers = document.querySelectorAll("[data-modal-target]");
+
+    modalTriggers.forEach(trigger => {
+      trigger.addEventListener("click", (e) => {
+        const targetSelector = trigger.getAttribute("data-modal-target");
+        const modalWrapper = document.querySelector(targetSelector);
+        
+        // Remove fade-out class if present and add fade-in class
+        modalWrapper.classList.remove("fade-out");
+        modalWrapper.classList.add("fade-in");
+        
+        // Display the modal
+        modalWrapper.style.display = "block";
+      });
+    });
+  },
+
+  closeModal: () => {
+    const modalWrappers = document.querySelectorAll(".modal-wrapper");
+
+    modalWrappers.forEach(modalWrapper => {
+      const modalBody = modalWrapper.querySelector('.modal-body');
+
+      // Prevent the modal from closing when the body is clicked
+      modalBody.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+
+      modalWrapper.addEventListener("click", () => {
+        // Add fade-out class to trigger fade-out animation
+        modalWrapper.classList.remove("fade-in");
+        modalWrapper.classList.add("fade-out");
+
+        // Use a timeout to set `display: none` after the fade-out animation completes
+        setTimeout(() => {
+          modalWrapper.style.display = "none";
+        }, 300); // Match this duration with your CSS transition duration
+      });
+    });
+  }
+};
+
+export { pageReady, PageLoader, Button, Popover, Modal };
+
+// pageReady(() => {
+//   PageLoader.slowIncreaseTo(100);
+//   PageLoader.init();
+//   Button.init();
+//   Popover.init();
+//   Modal.init();
+// });

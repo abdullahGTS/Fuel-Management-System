@@ -1,0 +1,36 @@
+{
+    "sites": [
+        {
+            "name": "port_saeed",
+            "phone": null,
+            "address": null,
+            "zip": null,
+            "longitud": null,
+            "latitud": null
+        },
+        {
+            "name": "hassan_roman_new_domyat",
+            "phone": null,
+            "address": null,
+            "zip": null,
+            "longitud": null,
+            "latitud": null
+        },
+        {
+            "name": "El Abasia",
+            "phone": null,
+            "address": null,
+            "zip": null,
+            "longitud": null,
+            "latitud": null
+        },
+        {
+            "name": "el dwahy bour saeed",
+            "phone": null,
+            "address": null,
+            "zip": null,
+            "longitud": null,
+            "latitud": null
+        }
+    ]
+}

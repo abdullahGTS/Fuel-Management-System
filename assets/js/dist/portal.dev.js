@@ -1,5 +1,7 @@
 "use strict";
 
+var _script = require("./script.js");
+
 var MobileNav = {
   init: function init() {
     var navigation = document.querySelector("#side-bar");
@@ -248,7 +250,13 @@ var AppearanceToggle = {
     });
   }
 };
-pageReady(function () {
+(0, _script.pageReady)(function () {
+  _script.PageLoader.init();
+
+  _script.Button.init();
+
+  _script.Popover.init();
+
   AppearanceToggle.init();
   MobileNav.init();
   NotificationSystem.init();

@@ -1,0 +1,28 @@
+{
+    "sitesnumbers": [
+        {
+            "id": 1,
+            "name": "port_saeed",
+            "sitenumber": 1001,
+            "tanks": 6
+        },
+        {
+            "id": 2,
+            "name": "hassan_roman_new_domyat",
+            "sitenumber": 1002,
+            "tanks": 5
+        },
+        {
+            "id": 3,
+            "name": "El Abasia",
+            "sitenumber": 1003,
+            "tanks": 6
+        },
+        {
+            "id": 4,
+            "name": "el dwahy bour saeed",
+            "sitenumber": 1004,
+            "tanks": 6
+        }
+    ]
+}

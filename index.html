@@ -45,7 +45,7 @@
                 <div class="auth-item" id="auth-form">
                     <div class="auth-form-wrapper custom-scroll-bar">
                         <div class="auth-logo">
-                            <img src="./assets/imgs/gts-logo.png" alt="GTS - Global Technology Services" />
+                            <img src="./assets/imgs/gts-logo-mobile.png" alt="GTS - Global Technology Services" />
                         </div>
                         <div class="auth-form-container">
                             <h1>Welcome to GTS,<br />Sign In to start managing your stations </h1>
@@ -99,8 +99,8 @@
                                 <p>© Global Technical Services <span id="year">1985</span></p>
                             </div>
                             <div class="gts-support">
-                                <a href="mailto:support@gts.sa?subject=Trouble Signing In">
-                                    <span class="mat-icon material-symbols-sharp">support</span> Contact Support</a>
+                                <div data-modal-target="#supportModal" class="support-item">
+                                    <span class="mat-icon material-symbols-sharp">support</span> Contact Support</div>
                             </div>
                         </footer>
                     </div>
@@ -114,14 +114,18 @@
         </div>
     </main>
 
+    <!-- Modal -->
+     <div class="modal-wrapper" id="supportModal">
+        <div class="modal-body"></div>
+     </div>
+
     <!-- Vendor Scripts -->
     <script src="./vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="./vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="./vendor/js/snackbar.min.js" defer></script>
     
     <!-- GTS Scripts -->
-    <script type="text/javascript" src="./assets/js/script.js"></script>
-    <script type="text/javascript" src="./assets/js/auth.js" async></script>
+    <script type="module" type="text/javascript" src="./assets/js/auth.js" async></script>
 </body>
 
 </html>

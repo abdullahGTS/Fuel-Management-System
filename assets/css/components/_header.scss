@@ -1,6 +1,6 @@
 #gts-header {
     width: 100%;
-    padding: 0 78px;
+    padding: 0 30px;
     .gts-head {
         display: flex;
         align-items: center;
@@ -16,7 +16,8 @@
             align-items: center;
             gap: 7px;
             #toggle-menu {
-                margin-left: -48px;
+                margin-left: 0px;
+                transform: translateY(0px);
             }
             h1 {
                 font-size: var(--gts-heading-fs);
@@ -45,8 +46,8 @@
                     font-weight: 400;
                 }
                 input {
-                    border-radius: 35px !important;
-                    background-color: var(--gts-light-color);
+                    border-radius: var(--gts-sm-curve) !important;
+                    background-color: rgba(var(--gts-extra-color), 0.7);
                     font-size: var(--gts-normal-fs);
                     font-weight: 400;
                     padding: 7px 21px 7px 60px;

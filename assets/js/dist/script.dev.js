@@ -1,5 +1,11 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.pageReady = pageReady;
+exports.Modal = exports.Popover = exports.Button = exports.PageLoader = void 0;
+
 // script.js
 function pageReady(callback) {
   if (document.readyState !== "loading") {
@@ -63,6 +69,7 @@ var PageLoader = {
     }, incrementSpeed);
   }
 };
+exports.PageLoader = PageLoader;
 var Button = {
   init: function init() {
     var buttonsNodeList = document.querySelectorAll(".btn");
@@ -96,6 +103,7 @@ var Button = {
     }, 850);
   }
 };
+exports.Button = Button;
 var Popover = {
   init: function init() {
     var popoverNodeList = document.querySelectorAll(".popover-wrapper");
@@ -123,7 +131,7 @@ var Popover = {
 
       var targetBody = popoverBody.getBoundingClientRect(); // Get dimensions of the popover body
 
-      var targetX = targetRect.left + window.scrollX; // Get the X position
+      var targetX = targetRect.left - popoverBody.offsetWidth + targetRect.width + window.scrollX; // Get the X position
 
       var targetY = targetRect.top - targetBody.height + window.scrollY; // Get the default Y position (top)
 
@@ -138,7 +146,7 @@ var Popover = {
       popoverBody.style.position = "absolute";
       popoverBody.style.top = "".concat(targetY + 10, "px"); // Offset of 10px from the target element
 
-      popoverBody.style.left = "".concat(targetX + 10, "px"); // Offset of 10px from the target element
+      popoverBody.style.left = "".concat(targetX, "px"); // Offset of 10px from the target element
       // Check if the popover goes beyond the right edge of the screen
 
       var popoverRightEdge = targetX + 10 + popoverBody.offsetWidth;
@@ -146,7 +154,8 @@ var Popover = {
 
       if (popoverRightEdge > viewportWidth) {
         // If the popover exceeds the screen width, move it to the left to fit within the screen
-        popoverBody.style.left = "".concat(viewportWidth - popoverBody.offsetWidth - 10, "px");
+        // popoverBody.style.left = `${ viewportWidth - ( targetRect.left + popoverBody.offsetWidth) }px`;
+        popoverBody.style.left = "".concat(targetRect.left - popoverBody.offsetWidth + targetRect.width, "px");
       } // Check if the popover goes beyond the left edge of the screen
 
 
@@ -200,9 +209,55 @@ var Popover = {
     }
   }
 };
-pageReady(function () {
-  PageLoader.slowIncreaseTo(100);
-  PageLoader.init();
-  Button.init();
-  Popover.init();
-});
+exports.Popover = Popover;
+var Modal = {
+  init: function init() {
+    var modalNodeList = document.querySelectorAll(".modal-wrapper");
+
+    if (modalNodeList.length) {
+      Modal.openModal();
+      Modal.closeModal();
+    }
+  },
+  openModal: function openModal() {
+    var modalTriggers = document.querySelectorAll("[data-modal-target]");
+    modalTriggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function (e) {
+        var targetSelector = trigger.getAttribute("data-modal-target");
+        var modalWrapper = document.querySelector(targetSelector); // Remove fade-out class if present and add fade-in class
+
+        modalWrapper.classList.remove("fade-out");
+        modalWrapper.classList.add("fade-in"); // Display the modal
+
+        modalWrapper.style.display = "block";
+      });
+    });
+  },
+  closeModal: function closeModal() {
+    var modalWrappers = document.querySelectorAll(".modal-wrapper");
+    modalWrappers.forEach(function (modalWrapper) {
+      var modalBody = modalWrapper.querySelector('.modal-body'); // Prevent the modal from closing when the body is clicked
+
+      modalBody.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+      modalWrapper.addEventListener("click", function () {
+        // Add fade-out class to trigger fade-out animation
+        modalWrapper.classList.remove("fade-in");
+        modalWrapper.classList.add("fade-out"); // Use a timeout to set `display: none` after the fade-out animation completes
+
+        setTimeout(function () {
+          modalWrapper.style.display = "none";
+        }, 300); // Match this duration with your CSS transition duration
+      });
+    });
+  }
+}; // pageReady(() => {
+//   PageLoader.slowIncreaseTo(100);
+//   PageLoader.init();
+//   Button.init();
+//   Popover.init();
+//   Modal.init();
+// });
+
+exports.Modal = Modal;

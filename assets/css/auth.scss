@@ -28,7 +28,10 @@ main {
                         width: 100%;
                         display: inline-grid;
                         .auth-logo {
-                            width: 160px;
+                            width: 100px;
+                            display: flex;
+                            align-items: center;
+                        
                             img {
                                 width: 100%;
                                 height: auto;
@@ -47,7 +50,6 @@ main {
 
                         footer {
                             position: relative;
-                            margin-top: auto;
                             display: flex;
                             flex-direction: row;
                             justify-content: space-between;
@@ -61,16 +63,25 @@ main {
                                 }
                             }
                             .gts-support {
-                                a {
+                                .support-item {
                                     display: flex;
                                     align-items: center;
                                     font-size: var(--gts-small-fs);
                                     color: var(--gts-gray-color);
                                     flex-direction: row;
                                     gap: 7px;
+                                    cursor: pointer;
+                                    transition: all 210ms ease;
                                     .mat-icon {
                                         font-size: var(--gts-icon-fs);
                                         color: var(--gts-gray-color);
+                                        transition: all 210ms ease;
+                                    }
+                                    &:hover {
+                                        color: var(--gts-primary-color);
+                                        .mat-icon {
+                                            color: var(--gts-primary-color);
+                                        }
                                     }
                                 }
                             }
