@@ -175,11 +175,11 @@
 
     #siteStatus {
         display: grid;
-        gap: 30px;
+        gap: 15px;
         grid-template-columns: repeat(3, 1fr);
         height: 100%;
         align-items: center;
-        padding: 0 40px 0 30px;
+        padding: 10px 40px 10px 30px;
         .total-sites {
             gap: 15px;
             .icon-wrap {
@@ -211,9 +211,15 @@
             margin: 0;
             border-left: 0px solid;
             border-color: rgba(var(--gts-brd-color), .14) !important;
-            gap: 15px;
+            gap: 5px;
             &:nth-of-type(2) {
                 border: 0 !important;
+            }
+            .chart-area {
+                display: inline-block !important;
+                flex: unset !important;
+                width: 140px;
+                height: 140px;
             }
         }
     }

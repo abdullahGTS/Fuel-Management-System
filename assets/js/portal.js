@@ -153,7 +153,7 @@ const ForceResponsive = {
         window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
     },
     checkWidth: () => {
-        if (window.innerWidth < 1361) {
+        if (window.innerWidth < 1581) {
             ForceResponsive.forceCollapsed();
         } else {
             ForceResponsive.forceUncollapsed();

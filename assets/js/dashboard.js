@@ -362,8 +362,8 @@ const SiteStatus = {
             legend: 'none', 
             pieSliceBorderColor: secondaryBgColor,
             chartArea: {
-                width: windowWidth < 769 ? '80%' : '90%',
-                height: windowWidth < 769 ? '80%' : '90%'
+                width: windowWidth < 769 ? '80%' : '80%',
+                height: windowWidth < 769 ? '80%' : '80%'
             }
         };
 
