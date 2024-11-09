@@ -170,6 +170,9 @@ body.loaded {
                                     background-color: var(--gts-white-color);
                                     border-color: rgba(var(--gts-brd-color), .14) !important;
                                 }
+                                &.gts-charts {
+                                    padding: 15px 30px;
+                                }
                                 &.no-padding {
                                     padding: 0 !important;
                                 }
@@ -184,10 +187,42 @@ body.loaded {
                                     .gts-card-title-wrapper {
                                         display: flex;
                                         align-items: center;
-                                        gap: 14px;
+                                        gap: 2px;
+                                        .mat-icon {
+                                            margin-right: 12px;
+                                        }
                                         h3 {
                                             font-size: var(--gts-normal-fs);
                                             color: var(--gts-dark-color);
+                                            white-space: nowrap;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 7px;
+                                        }
+                                        .dropdown-btn {
+                                            display: flex;
+                                            padding: 0px 3px !important;
+                                            border: 0 !important;
+                                            gap: 10px;
+                                            align-items: center;
+                                            font-size: var(--gts-normal-fs) !important;
+                                            color: var(--gts-gray-color) !important;
+                                            font-weight: 600;
+
+                                            .selected-site {
+                                                display: flex;
+                                                gap: 2px;
+                                                align-items: center;
+                                                strong {
+                                                    color: var(--gts-dark-color) !important;
+                                                }
+                                            }
+                                            .mat-icon {
+                                                margin: 0 !important;
+                                            }
+                                            &:hover {
+                                                background-color: rgba(var(--gts-brd-color), .14);
+                                            }
                                         }
                                     }
                 
@@ -205,7 +240,6 @@ body.loaded {
                                         }
                                     }
                                 }
-                
                             }
                         }
                     }

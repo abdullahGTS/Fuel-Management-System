@@ -4,7 +4,7 @@
             "id": 1,
             "name": "port_saeed",
             "sitenumber": 1001,
-            "tanks": 6
+            "tanks": 4
         },
         {
             "id": 2,
@@ -22,7 +22,7 @@
             "id": 4,
             "name": "el dwahy bour saeed",
             "sitenumber": 1004,
-            "tanks": 6
+            "tanks": 2
         }
     ]
 }

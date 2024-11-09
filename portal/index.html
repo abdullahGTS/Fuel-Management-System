@@ -151,7 +151,7 @@
                 <div class="gts-content custom-scroll-bar">
                     <div class="gts-grid-wrapper">
                         <div class="gts-grid">
-                            
+
                             <div class="gts-grid-item double-row">
                                 <div class="gts-item-content gts-charts white-box">
                                     <div class="gts-card-title">
@@ -173,20 +173,22 @@
                             </div>
 
                             <!-- Products -->
-                            <div class="gts-grid-item double-col">
-                                <div class="gts-grid" id="productsCards">
-                                    <!-- Data and Elements fetched from dashboard.js-->
-                                    <!-- <div class="gts-grid-item">
-                                        <div class="gts-product gts-item-content {{keyName}}">
-                                            <div class="gts-value">
-                                                <div class="icon-wrapper"><span
-                                                        class="mat-icon material-symbols-sharp">local_gas_station</span>
+                            <div class="gts-grid-item double-col" id="productsCards">
+                                <div id="productsCards">
+                                    <div class="gts-grid custom-scroll-bar">
+                                        <!-- Data and Elements fetched from dashboard.js-->
+                                        <!-- <div class="gts-grid-item">
+                                            <div class="gts-product gts-item-content {{keyName}}">
+                                                <div class="gts-value">
+                                                    <div class="icon-wrapper"><span
+                                                            class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                                    </div>
+                                                    <h3><span id="{{keyName}}-value">{{keyValue}}</span> lts</h3>
+                                                    <p>{{labeledKeyName}}</p>
                                                 </div>
-                                                <h3><span id="{{keyName}}-value">{{keyValue}}</span> lts</h3>
-                                                <p>{{labeledKeyName}}</p>
-                                            </div>
-                                        </div> 
-                                    </div> -->
+                                            </div> 
+                                        </div> -->
+                                    </div>
                                 </div>
                             </div>
 
@@ -196,7 +198,7 @@
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">ssid_chart</span>
-                                            <h3>Sales trends Chart</h3>
+                                            <h3>Sales trends</h3>
                                         </div>
                                         <div class="chart-controls">
                                             <div class="gts-tabs flex-box">
@@ -226,7 +228,8 @@
 
                                                 <div class="total-sites flex-box">
                                                     <div class="icon-wrap flex-box">
-                                                        <span class="mat-icon material-symbols-sharp">account_tree</span>
+                                                        <span
+                                                            class="mat-icon material-symbols-sharp">account_tree</span>
                                                     </div>
                                                     <h3 class="site-value-wrapper">
                                                         Total sites <span id="totalSitesValue">0</span>
@@ -255,7 +258,10 @@
                                     <div div class="gts-grid-item double-col double-row">
                                         <div class="gts-item-content no-padding">
                                             <div class="maps-wrapper">
-                                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                                <iframe
+                                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
+                                                    width="600" height="450" style="border:0;" allowfullscreen=""
+                                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                             </div>
                                         </div>
                                     </div>
@@ -266,7 +272,7 @@
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
                                                     <span class="mat-icon material-symbols-sharp">bar_chart</span>
-                                                    <h3>Product Sales Chart</h3>
+                                                    <h3>Product Sales</h3>
                                                 </div>
                                                 <div class="chart-controls">
                                                     <button class="btn btn-icon download-chart"
@@ -281,10 +287,106 @@
                                     </div>
 
 
+                                    <!-- Top 5 Sites -->
+                                    <div div class="gts-grid-item double-col double-row">
+                                        <div class="gts-item-content no-padding"></div>
+                                    </div>
+
+                                    <!-- Fill Status -->
                                     <div div class="gts-grid-item double-col">
                                         <div class="gts-item-content no-padding"></div>
                                     </div>
 
+                                </div>
+                            </div>
+
+                            <!-- System Alarms -->
+                            <div class="gts-grid-item double-col">
+                                <div class="gts-item-content gts-charts white-box">
+                                    <div class="gts-card-title">
+                                        <div class="gts-card-title-wrapper">
+                                            <span class="mat-icon material-symbols-sharp">grouped_bar_chart</span>
+                                            <h3>System Alarms</h3>
+                                        </div>
+                                        <div class="chart-controls">
+                                            <button class="btn btn-icon download-chart"
+                                                data-popover-target="#download-chart">
+                                                <span class="mat-icon material-symbols-sharp">download</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="systemAlarmsChart" class="chart-area"></div>
+
+                                </div>
+                            </div>
+
+                            <!-- Operational Alarms -->
+                            <div class="gts-grid-item">
+                                <div class="gts-item-content gts-charts white-box">
+                                    <div class="gts-card-title">
+                                        <div class="gts-card-title-wrapper">
+                                            <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                            <h3>Operational Alarms</h3>
+                                        </div>
+                                        <div class="chart-controls">
+                                            <button class="btn btn-icon download-chart"
+                                                data-popover-target="#download-chart">
+                                                <span class="mat-icon material-symbols-sharp">download</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="operationalAlarmsDonutChart" class="chart-area"></div>
+
+                                    <div class="chart-legend"></div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- Tanks Threshold -->
+                            <div class="gts-grid-item">
+                                <div class="gts-item-content gts-charts white-box">
+                                    <div class="gts-card-title">
+                                        <div class="gts-card-title-wrapper">
+                                            <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                            <h3>Volume <span id="threshold">(0%)</span> Threshold</h3>
+                                        </div>
+                                        <div class="chart-controls">
+                                            <button class="btn btn-icon download-chart"
+                                                data-popover-target="#download-chart">
+                                                <span class="mat-icon material-symbols-sharp">download</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="tankPercentageChart" class="chart-area"></div>
+                                </div>
+                            </div>
+
+                            <!-- Tanks Volume -->
+                            <div class="gts-grid-item double-col">
+                                <div class="gts-item-content gts-charts">
+                                    <div class="gts-card-title">
+                                        <div class="gts-card-title-wrapper">
+                                            <span class="mat-icon material-symbols-sharp">equalizer</span>
+                                            <h3><span id="tanksAmount">0</span> Tanks Volume</h3>
+                                            <button class="dropdown-btn" data-popover-target="#tanks-sites-list-target">
+                                                <div class="selected-site"><strong>On Site #:</strong>
+                                                    <span class="site-name">Select Site...</span>
+                                                </div>
+                                                <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
+                                            </button>
+
+                                        </div>
+                                        <div class="chart-controls">
+                                            <button class="btn btn-icon download-chart"
+                                                data-popover-target="#download-chart">
+                                                <span class="mat-icon material-symbols-sharp">download</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="tankVolumeChart" class="chart-area"></div>
                                 </div>
                             </div>
 
@@ -307,12 +409,6 @@
                             </div>
 
 
-                            <div class="gts-grid-item">
-                                <div class="gts-item-content"></div>
-                            </div>
-                            <div class="gts-grid-item">
-                                <div class="gts-item-content"></div>
-                            </div>
                             <div class="gts-grid-item">
                                 <div class="gts-item-content"></div>
                             </div>

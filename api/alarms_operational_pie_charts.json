@@ -1,1 +1,10 @@
-[["DELEVERY_reconciliation", 1], ["SUDDEN_loss", 1]]
+[
+    [
+        "DELEVERY_reconciliation",
+        2
+    ],
+    [
+        "SUDDEN_loss",
+        7
+    ]
+]

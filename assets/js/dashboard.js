@@ -11,6 +11,7 @@ const ProductLabels = {
     "cng": "CNG"
 }
 
+// Shared Download Chart
 const DownloadChart = {
     init: () => {
 
@@ -118,6 +119,7 @@ const DownloadChart = {
     }
 };
 
+// Fetch Product Data
 const Products = {
 
     init: async () => {
@@ -179,10 +181,22 @@ const Products = {
         
                 // Append the itemContainer to the gridItem and add it to the main container
                 gridItem.appendChild(itemContainer);
-                productsCards.appendChild(gridItem);
+                productsCards.querySelector('.gts-grid').appendChild(gridItem);
             });
-        }        
+        }     
+        if ( Object.keys(products).length > 3 ) {
+            Products.scrollProducts(productsCards, Object.keys(products).length);
+        }
     },
+    scrollProducts: (productsCards, items) => {
+        // Get the width of the first product card
+        const itemWidth = productsCards.querySelector('.gts-grid .gts-grid-item:first-child').offsetWidth;
+        productsCards.querySelectorAll('.gts-grid .gts-grid-item').forEach((card) => {
+            card.style.width = `${itemWidth}px`;
+        });
+        productsCards.style.width = `${itemWidth * 3} + 15` + `px`;
+    },
+    
     parseFormattedNumber: (numberStr) => {
         const formattedNumber = numberStr.replace(/,/g, '').trim();
         const parsedNumber = parseFloat(formattedNumber);
@@ -197,8 +211,8 @@ const Products = {
     },
 }
 
-// Pie Chart for Product Usage
-const GasolineUsage = {
+// Product Usage
+const ProductsUsage = {
     init: () => {
         const gasolineChartWrapper = document.getElementById('currentUsageChart');
         if (gasolineChartWrapper) {
@@ -206,106 +220,103 @@ const GasolineUsage = {
             google.charts.load('current', { packages: ['corechart'] });
 
             // Step 2: Set callback to run when the library is loaded
-            google.charts.setOnLoadCallback(GasolineUsage.drawPieChart);
+            google.charts.setOnLoadCallback(ProductsUsage.drawPieChart);
         }
     },
 
     // Step 4: Function to draw the Pie Chart
     drawPieChart: async () => {
         const { backgroundColor } = await ChartBackgroundColor();
-
+    
         // Create the data table
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Fuel Type');
         data.addColumn('number', 'Liters');
-
+        data.addColumn({ type: 'string', role: 'style' });
+    
         const products = await fetchData(API_PATHS.dashboardProducts);
         if (!products || Object.keys(products).length === 0) {
             console.error("No product data available");
             return;
         }
-
-        Object.keys(products).forEach((key) => {
+    
+        // Populate data table and prepare slices for each product dynamically
+        const slices = {};
+        Object.keys(products).forEach((key, index) => {
             const productName = ProductLabels[key] || key;
             const productValue = Number(products[key]);
+    
             if (!isNaN(productValue)) {
-                data.addRow([productName, productValue]);
+                let colorCode = key;
+                if ( key === 'gas95' ) colorCode = 'gasoline95';
+                if ( key === 'gas92' ) colorCode = 'gasoline92';
+                if ( key === 'gas91' ) colorCode = 'gasoline91';
+                if ( key === 'gas80' ) colorCode = 'gasoline80';
+    
+                const color = SharedColors[colorCode.toLowerCase()] || '#ccc';
+                data.addRow([productName, productValue, `color: ${color}`]);
+    
+                // Use SharedColors with lowercase product name as the key
+                slices[index] = {
+                    offset: 0.04,
+                    textStyle: { color: backgroundColor },
+                    borderColor: backgroundColor,
+                    borderWidth: 0,
+                    color: color // Ensure the color is included here
+                };
             } else {
                 console.warn(`Invalid number value for ${productName}: ${products[key]}`);
             }
-        })
-
-
+        });
+    
         const windowWidth = window.innerWidth;
-        // Set chart options (no 3D and custom colors with borders)
+        // Set chart options with dynamically created slices
         const options = {
             title: '',
             is3D: false,
             backgroundColor: backgroundColor,
-            slices: {
-                0: {
-                    offset: 0.04,
-                    textStyle: { color: backgroundColor },
-                    color: SharedColors.gasoline95,
-                    borderColor: backgroundColor,
-                    borderWidth: 0
-                },  // Gasoline 95
-                1: {
-                    offset: 0.04,
-                    textStyle: { color: backgroundColor },
-                    backgroundColor: '#00ff00',
-                    color: SharedColors.gasoline91,
-                    borderColor: backgroundColor,
-                    borderWidth: 0
-                },  // Gasoline 91
-                2: {
-                    offset: 0.04,
-                    textStyle: { color: backgroundColor },
-                    color: SharedColors.diesel,
-                    fillOpacity: 0.3,
-                    borderColor: backgroundColor,
-                    borderWidth: 0,
-                }   // Diesel
-            },
+            slices: slices, // Dynamic slices based on data
             pieSliceBorderColor: backgroundColor,
             chartArea: {
                 width: windowWidth < 769 ? '80%' : '75%',
                 height: windowWidth < 769 ? '80%' : '75%'
-            }, 
+            },
             pieSliceText: 'percentage',  // Show percentage in slices
             legend: { position: 'none' }  // Hide the default legend
         };
-
+    
         // Draw the chart in the specified div
         const gasolineChartWrapper = document.getElementById('currentUsageChart');
         const chart = new google.visualization.PieChart(gasolineChartWrapper);
         chart.draw(data, options);
-
+    
         // Step 5: Draw the legend beneath the chart
-        GasolineUsage.createLegend(gasolineChartWrapper);
+        ProductsUsage.createLegend(gasolineChartWrapper, data, options);
     },
+    
 
     // Step 6: Create a custom legend with colored circles below the chart
-    createLegend: (wrapper) => {
-        const legendData = [
-            { label: 'Gasoline 95', color: SharedColors.gasoline95 },
-            { label: 'Gasoline 91', color: SharedColors.gasoline91 },
-            { label: 'Diesel', color: SharedColors.diesel }
-        ];
+    createLegend: (wrapper, data, options) => {
         const legendContainer = wrapper.parentNode.querySelector('.chart-legend');
-        legendData.forEach(item => {
+        legendContainer.innerHTML = ''; // Clear any existing legend items
+
+        // Loop through chart data to dynamically create legend items
+        for (let i = 0; i < data.getNumberOfRows(); i++) {
+            const label = data.getValue(i, 0);
+            const color = options.slices[i].color || '#000';  // get color from slices
+
             const legendItem = document.createElement('div');
             legendItem.classList.add('legend-item');
             legendItem.innerHTML = `
-            <span class="legend-color" style="background-color: ${item.color};"></span>
-            <span class="legend-label">${item.label}</span>
-          `;
+                <span class="legend-color" style="background-color: ${color};"></span>
+                <span class="legend-label">${label}</span>
+            `;
             legendContainer.appendChild(legendItem);
-        });
+        }
     }
 };
 
-// Dount Chart for Site Status
+// Site Status
 const SiteStatus = {
     init: () => {
         const onlineSites = document.getElementById('onlineSitesChart');
@@ -373,7 +384,7 @@ const SiteStatus = {
     },
 };
 
-// Area Chart for Sales Trend
+// Sales Trend
 const SalesTrend = {
     currentTab: 'today', // Default to 'today'
 
@@ -580,12 +591,13 @@ const SalesTrend = {
     }
 };
 
-const ProductSals = {
+// Product Sales
+const ProductSales = {
     init: () => {
         const productSalesChart = document.querySelector('#productSalesChart');
         if ( productSalesChart ) {
             google.charts.load('current', { packages: ['corechart'] });
-            google.charts.setOnLoadCallback(ProductSals.fetchData);
+            google.charts.setOnLoadCallback(ProductSales.fetchData);
         }
     },
     fetchData: async () => {
@@ -597,7 +609,7 @@ const ProductSals = {
 
         // Update the chart with new data
         google.charts.load('current', { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(() => ProductSals.drawChart(sales.sales_by_hour));
+        google.charts.setOnLoadCallback(() => ProductSales.drawChart(sales.sales_by_hour));
     },
     drawChart: async (sales) => {
         const { backgroundColor } = await ChartBackgroundColor();
@@ -643,13 +655,249 @@ const ProductSals = {
     }    
 }
 
+// System Alarms
+const SystemAlarms = {
+    init: () => {
+        const systemAlarmsChart = document.getElementById('systemAlarmsChart');
+        if ( systemAlarmsChart ) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(SystemAlarms.fetchData);
+        }
+    },
+    fetchData: async () => {
+        const alarms = await fetchData(API_PATHS.systemAlarms);
+        if (!alarms || Object.keys(alarms).length === 0) {
+            console.error("No alarms data available");
+            return;
+        }
+
+        // Update the chart with new data
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(() => SystemAlarms.drawChart(alarms));
+    },
+
+    drawChart: async (alarms) => {
+        const { backgroundColor } = await ChartBackgroundColor();
+        const data = new google.visualization.DataTable();
+    
+        // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
+        data.addColumn('string', 'Alarm Type');
+        data.addColumn('number', 'Count');
+        data.addColumn({ type: 'string', role: 'style' });
+    
+        // Function to format alarm names dynamically
+        const formatAlarmName = (name) => {
+            return name.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        };
+    
+        // Populate rows dynamically based on fetched alarm data
+        alarms.forEach(alarm => {
+            const [name, count] = alarm; // Use first number in each array as the count
+            const formattedName = formatAlarmName(name.toLowerCase());
+            data.addRow([formattedName, count, '#6B6ED2']);
+        });
+    
+        // Chart options for the waterfall chart
+        const options = {
+            backgroundColor: backgroundColor,
+            legend: { position: 'none' }, // No legend needed
+            bar: { groupWidth: '52%' },
+            chartArea: {
+                width: '80%',
+                height: '80%',
+            },
+            hAxis: {
+                title: '',
+            },
+            vAxis: {
+                title: '',
+            }
+        };
+    
+        // Create and draw the waterfall chart
+        const chart = new google.visualization.ColumnChart(document.getElementById('systemAlarmsChart'));
+        chart.draw(data, options);
+    }    
+};
+
+// Operational Alarms
+const OperationalAlarms = {
+    init: () => {
+        const operationalAlarmsChart = document.getElementById('operationalAlarmsDonutChart');
+        if (operationalAlarmsChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(OperationalAlarms.fetchData);
+        }
+    },
+
+    fetchData: async () => {
+        const alarms = await fetchData(API_PATHS.operationalAlarms);
+        if (!alarms || alarms.length === 0) {
+            console.error("No operational alarms data available");
+            return;
+        }
+
+        // Load Google Charts and draw chart with fetched data
+        google.charts.setOnLoadCallback(() => OperationalAlarms.drawChart(alarms));
+    },
+
+    drawChart: async (alarms) => {
+        const { backgroundColor } = await ChartBackgroundColor();
+        const data = new google.visualization.DataTable();
+
+        // Define the columns
+        data.addColumn('string', 'Alarm Type');
+        data.addColumn('number', 'Count');
+
+        // Map alarm data to chart data with formatted names
+        alarms.forEach(alarm => {
+            const alarmName = alarm[0]
+                .toLowerCase()
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, char => char.toUpperCase()); // Capitalize each word
+            const alarmCount = alarm[1];
+            data.addRow([alarmName, alarmCount]);
+        });
+
+        // Define the colors, alternating between #000 and #eeee
+        const colors = alarms.map((_, index) => (index % 2 === 0 ? '#2D99FC' : '#83D0FF'));
+
+        // Set up chart options
+        const options = {
+            backgroundColor: backgroundColor,
+            pieSliceBorderColor: backgroundColor,
+            colors: colors,
+            pieHole: 0.5, 
+            slices: {
+                0: { offset: 0.1 },
+            },
+            legend: { position: 'none' },
+            chartArea: { width: '80%', height: '80%' },
+        };
+
+        // Create and draw the pie chart
+        const operationalAlarmsDonutChart = document.getElementById('operationalAlarmsDonutChart')
+        const chart = new google.visualization.PieChart(operationalAlarmsDonutChart);
+        chart.draw(data, options);
+
+        OperationalAlarms.createLegend(operationalAlarmsDonutChart, data, colors);
+    },
+
+    createLegend: (wrapper, data, colors) => {
+        const legendContainer = wrapper.parentNode.querySelector('.chart-legend');
+        legendContainer.innerHTML = ''; // Clear any existing legend items
+
+        // Loop through chart data to dynamically create legend items
+        for (let i = 0; i < data.getNumberOfRows(); i++) {
+            const label = data.getValue(i, 0);
+            const legendItem = document.createElement('div');
+            legendItem.classList.add('legend-item');
+            legendItem.innerHTML = `
+                <span class="legend-color" style="background-color: ${colors[i]};"></span>
+                <span class="legend-label">${label}</span>
+            `;
+            legendContainer.appendChild(legendItem);
+        }
+    }
+};
+
+const TanksPercentage = 90;
+const TanksVolume = {
+    init: () => {
+        const tankVolumeChart = document.querySelector('#tankVolumeChart');
+        const tankPercentageChart = document.querySelector('#tankPercentageChart');
+        if ( tankVolumeChart && tankPercentageChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(TanksVolume.fetchData);
+        }
+    },
+
+    fetchData: async () => {
+        const sitesData = await fetchData(API_PATHS.dashboardSites);
+        if (!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0) {
+            console.error("No sites data available");
+            return;
+        }
+
+        const sites = sitesData.sitesnumbers;
+        TanksVolume.siteDropDown(sites);
+        google.charts.setOnLoadCallback(() => TanksVolume.drawColumnChart(sites));
+        google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites));
+    },
+
+    siteDropDown: (sites) => {
+        const sitesList = document.querySelector('#tanks-sites-list ul');
+        const siteFilterInput = document.querySelector('#tanks-sites-list .site-filter input');
+        const siteName = document.querySelector('.site-name');
+        const tanksAmount = document.querySelector('#tanksAmount');
+
+
+        // Populate the dropdown with site items
+        sites.forEach((site, index) => {
+            const listItem = document.createElement('li');
+
+            const siteNumberSpan = document.createElement('span');
+            siteNumberSpan.classList.add('site-number');
+            siteNumberSpan.textContent = `#${site.sitenumber}`;
+            
+            const tanksLengthSpan = document.createElement('span');
+            tanksLengthSpan.classList.add('tanks-length');
+            tanksLengthSpan.textContent = `${site.tanks} Tanks`;
+            
+            listItem.appendChild(siteNumberSpan);
+            listItem.appendChild(tanksLengthSpan);
+            
+            listItem.dataset.sitenumber = site.sitenumber;
+            listItem.dataset.tanks = site.tanks;
+            listItem.classList.add('site-item');
+            
+            // Add click event to update selected site
+            listItem.addEventListener('click', () => {
+                document.querySelectorAll('.site-item').forEach(item => item.classList.remove('active'));
+                listItem.classList.add('active');
+                siteName.textContent = `${site.sitenumber}`;
+                tanksAmount.textContent = site.tanks;
+            });
+            
+
+            // Select the first item by default
+            if (index === 0) {
+                listItem.classList.add('active');
+                siteName.textContent = `${site.sitenumber}`;
+                tanksAmount.textContent = site.tanks;
+            }
+
+            sitesList.appendChild(listItem);
+        });
+
+        // Filter sites by sitenumber
+        siteFilterInput.addEventListener('input', () => {
+            const filterValue = siteFilterInput.value.toLowerCase();
+            document.querySelectorAll('.site-item').forEach(item => {
+                const sitenumber = item.dataset.sitenumber.toString();
+                if (sitenumber.includes(filterValue)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    },
+
+    drawColumnChart: async (sites) => {},
+    drawPieChart: async (sites) => {}
+}
+
 // Run All Charts
 const RunCharts = {
     init: () => {
-        GasolineUsage.init();
+        ProductsUsage.init();
         SiteStatus.init();
         SalesTrend.init();
-        ProductSals.init();
+        ProductSales.init();
+        SystemAlarms.init();
+        OperationalAlarms.init();
+        TanksVolume.init();
         // SiteStatusChart.init();
         // SystemAlarmsChart.init();
         // OperationalAlarmsBarChart.init();
@@ -658,7 +906,7 @@ const RunCharts = {
     }
 }
 
-// We will Reload Charts on Menu Collapsed
+// We will Reload Charts on Menu Collapsed And Apperacnce Toggle
 const ReloadCharts = {
     // Initialize the menu toggle functionality
     init: () => {
@@ -694,7 +942,7 @@ const ReloadCharts = {
             }
 
             // Optional: If your charts have specific cleanup logic, call that here
-            // Example: GasolineUsage.clear(); or similar if implemented
+            // Example: ProductsUsage.clear(); or similar if implemented
 
             // Step 3: Reload the charts
             setTimeout(() => {

@@ -1,1 +1,27 @@
-[["DISCONNECTED", 2, 2], ["OVERFLOW", 4, 4], ["PRODUCT_HIGH", 2, 2], ["PRODUCT_LOW", 3, 3], ["TANK_NO_LEVEL", 4, 4]]
+[
+    [
+        "DISCONNECTED",
+        2,
+        2
+    ],
+    [
+        "OVERFLOW",
+        4,
+        4
+    ],
+    [
+        "PRODUCT_HIGH",
+        2,
+        2
+    ],
+    [
+        "PRODUCT_LOW",
+        3,
+        3
+    ],
+    [
+        "TANK_NO_LEVEL",
+        4,
+        4
+    ]
+]

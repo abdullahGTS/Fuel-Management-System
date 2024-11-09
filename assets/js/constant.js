@@ -17,8 +17,8 @@ const API_PATHS = {
 
     dashboardProducts: '/api/dashboard_cards_api.json',
 
-    alarmsPieCharts: '/api/alarms_pie_charts.json',
-    alarmsOperationalPieCharts: '/api/alarms_operational_pie_charts.json'
+    systemAlarms: '/api/alarms_pie_charts.json',
+    operationalAlarms: '/api/alarms_operational_pie_charts.json'
 };
 
 // Shared function to fetch data from JSON files
@@ -46,6 +46,7 @@ const SharedColors = {
     gasoline92: '#e54141',
     gasoline91: '#e54141',
     gasoline80: '#26272d',
+    cng: '#26272d',
     diesel: '#FAB75C',
     online: '#3db16d',
     offline: '#e61e45'
