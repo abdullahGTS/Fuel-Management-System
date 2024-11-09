@@ -822,7 +822,7 @@ const TanksVolume = {
         const sites = sitesData.sitesnumbers;
         TanksVolume.siteDropDown(sites);
         google.charts.setOnLoadCallback(() => TanksVolume.drawColumnChart(sites));
-        google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites));
+        TanksVolume.threshold(sites);
     },
 
     siteDropDown: (sites) => {
@@ -883,9 +883,53 @@ const TanksVolume = {
             });
         });
     },
+    threshold: (sites) => {
+        const thresholdWrapper = document.querySelector('#threshold');
+        const thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
+        let threshold = TanksPercentage;
+    
+        // Set initial threshold display
+        if (thresholdWrapper) {
+            thresholdWrapper.textContent = `${TanksPercentage}%`;
+        }
+    
+        // Add 'active' class to the list item that matches the initial threshold
+        if (thresholdList.length) {
+            thresholdList.forEach((item) => {
+                // Check if data-value matches the current threshold
+                if (Number(item.dataset.value) === threshold) {
+                    item.classList.add('active');
+                }
+                
+                // Add click event listener to update the threshold on click
+                item.addEventListener('click', () => {
+                    // Update threshold to the clicked item's data-value
+                    threshold = Number(item.dataset.value);
+                    console.log('TanksPercentage', threshold);
 
+                    // Update the threshold display
+                    if (thresholdWrapper) {
+                        thresholdWrapper.textContent = `${threshold}%`;
+                    }
+    
+                    // Remove 'active' class from all items and apply to clicked item
+                    thresholdList.forEach((el) => el.classList.remove('active'));
+                    item.classList.add('active');
+    
+                    // Redraw the chart with the new threshold value
+                    google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
+                });
+            });
+        }
+    
+        // Draw the chart initially
+        google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
+    },
+    
     drawColumnChart: async (sites) => {},
-    drawPieChart: async (sites) => {}
+    drawPieChart: async (sites, threshold) => {
+
+    }
 }
 
 // Run All Charts

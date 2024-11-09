@@ -258,6 +258,11 @@
             min-height: 340px;
         }
     }
+
+    span#threshold {
+        cursor: pointer;
+        display: inline-block;
+    }
 }
 
 .popover-body.popover-list {
@@ -323,6 +328,19 @@
                         }
                     }
                 }
+            }
+        }
+    }
+}
+#tanks-threshold-target {
+
+    .popover-list {
+        max-width: 160px;
+        min-width: 100px;
+        margin-left: 15px !important;
+        ul {
+            li {
+                font-weight: 600;
             }
         }
     }

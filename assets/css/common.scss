@@ -462,6 +462,7 @@ body #toast-container {
         max-width: 920px;
         max-height: calc(100vh - 90px);
         width: 100%;
-        height: 100%;
+        // height: 100%;
+        cursor: auto;
     }
 }

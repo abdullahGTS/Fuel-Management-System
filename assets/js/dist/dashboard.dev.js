@@ -1130,9 +1130,7 @@ var TanksVolume = {
             google.charts.setOnLoadCallback(function () {
               return TanksVolume.drawColumnChart(sites);
             });
-            google.charts.setOnLoadCallback(function () {
-              return TanksVolume.drawPieChart(sites);
-            });
+            TanksVolume.threshold(sites);
 
           case 10:
           case "end":
@@ -1192,6 +1190,51 @@ var TanksVolume = {
       });
     });
   },
+  threshold: function threshold(sites) {
+    var thresholdWrapper = document.querySelector('#threshold');
+    var thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
+    var threshold = TanksPercentage; // Set initial threshold display
+
+    if (thresholdWrapper) {
+      thresholdWrapper.textContent = "".concat(TanksPercentage, "%");
+    } // Add 'active' class to the list item that matches the initial threshold
+
+
+    if (thresholdList.length) {
+      thresholdList.forEach(function (item) {
+        // Check if data-value matches the current threshold
+        if (Number(item.dataset.value) === threshold) {
+          item.classList.add('active');
+        } // Add click event listener to update the threshold on click
+
+
+        item.addEventListener('click', function () {
+          // Update threshold to the clicked item's data-value
+          threshold = Number(item.dataset.value);
+          console.log('TanksPercentage', threshold); // Update the threshold display
+
+          if (thresholdWrapper) {
+            thresholdWrapper.textContent = "".concat(threshold, "%");
+          } // Remove 'active' class from all items and apply to clicked item
+
+
+          thresholdList.forEach(function (el) {
+            return el.classList.remove('active');
+          });
+          item.classList.add('active'); // Redraw the chart with the new threshold value
+
+          google.charts.setOnLoadCallback(function () {
+            return TanksVolume.drawPieChart(sites, threshold);
+          });
+        });
+      });
+    } // Draw the chart initially
+
+
+    google.charts.setOnLoadCallback(function () {
+      return TanksVolume.drawPieChart(sites, threshold);
+    });
+  },
   drawColumnChart: function drawColumnChart(sites) {
     return regeneratorRuntime.async(function drawColumnChart$(_context13) {
       while (1) {
@@ -1203,7 +1246,7 @@ var TanksVolume = {
       }
     });
   },
-  drawPieChart: function drawPieChart(sites) {
+  drawPieChart: function drawPieChart(sites, threshold) {
     return regeneratorRuntime.async(function drawPieChart$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {

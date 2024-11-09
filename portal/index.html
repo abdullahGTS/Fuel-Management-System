@@ -261,7 +261,7 @@
                                                 <iframe
                                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
                                                     width="600" height="450" style="border:0;" allowfullscreen=""
-                                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title=""></iframe>
                                             </div>
                                         </div>
                                     </div>
@@ -351,7 +351,7 @@
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                            <h3>Volume <span id="threshold">(0%)</span> Threshold</h3>
+                                            <h3>Volume <span id="threshold" data-popover-target="#tanks-threshold-target">(0%)</span> Threshold</h3>
                                         </div>
                                         <div class="chart-controls">
                                             <button class="btn btn-icon download-chart"
@@ -578,6 +578,29 @@
         </div>
     </div>
 
+    <!-- Popover Threshold List -->
+    <div class="popover-wrapper" id="tanks-threshold-target" data-position="bottom">
+        <div class="popover-body popover-list">
+            <div class="sites-list-wrapper" id="tanks-threshold-list">
+                <div class="sites-list custom-scroll-bar">
+                    <ul>
+                        <li data-value="10">10%</li>
+                        <li data-value="20">20%</li>
+                        <li data-value="30">30%</li>
+                        <li data-value="40">40%</li>
+                        <li data-value="50">50%</li>
+                        <li data-value="60">60%</li>
+                        <li data-value="70">70%</li>
+                        <li data-value="80">80%</li>
+                        <li data-value="90">90%</li>
+                        <li data-value="100">100%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
     <!-- Popover Tanks Sites List -->
     <div class="popover-wrapper" id="delivery-sites-list-target" data-position="bottom">
         <div class="popover-body popover-list">
