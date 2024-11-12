@@ -285,11 +285,13 @@ var ProductsUsage = {
 
               if (!isNaN(productValue)) {
                 var colorCode = key;
-                if (key === 'gas95') colorCode = 'gasoline95';
-                if (key === 'gas92') colorCode = 'gasoline92';
-                if (key === 'gas91') colorCode = 'gasoline91';
-                if (key === 'gas80') colorCode = 'gasoline80';
-                var color = _constant.SharedColors[colorCode.toLowerCase()] || '#ccc';
+                if (key === 'gas95') colorCode = 'Gasoline95';
+                if (key === 'gas92') colorCode = 'Gasoline92';
+                if (key === 'gas91') colorCode = 'Gasoline91';
+                if (key === 'gas80') colorCode = 'Gasoline80';
+                if (key === 'diesel') colorCode = 'Diesel';
+                if (key === 'cng') colorCode = 'CNG';
+                var color = _constant.SharedColors[colorCode] || '#ccc';
                 data.addRow([productName, productValue, "color: ".concat(color)]); // Use SharedColors with lowercase product name as the key
 
                 slices[index] = {
@@ -408,8 +410,8 @@ var SiteStatus = {
             document.getElementById('onlineSitesValue').textContent = sites.online;
             document.getElementById('offlineSitesValue').textContent = sites.offline; // Draw the charts for online and offline sites
 
-            SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, _constant.SharedColors.online, secondaryBgColor, secondaryAlphaColor);
-            SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, _constant.SharedColors.offline, secondaryBgColor, secondaryAlphaColor);
+            SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, _constant.SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
+            SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, _constant.SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
 
           case 17:
           case "end":
@@ -682,7 +684,7 @@ var SalesTrend = {
                 height: '80%'
               },
               colors: products.map(function (product, index) {
-                return _constant.SharedColors[product.toLowerCase()];
+                return _constant.SharedColors[product];
               }),
               lineWidth: 3
             }; // Create and draw the chart
@@ -785,7 +787,7 @@ var ProductSales = {
     });
   },
   drawChart: function drawChart(sales) {
-    var _ref4, backgroundColor, data, products, options, chart;
+    var _ref4, backgroundColor, data, products, groupWidthPercentage, options, chart;
 
     return regeneratorRuntime.async(function drawChart$(_context7) {
       while (1) {
@@ -816,9 +818,10 @@ var ProductSales = {
               }).reduce(function (sum, item) {
                 return sum + parseFloat(item.total_money);
               }, 0);
-              var color = _constant.SharedColors[product.toLowerCase()] || '#ccc';
+              var color = _constant.SharedColors[product] || '#ccc';
               data.addRow([product, totalSales, "color: ".concat(color)]); // Adding color to each row
-            }); // Set up chart options
+            });
+            groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('productSalesChart', products.length); // Set up chart options
 
             options = {
               backgroundColor: backgroundColor,
@@ -826,7 +829,7 @@ var ProductSales = {
                 position: 'none'
               },
               bar: {
-                groupWidth: '60%'
+                groupWidth: "".concat(groupWidthPercentage, "%")
               },
               chartArea: {
                 width: '80%',
@@ -843,7 +846,7 @@ var ProductSales = {
             chart = new google.visualization.ColumnChart(document.getElementById('productSalesChart'));
             chart.draw(data, options);
 
-          case 13:
+          case 14:
           case "end":
             return _context7.stop();
         }
@@ -900,7 +903,7 @@ var SystemAlarms = {
     });
   },
   drawChart: function drawChart(alarms) {
-    var _ref5, backgroundColor, data, formatAlarmName, options, chart;
+    var _ref5, backgroundColor, data, formatAlarmName, groupWidthPercentage, options, chart;
 
     return regeneratorRuntime.async(function drawChart$(_context9) {
       while (1) {
@@ -935,17 +938,17 @@ var SystemAlarms = {
 
 
               var formattedName = formatAlarmName(name.toLowerCase());
-              data.addRow([formattedName, count, '#6B6ED2']);
-            }); // Chart options for the waterfall chart
+              data.addRow([formattedName, count, _constant.SharedColors.SystemAlarm]);
+            });
+            groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('systemAlarmsChart', alarms.length); // Chart options for the waterfall chart
 
             options = {
               backgroundColor: backgroundColor,
               legend: {
                 position: 'none'
               },
-              // No legend needed
               bar: {
-                groupWidth: '52%'
+                groupWidth: "".concat(groupWidthPercentage, "%")
               },
               chartArea: {
                 width: '80%',
@@ -962,7 +965,7 @@ var SystemAlarms = {
             chart = new google.visualization.ColumnChart(document.getElementById('systemAlarmsChart'));
             chart.draw(data, options);
 
-          case 13:
+          case 14:
           case "end":
             return _context9.stop();
         }
@@ -1043,7 +1046,7 @@ var OperationalAlarms = {
             }); // Define the colors, alternating between #000 and #eeee
 
             colors = alarms.map(function (_, index) {
-              return index % 2 === 0 ? '#2D99FC' : '#83D0FF';
+              return index % 2 === 0 ? _constant.SharedColors.DeleveryReconciliation : _constant.SharedColors.SuddenLoss;
             }); // Set up chart options
 
             options = {
@@ -1110,155 +1113,237 @@ var TanksVolume = {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            _context12.next = 2;
+            _context12.prev = 0;
+            _context12.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
 
-          case 2:
+          case 3:
             sitesData = _context12.sent;
 
             if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
-              _context12.next = 6;
+              _context12.next = 7;
               break;
             }
 
             console.error("No sites data available");
             return _context12.abrupt("return");
 
-          case 6:
+          case 7:
             sites = sitesData.sitesnumbers;
-            TanksVolume.siteDropDown(sites);
-            google.charts.setOnLoadCallback(function () {
-              return TanksVolume.drawColumnChart(sites);
-            });
-            TanksVolume.threshold(sites);
+            TanksVolume.populateSiteDropdown(sites);
+            TanksVolume.setupThreshold(sites); // Draw initial chart with the first site by default
 
-          case 10:
+            TanksVolume.drawColumnChart(sites[0].sitenumber);
+            _context12.next = 16;
+            break;
+
+          case 13:
+            _context12.prev = 13;
+            _context12.t0 = _context12["catch"](0);
+            console.error("Error fetching data:", _context12.t0);
+
+          case 16:
           case "end":
             return _context12.stop();
         }
       }
-    });
+    }, null, null, [[0, 13]]);
   },
-  siteDropDown: function siteDropDown(sites) {
+  populateSiteDropdown: function populateSiteDropdown(sites) {
     var sitesList = document.querySelector('#tanks-sites-list ul');
     var siteFilterInput = document.querySelector('#tanks-sites-list .site-filter input');
-    var siteName = document.querySelector('.site-name');
-    var tanksAmount = document.querySelector('#tanksAmount'); // Populate the dropdown with site items
+    sitesList.innerHTML = ''; // Clear previous items if any
 
     sites.forEach(function (site, index) {
-      var listItem = document.createElement('li');
-      var siteNumberSpan = document.createElement('span');
-      siteNumberSpan.classList.add('site-number');
-      siteNumberSpan.textContent = "#".concat(site.sitenumber);
-      var tanksLengthSpan = document.createElement('span');
-      tanksLengthSpan.classList.add('tanks-length');
-      tanksLengthSpan.textContent = "".concat(site.tanks, " Tanks");
-      listItem.appendChild(siteNumberSpan);
-      listItem.appendChild(tanksLengthSpan);
-      listItem.dataset.sitenumber = site.sitenumber;
-      listItem.dataset.tanks = site.tanks;
-      listItem.classList.add('site-item'); // Add click event to update selected site
-
+      var listItem = TanksVolume.createSiteListItem(site, index === 0);
       listItem.addEventListener('click', function () {
-        document.querySelectorAll('.site-item').forEach(function (item) {
-          return item.classList.remove('active');
-        });
-        listItem.classList.add('active');
-        siteName.textContent = "".concat(site.sitenumber);
-        tanksAmount.textContent = site.tanks;
-      }); // Select the first item by default
-
-      if (index === 0) {
-        listItem.classList.add('active');
-        siteName.textContent = "".concat(site.sitenumber);
-        tanksAmount.textContent = site.tanks;
-      }
-
+        return TanksVolume.selectSite(listItem, site);
+      });
       sitesList.appendChild(listItem);
-    }); // Filter sites by sitenumber
+    }); // Filter functionality for dropdown
 
     siteFilterInput.addEventListener('input', function () {
       var filterValue = siteFilterInput.value.toLowerCase();
       document.querySelectorAll('.site-item').forEach(function (item) {
-        var sitenumber = item.dataset.sitenumber.toString();
-
-        if (sitenumber.includes(filterValue)) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
+        item.style.display = item.dataset.sitenumber.includes(filterValue) ? 'flex' : 'none';
       });
-    });
+    }); // Select the first item by default if sites exist
+
+    if (sites.length > 0) {
+      TanksVolume.selectSite(sitesList.firstChild, sites[0]);
+    }
   },
-  threshold: function threshold(sites) {
-    var thresholdWrapper = document.querySelector('#threshold');
-    var thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
-    var threshold = TanksPercentage; // Set initial threshold display
-
-    if (thresholdWrapper) {
-      thresholdWrapper.textContent = "".concat(TanksPercentage, "%");
-    } // Add 'active' class to the list item that matches the initial threshold
-
-
-    if (thresholdList.length) {
-      thresholdList.forEach(function (item) {
-        // Check if data-value matches the current threshold
-        if (Number(item.dataset.value) === threshold) {
-          item.classList.add('active');
-        } // Add click event listener to update the threshold on click
-
-
-        item.addEventListener('click', function () {
-          // Update threshold to the clicked item's data-value
-          threshold = Number(item.dataset.value);
-          console.log('TanksPercentage', threshold); // Update the threshold display
-
-          if (thresholdWrapper) {
-            thresholdWrapper.textContent = "".concat(threshold, "%");
-          } // Remove 'active' class from all items and apply to clicked item
-
-
-          thresholdList.forEach(function (el) {
-            return el.classList.remove('active');
-          });
-          item.classList.add('active'); // Redraw the chart with the new threshold value
-
-          google.charts.setOnLoadCallback(function () {
-            return TanksVolume.drawPieChart(sites, threshold);
-          });
-        });
-      });
-    } // Draw the chart initially
-
-
-    google.charts.setOnLoadCallback(function () {
-      return TanksVolume.drawPieChart(sites, threshold);
-    });
+  createSiteListItem: function createSiteListItem(site, isActive) {
+    var listItem = document.createElement('li');
+    listItem.classList.add('site-item');
+    listItem.dataset.sitenumber = site.sitenumber;
+    listItem.dataset.tanks = site.tanks;
+    var siteNumberSpan = document.createElement('span');
+    siteNumberSpan.classList.add('site-number');
+    siteNumberSpan.textContent = "#".concat(site.sitenumber);
+    var tanksLengthSpan = document.createElement('span');
+    tanksLengthSpan.classList.add('tanks-length');
+    tanksLengthSpan.textContent = "".concat(site.tanks, " Tanks");
+    listItem.append(siteNumberSpan, tanksLengthSpan);
+    if (isActive) listItem.classList.add('active');
+    return listItem;
   },
-  drawColumnChart: function drawColumnChart(sites) {
+  selectSite: function selectSite(listItem, site) {
+    document.querySelectorAll('.site-item').forEach(function (item) {
+      return item.classList.remove('active');
+    });
+    listItem.classList.add('active');
+    var siteName = document.querySelector('.site-name');
+    var tanksAmount = document.querySelector('#tanksAmount');
+    siteName.textContent = site.sitenumber;
+    tanksAmount.textContent = site.tanks; // Draw the column chart for the selected site
+
+    TanksVolume.drawColumnChart(site.sitenumber);
+  },
+  drawColumnChart: function drawColumnChart(siteNumber) {
+    var _ref7, secondaryBgColor, secondaryAlphaColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
+
     return regeneratorRuntime.async(function drawColumnChart$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
+            _context13.prev = 0;
+            _context13.next = 3;
+            return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
+
+          case 3:
+            _ref7 = _context13.sent;
+            secondaryBgColor = _ref7.secondaryBgColor;
+            secondaryAlphaColor = _ref7.secondaryAlphaColor;
+            _context13.next = 8;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
+
+          case 8:
+            tanksData = _context13.sent;
+
+            if (!(!tanksData || tanksData.length === 0)) {
+              _context13.next = 12;
+              break;
+            }
+
+            console.error("No tank data available");
+            return _context13.abrupt("return");
+
+          case 12:
+            // Prepare data for the Google Chart
+            chartData = [['Tank', 'Volume']];
+            tanksData.forEach(function (tank) {
+              var _tank = _slicedToArray(tank, 2),
+                  tankName = _tank[0],
+                  volume = _tank[1];
+
+              chartData.push([tankName, volume]);
+            });
+            data = google.visualization.arrayToDataTable(chartData);
+            groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('tankVolumeChart', tanksData.length);
+            options = {
+              backgroundColor: secondaryBgColor,
+              title: '',
+              colors: [_constant.SharedColors.TanksVolume],
+              legend: {
+                position: 'none'
+              },
+              bar: {
+                groupWidth: "".concat(groupWidthPercentage, "%")
+              }
+            };
+            chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
+            chart.draw(data, options);
+            _context13.next = 24;
+            break;
+
+          case 21:
+            _context13.prev = 21;
+            _context13.t0 = _context13["catch"](0);
+            console.error("Error drawing column chart:", _context13.t0);
+
+          case 24:
           case "end":
             return _context13.stop();
         }
       }
+    }, null, null, [[0, 21]]);
+  },
+  setupThreshold: function setupThreshold(sites) {
+    var thresholdWrapper = document.querySelector('#threshold');
+    var thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
+    var threshold = TanksPercentage;
+
+    if (thresholdWrapper) {
+      thresholdWrapper.textContent = "".concat(threshold, "%");
+    }
+
+    thresholdList.forEach(function (item) {
+      if (Number(item.dataset.value) === threshold) {
+        item.classList.add('active');
+      }
+
+      item.addEventListener('click', function () {
+        threshold = Number(item.dataset.value);
+
+        if (thresholdWrapper) {
+          thresholdWrapper.textContent = "".concat(threshold, "%");
+        }
+
+        thresholdList.forEach(function (el) {
+          return el.classList.remove('active');
+        });
+        item.classList.add('active');
+        google.charts.setOnLoadCallback(function () {
+          return TanksVolume.drawPieChart(sites, threshold);
+        });
+      });
+    });
+    google.charts.setOnLoadCallback(function () {
+      return TanksVolume.drawPieChart(sites, threshold);
     });
   },
   drawPieChart: function drawPieChart(sites, threshold) {
+    var belowThreshold, aboveThreshold, data, options, chart;
     return regeneratorRuntime.async(function drawPieChart$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
           case 0:
+            belowThreshold = sites.filter(function (site) {
+              return site.tanks < threshold;
+            }).length;
+            aboveThreshold = sites.length - belowThreshold;
+            data = google.visualization.arrayToDataTable([['Status', 'Count'], ['Below Threshold', belowThreshold], ['Above Threshold', aboveThreshold]]);
+            options = {
+              title: 'Tanks Above/Below Threshold',
+              colors: ['#000000', '#eeeeee'],
+              legend: {
+                position: 'none'
+              }
+            };
+            chart = new google.visualization.PieChart(document.querySelector('#tankPercentageChart'));
+            chart.draw(data, options);
+
+          case 6:
           case "end":
             return _context14.stop();
         }
       }
     });
   }
-}; // Run All Charts
+}; // Shared function to set bar width
 
+var ChartUtils = {
+  calculateGroupWidthPercentage: function calculateGroupWidthPercentage(chartId, numBars) {
+    var targetBarWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 90;
+    var chartContainer = document.querySelector("#".concat(chartId));
+    var containerWidth = chartContainer ? chartContainer.offsetWidth : 0;
+    if (containerWidth === 0 || numBars === 0) return 100; // Fallback to 100% if container width or bars are missing
+    // Calculate percentage to keep bar width close to targetBarWidth
+
+    return Math.min(targetBarWidth * numBars / containerWidth * 100, 100);
+  }
+};
 var RunCharts = {
   init: function init() {
     ProductsUsage.init();

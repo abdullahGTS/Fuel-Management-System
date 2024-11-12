@@ -58,29 +58,29 @@
 }
 
 @media (max-width: 1580px) {
-    #gts-wrapper {
-        #gts-stage {
-            .gts-container {
-                #gts-header {
-                    padding: 0 48px !important;
-                }
-                .gts-content {
-                    padding: 42px 48px !important;
-                }
-            }
-        }
-    }
-    body {
-        &.gts-menu-collapsed {
-            #gts-wrapper {
-                #side-bar {
-                    #toggle-menu {
-                        right: -60px;
-                    }
-                }
-            }
-        }
-    }
+    // #gts-wrapper {
+    //     #gts-stage {
+    //         .gts-container {
+    //             #gts-header {
+    //                 padding: 0 48px !important;
+    //             }
+    //             .gts-content {
+    //                 padding: 42px 48px !important;
+    //             }
+    //         }
+    //     }
+    // }
+    // body {
+    //     &.gts-menu-collapsed {
+    //         #gts-wrapper {
+    //             #side-bar {
+    //                 #toggle-menu {
+    //                     right: -60px;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 @media (max-width: 1440px) {
@@ -130,6 +130,15 @@
 
 }
 
+@media (max-width: 1360px) {
+    #productsCards {
+        grid-column: auto / span 3 !important;
+        order: 0;
+    }
+    .double-row.on-mobile {
+        grid-row: unset !important;
+    }
+}
 @media (max-width: 1280px) {
     main {
         #auth-wrapper {
@@ -149,7 +158,6 @@
             }
         }
     }
-
     
     #gts-wrapper {
         #side-bar {
@@ -241,6 +249,14 @@
             
         } 
     }
+    .grid-4 {
+        .double-col.on-mobile {
+            grid-column: auto / span 4 !important;
+        }
+        .double-row {
+            grid-row: unset !important;
+        }
+    }
 }
 
 @media (max-width: 1048px) {
@@ -281,6 +297,16 @@
             }
         }
     }
+    #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper > .gts-grid > .gts-grid-item.double-col,
+    #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper > .gts-grid > .gts-grid-item.triple-col,
+    #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper > .gts-grid > .gts-grid-item {
+        grid-column: auto / span 3 !important;
+    }
+    .grid-4 {
+        .double-col {
+            grid-column: auto / span 4 !important;
+        }
+    }
 }
 
 @media (max-width: 1024px) {
@@ -318,10 +344,10 @@
         }
     }
 
-    #gts-wrapper {
+    body.gts-menu-collapsed #gts-wrapper {
         flex-direction: column-reverse;
         #side-bar {
-            width: 100%;
+            width: 100% !important;
             height: auto;
             flex-direction: row;
             padding: 7px 14px 14px;
@@ -332,12 +358,21 @@
                 padding: 0;
                 width: 140px;
                 min-height: auto;
+                a {
+                    .collapsed {
+                        display: none !important;
+                    }
+                    .mobile {
+                        display: flex !important;
+                    }
+                }
             }
             gts-sidebar {
                 flex-direction: row;
                 width: 100%;
                 flex: 1;
             }
+
             #nav-wrapper {
                 flex: 1;
                 height: auto !important;
@@ -351,18 +386,32 @@
                     .nav-items {
                         display: flex;
                         align-items: center;
-                        nav {
+                        nav:not(.open) {
                             height: auto;
                             ul {
+                                flex-direction: row !important;
                                 li {
                                     display: inline-block;
-                                    padding: 2px 9px;
+                                    padding: 0px;
                                     .nav-item {
                                         display: none;
                                     }
                                     &.active {
                                         &::before {
                                             display: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        nav.open {
+                            ul {
+                                li {
+                                    width: 100% !important;
+                                    a {
+                                        justify-content: flex-start !important;
+                                        .nav-item {
+                                            display: flex !important;
                                         }
                                     }
                                 }

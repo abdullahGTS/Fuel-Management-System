@@ -123,68 +123,68 @@ const DownloadChart = {
 const Products = {
 
     init: async () => {
-            const products = await fetchData(API_PATHS.dashboardProducts);
-            Products.renderProducts(products);
+        const products = await fetchData(API_PATHS.dashboardProducts);
+        Products.renderProducts(products);
     },
     renderProducts: (products) => {
         const productsCards = document.getElementById('productsCards');
         if (productsCards) {
-        
+
             Object.keys(products).forEach((key) => {
                 // Create the main wrapper for the product card
                 const gridItem = document.createElement('div');
                 gridItem.classList.add('gts-grid-item');
-        
+
                 // Create the main product container
                 const itemContainer = document.createElement('div');
                 itemContainer.classList.add('gts-product');
                 itemContainer.classList.add('gts-item-content');
                 itemContainer.classList.add(key.toLowerCase());
-        
+
                 // Create the inner container for icon and content
                 const gtsValue = document.createElement('div');
                 gtsValue.classList.add('gts-value');
-        
+
                 // Create the icon wrapper
                 const iconWrapper = document.createElement('div');
                 iconWrapper.classList.add('icon-wrapper');
-                
+
                 // Create the icon element (using Material Icons in this example)
                 const icon = document.createElement('span');
                 icon.classList.add('mat-icon', 'material-symbols-sharp');
                 icon.textContent = 'local_gas_station'; // Set your icon name or dynamic icon here
-        
+
                 // Append icon to icon wrapper
                 iconWrapper.appendChild(icon);
-        
+
                 // Create the header for the product quantity
                 const quantityHeader = document.createElement('h3');
                 const quantityValue = document.createElement('span');
                 quantityValue.id = `${key}-value`;
                 quantityValue.textContent = Products.parseFormattedNumber(products[key]);
-        
+
                 // Add unit after the value
                 quantityHeader.appendChild(quantityValue);
                 quantityHeader.insertAdjacentText('beforeend', ' lts');
-        
+
                 // Create the product name/label as a paragraph
                 const productLabel = document.createElement('p');
                 productLabel.textContent = ProductLabels[key] || key;
-        
+
                 // Append elements in the proper structure
                 gtsValue.appendChild(iconWrapper);
                 gtsValue.appendChild(quantityHeader);
                 gtsValue.appendChild(productLabel);
-                
+
                 // Append the main gts-value container to itemContainer
                 itemContainer.appendChild(gtsValue);
-        
+
                 // Append the itemContainer to the gridItem and add it to the main container
                 gridItem.appendChild(itemContainer);
                 productsCards.querySelector('.gts-grid').appendChild(gridItem);
             });
-        }     
-        if ( Object.keys(products).length > 3 ) {
+        }
+        if (Object.keys(products).length > 3) {
             Products.scrollProducts(productsCards, Object.keys(products).length);
         }
     },
@@ -196,16 +196,16 @@ const Products = {
         });
         productsCards.style.width = `${itemWidth * 3} + 15` + `px`;
     },
-    
+
     parseFormattedNumber: (numberStr) => {
         const formattedNumber = numberStr.replace(/,/g, '').trim();
         const parsedNumber = parseFloat(formattedNumber);
-        
+
         if (isNaN(parsedNumber)) {
             console.error('Invalid number format:', numberStr);
             return '0'; // Return a string so it can be displayed
         }
-    
+
         // Format the number with commas
         return parsedNumber.toLocaleString();
     },
@@ -227,35 +227,37 @@ const ProductsUsage = {
     // Step 4: Function to draw the Pie Chart
     drawPieChart: async () => {
         const { backgroundColor } = await ChartBackgroundColor();
-    
+
         // Create the data table
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Fuel Type');
         data.addColumn('number', 'Liters');
         data.addColumn({ type: 'string', role: 'style' });
-    
+
         const products = await fetchData(API_PATHS.dashboardProducts);
         if (!products || Object.keys(products).length === 0) {
             console.error("No product data available");
             return;
         }
-    
+
         // Populate data table and prepare slices for each product dynamically
         const slices = {};
         Object.keys(products).forEach((key, index) => {
             const productName = ProductLabels[key] || key;
             const productValue = Number(products[key]);
-    
+
             if (!isNaN(productValue)) {
                 let colorCode = key;
-                if ( key === 'gas95' ) colorCode = 'gasoline95';
-                if ( key === 'gas92' ) colorCode = 'gasoline92';
-                if ( key === 'gas91' ) colorCode = 'gasoline91';
-                if ( key === 'gas80' ) colorCode = 'gasoline80';
-    
-                const color = SharedColors[colorCode.toLowerCase()] || '#ccc';
+                if (key === 'gas95') colorCode = 'Gasoline95';
+                if (key === 'gas92') colorCode = 'Gasoline92';
+                if (key === 'gas91') colorCode = 'Gasoline91';
+                if (key === 'gas80') colorCode = 'Gasoline80';
+                if (key === 'diesel') colorCode = 'Diesel';
+                if (key === 'cng') colorCode = 'CNG';
+
+                const color = SharedColors[colorCode] || '#ccc';
                 data.addRow([productName, productValue, `color: ${color}`]);
-    
+
                 // Use SharedColors with lowercase product name as the key
                 slices[index] = {
                     offset: 0.04,
@@ -268,7 +270,7 @@ const ProductsUsage = {
                 console.warn(`Invalid number value for ${productName}: ${products[key]}`);
             }
         });
-    
+
         const windowWidth = window.innerWidth;
         // Set chart options with dynamically created slices
         const options = {
@@ -284,16 +286,16 @@ const ProductsUsage = {
             pieSliceText: 'percentage',  // Show percentage in slices
             legend: { position: 'none' }  // Hide the default legend
         };
-    
+
         // Draw the chart in the specified div
         const gasolineChartWrapper = document.getElementById('currentUsageChart');
         const chart = new google.visualization.PieChart(gasolineChartWrapper);
         chart.draw(data, options);
-    
+
         // Step 5: Draw the legend beneath the chart
         ProductsUsage.createLegend(gasolineChartWrapper, data, options);
     },
-    
+
 
     // Step 6: Create a custom legend with colored circles below the chart
     createLegend: (wrapper, data, options) => {
@@ -349,8 +351,8 @@ const SiteStatus = {
         document.getElementById('offlineSitesValue').textContent = sites.offline;
 
         // Draw the charts for online and offline sites
-        SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, SharedColors.online, secondaryBgColor, secondaryAlphaColor);
-        SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, SharedColors.offline, secondaryBgColor, secondaryAlphaColor);
+        SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
+        SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
     },
 
     drawDonutChart: (elementId, value, total, color, secondaryBgColor, secondaryAlphaColor) => {
@@ -370,7 +372,7 @@ const SiteStatus = {
                 1: { color: secondaryAlphaColor },
             },
             backgroundColor: secondaryBgColor,
-            legend: 'none', 
+            legend: 'none',
             pieSliceBorderColor: secondaryBgColor,
             chartArea: {
                 width: windowWidth < 769 ? '80%' : '80%',
@@ -401,7 +403,7 @@ const SalesTrend = {
         const salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
         if (salesTabsNodeList.length) {
             salesTabsNodeList.forEach((tab) => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     salesTabsNodeList.forEach((item) => {
                         item.classList.remove('active');
                     });
@@ -464,7 +466,7 @@ const SalesTrend = {
         // Create the DataTable
         const data = new google.visualization.DataTable();
         const products = [...new Set(sales.map(item => item.gradeid__name))];
-    
+
         // Dynamically add columns based on the data structure
         switch (SalesTrend.currentTab) {
             case 'today':
@@ -478,27 +480,27 @@ const SalesTrend = {
                 data.addColumn('string', 'Week');
                 break;
         }
-    
+
         // Add columns dynamically for each product
         products.forEach(product => {
-            data.addColumn('number', product); 
+            data.addColumn('number', product);
         });
-    
+
         // Determine the correct time unit for the selected tab (hour, day, week)
         const timeUnit = SalesTrend.getTimeUnit(); // 'hour', 'day', or 'week'
-    
+
         // Extract raw time units (no formatting yet)
         const timeUnits = [...new Set(sales.map(item => item[timeUnit]))];
-    
+
         // If timeUnits are empty, log to debug
         if (timeUnits.length === 0) {
             console.error("No time units found. Check the sales data and time unit mapping.");
         }
-    
+
         // Function to format the raw date into a readable string (e.g., "12:30 PM" for hours)
         const formatTimeUnit = (unit, timeUnit) => {
             const date = new Date(unit);  // Create a Date object from the time unit
-    
+
             // Format according to the selected time unit (hour, day, or week)
             switch (timeUnit) {
                 case 'hour':
@@ -516,24 +518,24 @@ const SalesTrend = {
                     return unit; // If no formatting needed
             }
         };
-    
+
         // Prepare data rows based on the selected time period (hour, day, week)
         const formattedTimeUnits = timeUnits.map(unit => formatTimeUnit(unit, timeUnit)); // Format all time units
-    
+
         formattedTimeUnits.forEach((unit, index) => {
             const row = [unit]; // Initialize row with the formatted time unit (hour, day, week)
-    
+
             // For each product, filter the sales data and sum the total money for that time unit
             products.forEach(product => {
                 const salesForProduct = sales.filter(item => item.gradeid__name === product && item[timeUnit] === timeUnits[index]);
                 const totalMoney = salesForProduct.reduce((sum, item) => sum + parseFloat(item.total_money || 0), 0); // Sum the total money for that product
                 row.push(totalMoney); // Add the total money for the product in that time unit
             });
-    
+
             // Add the row to the DataTable
             data.addRow(row);
         });
-    
+
         // Chart options
         const options = {
             title: '',
@@ -551,15 +553,15 @@ const SalesTrend = {
                 width: '75%',
                 height: '80%',
             },
-            colors: products.map((product, index) => SharedColors[product.toLowerCase()]),
+            colors: products.map((product, index) => SharedColors[product]),
             lineWidth: 3,
         };
-    
+
         // Create and draw the chart
         const chart = new google.visualization.LineChart(document.getElementById('salesTrendChart'));
         chart.draw(data, options);
-    },    
-    
+    },
+
     // Utility function to get the time unit based on the selected tab
     getTimeUnit: () => {
         switch (SalesTrend.currentTab) {
@@ -595,7 +597,7 @@ const SalesTrend = {
 const ProductSales = {
     init: () => {
         const productSalesChart = document.querySelector('#productSalesChart');
-        if ( productSalesChart ) {
+        if (productSalesChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(ProductSales.fetchData);
         }
@@ -614,7 +616,7 @@ const ProductSales = {
     drawChart: async (sales) => {
         const { backgroundColor } = await ChartBackgroundColor();
         const data = new google.visualization.DataTable();
-    
+
         // Add columns for the product name and total sales amount
         data.addColumn('string', 'Product');
         data.addColumn('number', 'Total Sales');
@@ -629,14 +631,17 @@ const ProductSales = {
                 .filter(item => item.gradeid__name === product)
                 .reduce((sum, item) => sum + parseFloat(item.total_money), 0);
 
-            const color = SharedColors[product.toLowerCase()] || '#ccc';
+            const color = SharedColors[product] || '#ccc';
             data.addRow([product, totalSales, `color: ${color}`]); // Adding color to each row
         });
+
+        const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('productSalesChart', products.length);
+
         // Set up chart options
         const options = {
             backgroundColor: backgroundColor,
             legend: { position: 'none' },
-            bar: { groupWidth: '60%' },
+            bar: { groupWidth: `${groupWidthPercentage}%` },
             chartArea: {
                 width: '80%',
                 height: '80%',
@@ -648,18 +653,18 @@ const ProductSales = {
                 title: '',
             }
         };
-    
+
         // Create and draw the bar chart
         const chart = new google.visualization.ColumnChart(document.getElementById('productSalesChart'));
         chart.draw(data, options);
-    }    
+    }
 }
 
 // System Alarms
 const SystemAlarms = {
     init: () => {
         const systemAlarmsChart = document.getElementById('systemAlarmsChart');
-        if ( systemAlarmsChart ) {
+        if (systemAlarmsChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(SystemAlarms.fetchData);
         }
@@ -679,29 +684,31 @@ const SystemAlarms = {
     drawChart: async (alarms) => {
         const { backgroundColor } = await ChartBackgroundColor();
         const data = new google.visualization.DataTable();
-    
+
         // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
         data.addColumn('string', 'Alarm Type');
         data.addColumn('number', 'Count');
         data.addColumn({ type: 'string', role: 'style' });
-    
+
         // Function to format alarm names dynamically
         const formatAlarmName = (name) => {
             return name.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         };
-    
+
         // Populate rows dynamically based on fetched alarm data
         alarms.forEach(alarm => {
             const [name, count] = alarm; // Use first number in each array as the count
             const formattedName = formatAlarmName(name.toLowerCase());
-            data.addRow([formattedName, count, '#6B6ED2']);
+            data.addRow([formattedName, count, SharedColors.SystemAlarm]);
         });
-    
+
+        const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('systemAlarmsChart', alarms.length);
+
         // Chart options for the waterfall chart
         const options = {
             backgroundColor: backgroundColor,
-            legend: { position: 'none' }, // No legend needed
-            bar: { groupWidth: '52%' },
+            legend: { position: 'none' },
+            bar: { groupWidth: `${groupWidthPercentage}%` },
             chartArea: {
                 width: '80%',
                 height: '80%',
@@ -713,11 +720,11 @@ const SystemAlarms = {
                 title: '',
             }
         };
-    
+
         // Create and draw the waterfall chart
         const chart = new google.visualization.ColumnChart(document.getElementById('systemAlarmsChart'));
         chart.draw(data, options);
-    }    
+    }
 };
 
 // Operational Alarms
@@ -760,14 +767,14 @@ const OperationalAlarms = {
         });
 
         // Define the colors, alternating between #000 and #eeee
-        const colors = alarms.map((_, index) => (index % 2 === 0 ? '#2D99FC' : '#83D0FF'));
+        const colors = alarms.map((_, index) => (index % 2 === 0 ? SharedColors.DeleveryReconciliation : SharedColors.SuddenLoss));
 
         // Set up chart options
         const options = {
             backgroundColor: backgroundColor,
             pieSliceBorderColor: backgroundColor,
             colors: colors,
-            pieHole: 0.5, 
+            pieHole: 0.5,
             slices: {
                 0: { offset: 0.1 },
             },
@@ -806,133 +813,191 @@ const TanksVolume = {
     init: () => {
         const tankVolumeChart = document.querySelector('#tankVolumeChart');
         const tankPercentageChart = document.querySelector('#tankPercentageChart');
-        if ( tankVolumeChart && tankPercentageChart) {
+        if (tankVolumeChart && tankPercentageChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(TanksVolume.fetchData);
         }
     },
 
     fetchData: async () => {
-        const sitesData = await fetchData(API_PATHS.dashboardSites);
-        if (!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0) {
-            console.error("No sites data available");
-            return;
-        }
-
-        const sites = sitesData.sitesnumbers;
-        TanksVolume.siteDropDown(sites);
-        google.charts.setOnLoadCallback(() => TanksVolume.drawColumnChart(sites));
-        TanksVolume.threshold(sites);
-    },
-
-    siteDropDown: (sites) => {
-        const sitesList = document.querySelector('#tanks-sites-list ul');
-        const siteFilterInput = document.querySelector('#tanks-sites-list .site-filter input');
-        const siteName = document.querySelector('.site-name');
-        const tanksAmount = document.querySelector('#tanksAmount');
-
-
-        // Populate the dropdown with site items
-        sites.forEach((site, index) => {
-            const listItem = document.createElement('li');
-
-            const siteNumberSpan = document.createElement('span');
-            siteNumberSpan.classList.add('site-number');
-            siteNumberSpan.textContent = `#${site.sitenumber}`;
-            
-            const tanksLengthSpan = document.createElement('span');
-            tanksLengthSpan.classList.add('tanks-length');
-            tanksLengthSpan.textContent = `${site.tanks} Tanks`;
-            
-            listItem.appendChild(siteNumberSpan);
-            listItem.appendChild(tanksLengthSpan);
-            
-            listItem.dataset.sitenumber = site.sitenumber;
-            listItem.dataset.tanks = site.tanks;
-            listItem.classList.add('site-item');
-            
-            // Add click event to update selected site
-            listItem.addEventListener('click', () => {
-                document.querySelectorAll('.site-item').forEach(item => item.classList.remove('active'));
-                listItem.classList.add('active');
-                siteName.textContent = `${site.sitenumber}`;
-                tanksAmount.textContent = site.tanks;
-            });
-            
-
-            // Select the first item by default
-            if (index === 0) {
-                listItem.classList.add('active');
-                siteName.textContent = `${site.sitenumber}`;
-                tanksAmount.textContent = site.tanks;
+        try {
+            const sitesData = await fetchData(API_PATHS.dashboardSites);
+            if (!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0) {
+                console.error("No sites data available");
+                return;
             }
 
+            const sites = sitesData.sitesnumbers;
+            TanksVolume.populateSiteDropdown(sites);
+            TanksVolume.setupThreshold(sites);
+
+            // Draw initial chart with the first site by default
+            TanksVolume.drawColumnChart(sites[0].sitenumber);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    },
+
+    populateSiteDropdown: (sites) => {
+        const sitesList = document.querySelector('#tanks-sites-list ul');
+        const siteFilterInput = document.querySelector('#tanks-sites-list .site-filter input');
+
+        sitesList.innerHTML = '';  // Clear previous items if any
+
+        sites.forEach((site, index) => {
+            const listItem = TanksVolume.createSiteListItem(site, index === 0);
+            listItem.addEventListener('click', () => TanksVolume.selectSite(listItem, site));
             sitesList.appendChild(listItem);
         });
 
-        // Filter sites by sitenumber
+        // Filter functionality for dropdown
         siteFilterInput.addEventListener('input', () => {
             const filterValue = siteFilterInput.value.toLowerCase();
             document.querySelectorAll('.site-item').forEach(item => {
-                const sitenumber = item.dataset.sitenumber.toString();
-                if (sitenumber.includes(filterValue)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+                item.style.display = item.dataset.sitenumber.includes(filterValue) ? 'flex' : 'none';
             });
         });
+
+        // Select the first item by default if sites exist
+        if (sites.length > 0) {
+            TanksVolume.selectSite(sitesList.firstChild, sites[0]);
+        }
     },
-    threshold: (sites) => {
+
+    createSiteListItem: (site, isActive) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('site-item');
+        listItem.dataset.sitenumber = site.sitenumber;
+        listItem.dataset.tanks = site.tanks;
+
+        const siteNumberSpan = document.createElement('span');
+        siteNumberSpan.classList.add('site-number');
+        siteNumberSpan.textContent = `#${site.sitenumber}`;
+
+        const tanksLengthSpan = document.createElement('span');
+        tanksLengthSpan.classList.add('tanks-length');
+        tanksLengthSpan.textContent = `${site.tanks} Tanks`;
+
+        listItem.append(siteNumberSpan, tanksLengthSpan);
+
+        if (isActive) listItem.classList.add('active');
+        return listItem;
+    },
+
+    selectSite: (listItem, site) => {
+        document.querySelectorAll('.site-item').forEach(item => item.classList.remove('active'));
+        listItem.classList.add('active');
+
+        const siteName = document.querySelector('.site-name');
+        const tanksAmount = document.querySelector('#tanksAmount');
+
+        siteName.textContent = site.sitenumber;
+        tanksAmount.textContent = site.tanks;
+
+        // Draw the column chart for the selected site
+        TanksVolume.drawColumnChart(site.sitenumber);
+    },
+
+    drawColumnChart: async (siteNumber) => {
+        try {
+            const { secondaryBgColor, secondaryAlphaColor } = await ChartBackgroundColor();
+
+            // Fetch tanks data for the selected site
+            const tanksData = await fetchData(`${API_PATHS.tanksVolumes}${siteNumber}.json`);
+            if (!tanksData || tanksData.length === 0) {
+                console.error("No tank data available");
+                return;
+            }
+
+            // Prepare data for the Google Chart
+            const chartData = [['Tank', 'Volume']];
+            tanksData.forEach(tank => {
+                const [tankName, volume] = tank;
+                chartData.push([tankName, volume]);
+            });
+
+            const data = google.visualization.arrayToDataTable(chartData);
+
+            const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('tankVolumeChart', tanksData.length);
+
+            const options = {
+                backgroundColor: secondaryBgColor,
+                title: '',
+                colors: [SharedColors.TanksVolume],
+                legend: { position: 'none' },
+                bar: { groupWidth: `${groupWidthPercentage}%` }
+            };
+
+            const chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
+            chart.draw(data, options);
+        } catch (error) {
+            console.error("Error drawing column chart:", error);
+        }
+    },
+
+    setupThreshold: (sites) => {
         const thresholdWrapper = document.querySelector('#threshold');
         const thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
         let threshold = TanksPercentage;
-    
-        // Set initial threshold display
-        if (thresholdWrapper) {
-            thresholdWrapper.textContent = `${TanksPercentage}%`;
-        }
-    
-        // Add 'active' class to the list item that matches the initial threshold
-        if (thresholdList.length) {
-            thresholdList.forEach((item) => {
-                // Check if data-value matches the current threshold
-                if (Number(item.dataset.value) === threshold) {
-                    item.classList.add('active');
-                }
-                
-                // Add click event listener to update the threshold on click
-                item.addEventListener('click', () => {
-                    // Update threshold to the clicked item's data-value
-                    threshold = Number(item.dataset.value);
-                    console.log('TanksPercentage', threshold);
 
-                    // Update the threshold display
-                    if (thresholdWrapper) {
-                        thresholdWrapper.textContent = `${threshold}%`;
-                    }
-    
-                    // Remove 'active' class from all items and apply to clicked item
-                    thresholdList.forEach((el) => el.classList.remove('active'));
-                    item.classList.add('active');
-    
-                    // Redraw the chart with the new threshold value
-                    google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
-                });
-            });
+        if (thresholdWrapper) {
+            thresholdWrapper.textContent = `${threshold}%`;
         }
-    
-        // Draw the chart initially
+
+        thresholdList.forEach(item => {
+            if (Number(item.dataset.value) === threshold) {
+                item.classList.add('active');
+            }
+
+            item.addEventListener('click', () => {
+                threshold = Number(item.dataset.value);
+                if (thresholdWrapper) {
+                    thresholdWrapper.textContent = `${threshold}%`;
+                }
+
+                thresholdList.forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+
+                google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
+            });
+        });
+
         google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
     },
-    
-    drawColumnChart: async (sites) => {},
+
     drawPieChart: async (sites, threshold) => {
+        const belowThreshold = sites.filter(site => site.tanks < threshold).length;
+        const aboveThreshold = sites.length - belowThreshold;
 
+        const data = google.visualization.arrayToDataTable([
+            ['Status', 'Count'],
+            ['Below Threshold', belowThreshold],
+            ['Above Threshold', aboveThreshold]
+        ]);
+
+        const options = {
+            title: 'Tanks Above/Below Threshold',
+            colors: ['#000000', '#eeeeee'],
+            legend: { position: 'none' }
+        };
+
+        const chart = new google.visualization.PieChart(document.querySelector('#tankPercentageChart'));
+        chart.draw(data, options);
     }
-}
+};
 
-// Run All Charts
+// Shared function to set bar width
+const ChartUtils = {
+    calculateGroupWidthPercentage: (chartId, numBars, targetBarWidth = 90) => {
+        const chartContainer = document.querySelector(`#${chartId}`);
+        const containerWidth = chartContainer ? chartContainer.offsetWidth : 0;
+        if (containerWidth === 0 || numBars === 0) return 100; // Fallback to 100% if container width or bars are missing
+
+        // Calculate percentage to keep bar width close to targetBarWidth
+        return Math.min((targetBarWidth * numBars / containerWidth) * 100, 100);
+    }
+};
+
 const RunCharts = {
     init: () => {
         ProductsUsage.init();
@@ -974,12 +1039,12 @@ const ReloadCharts = {
             const chartContainers = document.querySelectorAll('.chart-area');
             const chartLegend = document.querySelectorAll('.chart-legend');
 
-            if ( chartContainers ) {
+            if (chartContainers) {
                 chartContainers.forEach(container => {
                     container.innerHTML = ''; // Clear the chart container
                 });
             }
-            if ( chartLegend ) {
+            if (chartLegend) {
                 chartLegend.forEach(container => {
                     container.innerHTML = ''; // Clear the chart container
                 });

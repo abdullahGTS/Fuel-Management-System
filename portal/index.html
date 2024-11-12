@@ -152,26 +152,6 @@
                     <div class="gts-grid-wrapper">
                         <div class="gts-grid">
 
-                            <div class="gts-grid-item double-row">
-                                <div class="gts-item-content gts-charts white-box">
-                                    <div class="gts-card-title">
-                                        <div class="gts-card-title-wrapper">
-                                            <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                            <h3>Usage Comparison</h3>
-                                        </div>
-
-                                        <div class="chart-controls">
-                                            <button class="btn btn-icon download-chart"
-                                                data-popover-target="#download-chart">
-                                                <span class="mat-icon material-symbols-sharp">download</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div id="currentUsageChart" class="chart-area"></div>
-                                    <div class="chart-legend"></div>
-                                </div>
-                            </div>
-
                             <!-- Products -->
                             <div class="gts-grid-item double-col" id="productsCards">
                                 <div id="productsCards">
@@ -191,6 +171,28 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Products Usage -->
+                            <div class="gts-grid-item double-row on-mobile">
+                                <div class="gts-item-content gts-charts white-box">
+                                    <div class="gts-card-title">
+                                        <div class="gts-card-title-wrapper">
+                                            <span class="mat-icon material-symbols-sharp">pie_chart</span>
+                                            <h3>Usage Comparison</h3>
+                                        </div>
+
+                                        <div class="chart-controls">
+                                            <button class="btn btn-icon download-chart"
+                                                data-popover-target="#download-chart">
+                                                <span class="mat-icon material-symbols-sharp">download</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="currentUsageChart" class="chart-area"></div>
+                                    <div class="chart-legend"></div>
+                                </div>
+                            </div>
+
 
                             <!-- Sales -->
                             <div class="gts-grid-item double-col">
@@ -222,7 +224,7 @@
                             <div class="gts-grid-item triple-col">
                                 <div class="gts-grid grid-4">
                                     <!-- Sites -->
-                                    <div class="gts-grid-item double-col">
+                                    <div class="gts-grid-item double-col on-mobile">
                                         <div class="gts-item-content no-padding">
                                             <div class="site-status" id="siteStatus">
 

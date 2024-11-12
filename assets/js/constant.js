@@ -3,7 +3,8 @@
 // Define the API paths as constants or an object
 const API_PATHS = {
     dashboardSites: '/api/dashboard_sites_api.json',
-
+    tanksVolumes: '/api/sites/',
+    dashboardDeliveryAmount: '/api/dashboard_delivery_amount_api_column_chart.json',
     dashboardSalesToday: '/api/dashboard_sales_today.json',
     dashboardSalesYesterday: '/api/dashboard_sales_yesterday.json',
     dashboardSalesLastWeek: '/api/dashboard_sales_last_week.json',
@@ -13,7 +14,6 @@ const API_PATHS = {
 
     dashboardMaps: '/api/dashboard_maps_api.json',
 
-    dashboardDeliveryAmount: '/api/dashboard_delivery_amount_api_column_chart.json',
 
     dashboardProducts: '/api/dashboard_cards_api.json',
 
@@ -42,14 +42,18 @@ async function fetchData(endpoint) {
 
 // Unified Product Colors
 const SharedColors = {
-    gasoline95: '#009C62',
-    gasoline92: '#e54141',
-    gasoline91: '#e54141',
-    gasoline80: '#26272d',
-    cng: '#26272d',
-    diesel: '#FAB75C',
-    online: '#3db16d',
-    offline: '#e61e45'
+    Gasoline95: '#009C62',
+    Gasoline92: '#e54141',
+    Gasoline91: '#e54141',
+    Gasoline80: '#26272d',
+    CNG: '#26272d',
+    Diesel: '#FAB75C',
+    Online: '#3db16d',
+    Offline: '#e61e45',
+    DeleveryReconciliation: '#2D99FC',
+    SuddenLoss: '#83D0FF',
+    SystemAlarm: '#6B6ED2',
+    TanksVolume: '#156E41'
 };
 
 const ChartBackgroundColor = () => {
