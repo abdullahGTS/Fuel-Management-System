@@ -252,12 +252,5 @@ var Modal = {
       });
     });
   }
-}; // pageReady(() => {
-//   PageLoader.slowIncreaseTo(100);
-//   PageLoader.init();
-//   Button.init();
-//   Popover.init();
-//   Modal.init();
-// });
-
+};
 exports.Modal = Modal;

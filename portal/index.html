@@ -57,7 +57,7 @@
             <div class="gts-logo">
                 <a href="./index.html">
                     <img src="../assets/imgs/gts-logo-mobile.png" class="desktop" alt="GTS Logo" />
-                    <img src="../assets/imgs/gts-icon.png" class="collapsed" alt="GTS Logo" />
+                    <img src="../assets/imgs/gts-logo-mobile.png" class="collapsed" alt="GTS Logo" />
                     <img src="../assets/imgs/gts-logo-mobile.png" class="mobile" alt="GTS Logo" />
                 </a>
             </div>
@@ -353,9 +353,10 @@
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                            <h3>Volume <span id="threshold" data-popover-target="#tanks-threshold-target">(0%)</span> Threshold</h3>
+                                            <h3>Low Stock</h3>
                                         </div>
                                         <div class="chart-controls">
+                                            <button class="thresholdBtn" data-popover-target="#tanks-threshold-target">Threshold <span id="threshold">(0%)</span></button>
                                             <button class="btn btn-icon download-chart"
                                                 data-popover-target="#download-chart">
                                                 <span class="mat-icon material-symbols-sharp">download</span>
@@ -363,6 +364,9 @@
                                         </div>
                                     </div>
                                     <div id="tankPercentageChart" class="chart-area"></div>
+                                    <div class="chart-legend" id="stockProductList">
+                                        <ul></ul>
+                                    </div>
                                 </div>
                             </div>
 

@@ -466,3 +466,31 @@ body #toast-container {
         cursor: auto;
     }
 }
+
+.tooltip {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10);
+    border-radius: var(--gts-sm-curve);
+    padding: 6px 12px;
+    color: #fff;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2147483646;
+    transform: translateY(-50%);
+    font-size: var(--gts-small-fs);
+    .gts-badge {
+        position: relative;
+        right: -4px;
+        top: -1px;
+        min-width: 10px;
+        min-height: 10px;
+        line-height: 10px;
+        padding: 2px 5px;
+        color: var(--gts-white-color);
+        background-color: var(--gts-red-color);
+        font-size: var(--gts-xsmall-fs);
+        border-radius: 20px;
+        border: .5px solid var(--gts-red-color);
+        font-weight: 600;
+    }
+}

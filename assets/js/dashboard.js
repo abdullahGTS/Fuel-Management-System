@@ -808,12 +808,11 @@ const OperationalAlarms = {
     }
 };
 
-const TanksPercentage = 90;
+// Tanks Volume
 const TanksVolume = {
     init: () => {
         const tankVolumeChart = document.querySelector('#tankVolumeChart');
-        const tankPercentageChart = document.querySelector('#tankPercentageChart');
-        if (tankVolumeChart && tankPercentageChart) {
+        if ( tankVolumeChart ) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(TanksVolume.fetchData);
         }
@@ -829,7 +828,6 @@ const TanksVolume = {
 
             const sites = sitesData.sitesnumbers;
             TanksVolume.populateSiteDropdown(sites);
-            TanksVolume.setupThreshold(sites);
 
             // Draw initial chart with the first site by default
             TanksVolume.drawColumnChart(sites[0].sitenumber);
@@ -933,17 +931,92 @@ const TanksVolume = {
         } catch (error) {
             console.error("Error drawing column chart:", error);
         }
+    }
+};
+
+
+// Low Stock
+const LowStock = {
+    TanksPercentage: 50,
+
+    // Initialize LowStock functionality
+    init: () => {
+        const tankPercentageChart = document.querySelector('#tankPercentageChart');
+        if (tankPercentageChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(LowStock.fetchStockData);
+        }
     },
 
-    setupThreshold: (sites) => {
+    // Fetch stock data from API
+    fetchStockData: async () => {
+        try {
+            const stockData = await fetchData(API_PATHS.stockData);
+            if (!stockData || !stockData.list) {
+                console.error("No stock data available");
+                return;
+            }
+
+            // Update TanksPercentage and populate product list and threshold setup
+            LowStock.TanksPercentage = stockData.percent || LowStock.TanksPercentage;
+            LowStock.fetchProduct(stockData.list);
+        } catch (error) {
+            console.error("Error fetching stock data:", error);
+        }
+    },
+
+    // Display products in the UI with click events to update the pie chart
+    fetchProduct: (stockList) => {
+        const productList = document.querySelector('#stockProductList ul');
+        if (!productList) return;
+
+        // Clear any existing list items
+        productList.innerHTML = '';
+
+        // Iterate over each product in the stock list
+        Object.keys(stockList).forEach((productName, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = productName; // Display product name
+            listItem.dataset.productName = productName; // Store product name for reference
+            listItem.classList.add('product-item');
+            listItem.classList.add( productName.toLowerCase() );
+            // Add 'active' class to the first item by default
+            if (index === 0) {
+                listItem.classList.add('active');
+                // Draw the chart initially for the first product
+                LowStock.setupThreshold(stockList, productName);
+            }
+        
+            // Add click event to display product data in the chart
+            listItem.addEventListener('click', () => {
+                // Remove 'active' class from all items
+                document.querySelectorAll('.product-item').forEach(item => item.classList.remove('active'));
+        
+                // Add 'active' class to the clicked item
+                listItem.classList.add('active');
+        
+                // Draw chart for the selected product
+                LowStock.setupThreshold(stockList, productName);
+            });
+        
+            // Append the list item to the product list
+            productList.appendChild(listItem);
+        });
+        
+    },
+
+    // Setup threshold selection options and initialize the chart
+    setupThreshold: (stockList, productName) => {
         const thresholdWrapper = document.querySelector('#threshold');
         const thresholdList = document.querySelectorAll('#tanks-threshold-list ul li');
-        let threshold = TanksPercentage;
+        let threshold = LowStock.TanksPercentage;
 
+        // Display the initial threshold
         if (thresholdWrapper) {
             thresholdWrapper.textContent = `${threshold}%`;
         }
 
+        // Add click events for each threshold item
         thresholdList.forEach(item => {
             if (Number(item.dataset.value) === threshold) {
                 item.classList.add('active');
@@ -951,23 +1024,45 @@ const TanksVolume = {
 
             item.addEventListener('click', () => {
                 threshold = Number(item.dataset.value);
+
                 if (thresholdWrapper) {
                     thresholdWrapper.textContent = `${threshold}%`;
                 }
 
+                // Reset active class and set selected item as active
                 thresholdList.forEach(el => el.classList.remove('active'));
                 item.classList.add('active');
 
-                google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
+                // Redraw chart based on the new threshold
+                LowStock.drawPieChart(stockList, LowStock.TanksPercentage, productName);
             });
         });
 
-        google.charts.setOnLoadCallback(() => TanksVolume.drawPieChart(sites, threshold));
+        // Initial chart drawing with the default threshold
+        // google.charts.setOnLoadCallback(() => LowStock.drawPieChart(stockList, threshold));
+        LowStock.drawPieChart(stockList, LowStock.TanksPercentage, productName);
+
     },
 
-    drawPieChart: async (sites, threshold) => {
-        const belowThreshold = sites.filter(site => site.tanks < threshold).length;
-        const aboveThreshold = sites.length - belowThreshold;
+    // Draw pie chart based on the selected threshold and specific product if chosen
+    drawPieChart: (stockList, threshold, selectedProduct = null) => {
+        let belowThreshold = 0;
+        let aboveThreshold = 0;
+
+
+        // Aggregate data based on the threshold and optionally for a specific product
+        if (selectedProduct && stockList[selectedProduct]) {
+            // Use specific product's above/below data
+            belowThreshold = stockList[selectedProduct].below;
+            aboveThreshold = stockList[selectedProduct].above;
+        } else {
+            // Aggregate data across all products
+            Object.values(stockList).forEach(stock => {
+                belowThreshold += stock.below;
+                aboveThreshold += stock.above;
+            });
+        }
+
 
         const data = google.visualization.arrayToDataTable([
             ['Status', 'Count'],
@@ -975,16 +1070,51 @@ const TanksVolume = {
             ['Above Threshold', aboveThreshold]
         ]);
 
+        function adjustColorBrightness(hex, percent) {
+            // Convert hex to RGB
+            let r = parseInt(hex.slice(1, 3), 16);
+            let g = parseInt(hex.slice(3, 5), 16);
+            let b = parseInt(hex.slice(5, 7), 16);
+        
+            // Adjust brightness by the given percentage
+            r = Math.round(r * (1 + percent));
+            g = Math.round(g * (1 + percent));
+            b = Math.round(b * (1 + percent));
+        
+            // Ensure RGB values are within 0-255
+            r = Math.min(255, Math.max(0, r));
+            g = Math.min(255, Math.max(0, g));
+            b = Math.min(255, Math.max(0, b));
+        
+            // Convert RGB back to hex
+            const rHex = r.toString(16).padStart(2, '0');
+            const gHex = g.toString(16).padStart(2, '0');
+            const bHex = b.toString(16).padStart(2, '0');
+        
+            return `#${rHex}${gHex}${bHex}`;
+        }        
+
+        const baseColor = selectedProduct && SharedColors[selectedProduct] ? SharedColors[selectedProduct] : '#666666';
+        const lighterColor = adjustColorBrightness(baseColor, -0.4);
+
         const options = {
-            title: 'Tanks Above/Below Threshold',
-            colors: ['#000000', '#eeeeee'],
-            legend: { position: 'none' }
+            // title: selectedProduct ? `${selectedProduct} Stock Levels` : 'Total Stock Levels',
+            title: '',
+            colors: [lighterColor, baseColor],
+            legend: { position: 'none' },
+            slices: {
+                0: { offset: 0.1 },
+            },
+            chartArea: {
+                width: '80%',
+                height: '80%',
+            }
         };
 
         const chart = new google.visualization.PieChart(document.querySelector('#tankPercentageChart'));
         chart.draw(data, options);
     }
-};
+}
 
 // Shared function to set bar width
 const ChartUtils = {
@@ -1007,7 +1137,7 @@ const RunCharts = {
         SystemAlarms.init();
         OperationalAlarms.init();
         TanksVolume.init();
-        // SiteStatusChart.init();
+        LowStock.init();
         // SystemAlarmsChart.init();
         // OperationalAlarmsBarChart.init();
         // TankVolumeBarChart.init();

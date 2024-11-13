@@ -134,36 +134,147 @@ const NotificationSystem = {
     }
 };
 
-const CollabsedMenu = {
-    // Initialize the menu toggle functionality
+// const CollabsedMenu = {
+//     // Initialize the menu toggle functionality
+//     init: () => {
+//         // Attach the click event listener to #toggle-menu
+//         document.getElementById('toggle-menu').addEventListener('click', CollabsedMenu.toggle(null));
+//     },
+
+//     // Function to toggle the class on the body
+//     toggle: (mode) => {
+//         if ( mode === null ) document.body.classList.toggle('gts-menu-collapsed');
+//         if ( mode ) document.body.classList.add('gts-menu-collapsed');
+//         if ( !mode ) document.body.classList.remove('gts-menu-collapsed');
+
+//         // If the menu is collapsed then fire the toolip function
+//         // if the menu is uncollapsed then kill the toolip function
+//     },
+
+//     // Toolip init
+//     toolip: () => {
+//         // in this function we will go though #side-bar .nav-items nav ul li a .nav-item and get the text in this element .nav-item.
+//         // on hover on #side-bar .nav-items nav ul li a then we will append a div.toolip with textContent the textContent of the hovered href .nav-item
+//         // on mouseout we will remove this toolip
+//         // the position of the toolip will be the mousehover event element right and 50% top of it
+//     }
+// };
+
+// // Also chekc if we are implementing below function correctly
+// const ForceResponsive = {
+//     init: () => {
+//         ForceResponsive.checkWidth(); // Check width on initialization
+//         window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
+//     },
+//     checkWidth: () => {
+//         if (window.innerWidth < 1581) {
+//             CollabsedMenu.toggle(true);
+//         } else {
+//             CollabsedMenu.toggle(false);
+//         }
+//     }
+// };
+
+
+const CollapsedMenu = {
+    // Track whether tooltips are active
+    isTooltipActive: false,
+
+    // Initialize menu toggle functionality
     init: () => {
-        // Attach the click event listener to #toggle-menu
-        document.getElementById('toggle-menu').addEventListener('click', CollabsedMenu.toggle);
+        document.getElementById('toggle-menu').addEventListener('click', () => CollapsedMenu.toggle('toggle'));
     },
 
-    // Function to toggle the class on the body
-    toggle: () => {
-        document.body.classList.toggle('gts-menu-collapsed');
+    // Toggle the collapsed menu state and handle tooltip activation
+    toggle: (force) => {
+        if (force === true) {
+            document.body.classList.add('gts-menu-collapsed');
+        } else if (force === false) {
+            document.body.classList.remove('gts-menu-collapsed');
+        } else {
+            // 'toggle' mode to switch between collapsed/expanded states
+            document.body.classList.toggle('gts-menu-collapsed');
+        }
+
+        const isCollapsed = document.body.classList.contains('gts-menu-collapsed');
+
+        if (isCollapsed && !CollapsedMenu.isTooltipActive) {
+            CollapsedMenu.activateTooltips();
+        } else if (!isCollapsed && CollapsedMenu.isTooltipActive) {
+            CollapsedMenu.deactivateTooltips();
+        }
+    },
+
+    // Activate tooltips by adding mouse event listeners
+    activateTooltips: () => {
+        CollapsedMenu.isTooltipActive = true;
+        const navLinks = document.querySelectorAll('#side-bar .nav-items nav ul li a');
+
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', CollapsedMenu.showTooltip);
+            link.addEventListener('mouseleave', CollapsedMenu.hideTooltip);
+        });
+    },
+
+    // Deactivate tooltips by removing mouse event listeners
+    deactivateTooltips: () => {
+        CollapsedMenu.isTooltipActive = false;
+        const navLinks = document.querySelectorAll('#side-bar .nav-items nav ul li a');
+
+        navLinks.forEach(link => {
+            link.removeEventListener('mouseenter', CollapsedMenu.showTooltip);
+            link.removeEventListener('mouseleave', CollapsedMenu.hideTooltip);
+        });
+        CollapsedMenu.removeAllTooltips();
+    },
+
+    // Show tooltip on hover
+    showTooltip: (event) => {
+        const link = event.currentTarget;
+        const tooltipText = link.querySelector('.nav-item').innerHTML;
+
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        tooltip.innerHTML = tooltipText;
+
+        // Position tooltip
+        const rect = link.getBoundingClientRect();
+        tooltip.style.position = 'absolute';
+        tooltip.style.left = `${rect.right}px`;
+        tooltip.style.top = `${rect.top + rect.height / 2}px`;
+
+        // Attach tooltip to document and reference it in the element for removal
+        document.body.appendChild(tooltip);
+        link._tooltip = tooltip;
+    },
+
+    // Hide tooltip on mouse leave
+    hideTooltip: (event) => {
+        const link = event.currentTarget;
+        if (link._tooltip) {
+            link._tooltip.remove();
+            delete link._tooltip;
+        }
+    },
+
+    // Remove all tooltips
+    removeAllTooltips: () => {
+        const tooltips = document.querySelectorAll('.tooltip');
+        tooltips.forEach(tooltip => tooltip.remove());
     }
 };
 
+// Check if we are implementing ForceResponsive correctly
 const ForceResponsive = {
     init: () => {
         ForceResponsive.checkWidth(); // Check width on initialization
         window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
     },
+
     checkWidth: () => {
-        if (window.innerWidth < 1581) {
-            ForceResponsive.forceCollapsed();
-        } else {
-            ForceResponsive.forceUncollapsed();
-        }
-    },
-    forceCollapsed: () => {
-        document.body.classList.add('gts-menu-collapsed');
-    },
-    forceUncollapsed: () => {
-        document.body.classList.remove('gts-menu-collapsed');
+        const shouldCollapse = window.innerWidth < 1581;
+        CollapsedMenu.toggle(shouldCollapse); // Force collapse or expand based on width
     }
 };
 
@@ -283,7 +394,7 @@ pageReady(() => {
     AppearanceToggle.init();
     MobileNav.init();
     NotificationSystem.init();
-    CollabsedMenu.init();
+    CollapsedMenu.init();
     ForceResponsive.init();
 });
 

@@ -265,11 +265,3 @@ const Modal = {
 };
 
 export { pageReady, PageLoader, Button, Popover, Modal };
-
-// pageReady(() => {
-//   PageLoader.slowIncreaseTo(100);
-//   PageLoader.init();
-//   Button.init();
-//   Popover.init();
-//   Modal.init();
-// });

@@ -3,20 +3,16 @@
 // Define the API paths as constants or an object
 const API_PATHS = {
     dashboardSites: '/api/dashboard_sites_api.json',
+    stockData:'/api/dashboard_stock.json',
     tanksVolumes: '/api/sites/',
     dashboardDeliveryAmount: '/api/dashboard_delivery_amount_api_column_chart.json',
     dashboardSalesToday: '/api/dashboard_sales_today.json',
     dashboardSalesYesterday: '/api/dashboard_sales_yesterday.json',
     dashboardSalesLastWeek: '/api/dashboard_sales_last_week.json',
     dashboardSalesLastMonth: '/api/dashboard_sales_last_month.json',
-
     dashboardOnlineOffline: '/api/dashboard_online_ofline_api.json',
-
     dashboardMaps: '/api/dashboard_maps_api.json',
-
-
     dashboardProducts: '/api/dashboard_cards_api.json',
-
     systemAlarms: '/api/alarms_pie_charts.json',
     operationalAlarms: '/api/alarms_operational_pie_charts.json'
 };
