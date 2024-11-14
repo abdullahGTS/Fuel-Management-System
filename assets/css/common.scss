@@ -368,7 +368,8 @@ body #toast-container {
                         }
                     }
                 }
-                a, .href-item {
+                a, 
+                .href-item {
                     display: flex;
                     align-items: center;
                     gap: 14px;
