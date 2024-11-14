@@ -350,15 +350,16 @@ const SiteStatus = {
         document.getElementById('offlineSitesValue').textContent = sites.offline;
 
         // Draw the charts for online and offline sites
-        SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
-        SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
+        SiteStatus.drawDonutChart('onlineSitesChart', 'Online Sites', sites.online, totalSites, SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
+        SiteStatus.drawDonutChart('offlineSitesChart', 'Offline Sites', sites.offline, totalSites, SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
     },
 
-    drawDonutChart: (elementId, value, total, color, secondaryBgColor, secondaryAlphaColor) => {
+    drawDonutChart: (elementId, label, value, total, color, secondaryBgColor, secondaryAlphaColor) => {
         const windowWidth = window.innerWidth;
+
         const data = google.visualization.arrayToDataTable([
             ['Status', 'Sites'],
-            ['Value', value],
+            [label, value],
             ['Remaining', total - value],
         ]);
 
@@ -400,7 +401,13 @@ const SalesTrend = {
     },
 
     tabSwtch: (wrapper) => {
-        const salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
+        // const salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
+        const salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+        const salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
+        const salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
+        const selectedDate = salesTabs.querySelector('.selectedDate');
+        selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
+
         if (salesTabsNodeList.length) {
             salesTabsNodeList.forEach((tab) => {
                 tab.addEventListener('click', function () {
@@ -677,6 +684,140 @@ const ProductSales = {
         chart.draw(data, options);
     }
 }
+
+// Top Five Sites 
+const TopSites = {
+    currentTab: 'today',
+    currency: 'SAR',
+    init: () => {
+        const topFiveSites = document.querySelector('#topFiveSites');
+        if (topFiveSites) {
+            TopSites.fetchData();
+            TopSites.tabSwtch(topFiveSites);
+        }
+    },
+    
+    fetchData: async () => {
+        let apiPath;
+        let apiPathArray;
+        switch (TopSites.currentTab) {
+            case 'today':
+                apiPath = API_PATHS.topFiveSitesToday;
+                apiPathArray = 'top_five_today';
+                break;
+            case 'yesterday':
+                apiPath = API_PATHS.topFiveSitesYesterday;
+                apiPathArray = 'top_five_yesterday';
+                break;
+            case 'week':
+                apiPath = API_PATHS.topFiveSitesLastWeek;
+                apiPathArray = 'top_five_week';
+                break;
+            case 'month':
+                apiPath = API_PATHS.topFiveSitesLastMonth;
+                apiPathArray = 'top_five_month';
+                break;
+            default:
+                apiPath = API_PATHS.topFiveSitesToday;
+                apiPathArray = 'top_five_today';
+        }
+
+        const sites = await fetchData(apiPath);
+        if (sites) {
+            TopSites.progressBars(sites[apiPathArray]);
+        }
+    },
+    
+    tabSwtch: (wrapper) => {
+        const salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+        const salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
+        const salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
+        const selectedDate = salesTabs.querySelector('.selectedDate');
+        selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
+
+        if (salesTabsNodeList.length) {
+            salesTabsNodeList.forEach((tab) => {
+                tab.addEventListener('click', function () {
+                    salesTabsNodeList.forEach((item) => {
+                        item.classList.remove('active');
+                    });
+                    tab.classList.add('active');
+                    const selectedTab = tab.getAttribute('data-tab-target');
+                    TopSites.setTab(selectedTab);
+                    selectedDate.textContent = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1).toLowerCase();
+                });
+            });
+        }
+    },
+    
+    setTab: (tab) => {
+        TopSites.currentTab = tab;
+        TopSites.fetchData();
+    },
+
+    progressBars: (sitesData) => {
+        const topFiveSites = document.querySelector('#topFiveSites');
+        topFiveSites.innerHTML = ''; // Clear existing progress bars
+    
+        const maxTotalMoney = Math.max(...sitesData.map(site => parseFloat(site.total_money))); // Find the maximum value for scaling
+    
+        sitesData.forEach((site, index) => {
+            const totalMoney = parseFloat(site.total_money); // Convert total_money to a float
+            const widthPercentage = (totalMoney / maxTotalMoney) * 100; // Calculate width as a percentage
+    
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('site-progressbar-wrapper');
+    
+            const container = document.createElement('div');
+            container.classList.add('site-progressbar-container');
+
+            const progressBar = document.createElement('div');
+            progressBar.classList.add('site-progressbar');
+            progressBar.style.width = `0%`; // Start from 0 width
+            const colors = [
+                SharedColors.TopFiveSites.First,
+                SharedColors.TopFiveSites.Second,
+                SharedColors.TopFiveSites.Third,
+                SharedColors.TopFiveSites.Fourth,
+                SharedColors.TopFiveSites.Fifth
+            ];
+            progressBar.style.backgroundColor = colors[index % colors.length];
+                
+            const progressBarSiteNumber = document.createElement('span');
+            progressBarSiteNumber.classList.add('site-progressbar-id');
+            progressBarSiteNumber.textContent = `Site ID: ${site.siteid__sitenumber}`;
+            
+
+            const progressBarValue = document.createElement('span');
+            progressBarValue.classList.add('site-progressbar-value');
+            progressBarValue.textContent = `${(Math.round(totalMoney / 1000) * 1000).toLocaleString()} ${TopSites.currency}`;
+
+            const tooltip = document.createElement('span');
+            tooltip.classList.add('site-progressbar-tooltip');
+            tooltip.textContent = `${totalMoney.toLocaleString()} ${TopSites.currency} `;
+            
+            progressBar.addEventListener('mouseover', () => {
+                tooltip.style.display = 'inline';
+            });
+            progressBar.addEventListener('mouseout', () => {
+                tooltip.style.display = 'none';
+            });
+    
+            
+            wrapper.appendChild(container);
+            wrapper.prepend(progressBarSiteNumber);
+            container.appendChild(progressBar);
+            container.appendChild(progressBarValue);
+            container.appendChild(tooltip);
+            topFiveSites.appendChild(wrapper);
+    
+            // Apply the correct width with a delay to create the animation effect
+            setTimeout(() => {
+                progressBar.style.width = `${widthPercentage}%`;
+            }, 70); // Delay each bar progressively by 300ms
+        });
+    }    
+};
 
 // System Alarms
 const SystemAlarms = {
@@ -1066,6 +1207,7 @@ const LowStock = {
 
                 if (thresholdWrapper) {
                     thresholdWrapper.textContent = `${threshold}%`;
+                    LowStock.TanksPercentage = threshold;
                 }
 
                 // Reset active class and set selected item as active
@@ -1104,8 +1246,8 @@ const LowStock = {
 
         const data = google.visualization.arrayToDataTable([
             ['Status', 'Count'],
-            ['Below Threshold', belowThreshold],
-            ['Above Threshold', aboveThreshold]
+            ['Below ' + threshold + '%', belowThreshold],
+            ['Above ' + threshold + '%', aboveThreshold]
         ]);
 
         function adjustColorBrightness(hex, percent) {
@@ -1396,4 +1538,5 @@ pageReady(() => {
     DownloadChart.init();
     Products.init();
     RunCharts.init();
+    TopSites.init();
 });

@@ -1,0 +1,24 @@
+{
+    "top_five_today": [
+        {
+            "siteid__sitenumber": 1004,
+            "total_money": "123899.993"
+        },
+        {
+            "siteid__sitenumber": 1002,
+            "total_money": "85256.510"
+        },
+        {
+            "siteid__sitenumber": 1003,
+            "total_money": "52629.660"
+        },
+        {
+            "siteid__sitenumber": 1001,
+            "total_money": "15256.510"
+        },
+        {
+            "siteid__sitenumber": 1000,
+            "total_money": "72629.660"
+        }
+    ]
+}

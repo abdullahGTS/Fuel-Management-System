@@ -203,12 +203,16 @@
                                             <h3>Sales trends</h3>
                                         </div>
                                         <div class="chart-controls">
-                                            <div class="gts-tabs flex-box">
+                                            <div class="date-filter" data-popover-target="#date-filter">
+                                                <span class="mat-icon material-symbols-sharp">schedule</span>
+                                                <span class="selectedDate">No Date Selected</span>
+                                            </div>
+                                            <!-- <div class="gts-tabs flex-box">
                                                 <button class="tab-btn active" data-tab-target="today">Today</button>
                                                 <button class="tab-btn" data-tab-target="yesterday">Yesterday</button>
                                                 <button class="tab-btn" data-tab-target="lastWeek">Last Week</button>
                                                 <button class="tab-btn" data-tab-target="lastMonth">Last Month</button>
-                                            </div>
+                                            </div> -->
                                             <button class="btn btn-icon download-chart"
                                                 data-popover-target="#download-chart">
                                                 <span class="mat-icon material-symbols-sharp">download</span>
@@ -259,7 +263,7 @@
                                     <!-- Maps -->
                                     <div div class="gts-grid-item double-col double-row">
                                         <div class="gts-item-content no-padding">
-                                            <div class="maps-wrapper">
+                                            <div id="mapWrapper">
                                                 <iframe
                                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
                                                     width="600" height="450" style="border:0;" allowfullscreen=""
@@ -292,7 +296,27 @@
 
                                     <!-- Top 5 Sites -->
                                     <div div class="gts-grid-item double-col double-row">
-                                        <div class="gts-item-content no-padding"></div>
+                                        <div class="gts-item-content gts-charts">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">location_on</span>
+                                                    <h3>Top 5 sites in sales</h3>
+                                                </div>
+                                                <div class="chart-controls">
+
+                                                    <div class="date-filter" data-popover-target="#date-filter">
+                                                        <span class="mat-icon material-symbols-sharp">schedule</span>
+                                                        <span class="selectedDate">No Date Selected</span>
+                                                    </div>
+
+                                                    <button class="btn btn-icon download-chart"
+                                                        data-popover-target="#download-chart">
+                                                        <span class="mat-icon material-symbols-sharp">download</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="topFiveSites"></div>
+                                        </div>
                                     </div>
 
                                     <!-- Fill Status -->
@@ -625,6 +649,21 @@
         </div>
     </div>
 
+    <!-- Popover Date Filter -->
+    <div class="popover-wrapper" id="date-filter" data-position="bottom">
+        <div class="popover-body popover-list">
+            <div class="sites-list-wrapper" id="date-filter-list">
+                <div class="sites-list custom-scroll-bar">
+                    <ul>
+                        <li><button class="tab-btn active" data-tab-target="today">Today</button></li>
+                        <li><button class="tab-btn" data-tab-target="yesterday">Yesterday</button></li>
+                        <li><button class="tab-btn" data-tab-target="lastWeek">Last Week</button></li>
+                        <li><button class="tab-btn" data-tab-target="lastMonth">Last Month</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>

@@ -20,7 +20,11 @@ var API_PATHS = {
   dashboardMaps: '/api/dashboard_maps_api.json',
   dashboardProducts: '/api/dashboard_cards_api.json',
   systemAlarms: '/api/alarms_pie_charts.json',
-  operationalAlarms: '/api/alarms_operational_pie_charts.json'
+  operationalAlarms: '/api/alarms_operational_pie_charts.json',
+  topFiveSitesToday: '/api/topFiveSites/dashboard_top_five_today.json',
+  topFiveSitesYesterday: '/api/topFiveSites/dashboard_top_five_yesterday.json',
+  topFiveSitesLastWeek: '/api/topFiveSites/dashboard_top_five_week.json',
+  topFiveSitesLastMonth: '/api/topFiveSites/dashboard_top_five_month.json'
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;
@@ -80,8 +84,15 @@ var SharedColors = {
   DeleveryReconciliation: '#2D99FC',
   SuddenLoss: '#83D0FF',
   SystemAlarm: '#6B6ED2',
-  TanksVolume: '#01315D',
-  DeliveryAmount: '#156E41'
+  TanksVolume: '#156E41',
+  DeliveryAmount: '#156E41',
+  TopFiveSites: {
+    First: '#156E41',
+    Second: '#6B6ED2',
+    Third: '#83D0FF',
+    Fourth: '#FAB75C',
+    Fifth: '#e54141'
+  }
 };
 exports.SharedColors = SharedColors;
 

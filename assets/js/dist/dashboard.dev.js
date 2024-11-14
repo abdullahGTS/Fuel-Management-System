@@ -407,8 +407,8 @@ var SiteStatus = {
             document.getElementById('onlineSitesValue').textContent = sites.online;
             document.getElementById('offlineSitesValue').textContent = sites.offline; // Draw the charts for online and offline sites
 
-            SiteStatus.drawDonutChart('onlineSitesChart', sites.online, totalSites, _constant.SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
-            SiteStatus.drawDonutChart('offlineSitesChart', sites.offline, totalSites, _constant.SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
+            SiteStatus.drawDonutChart('onlineSitesChart', 'Online Sites', sites.online, totalSites, _constant.SharedColors.Online, secondaryBgColor, secondaryAlphaColor);
+            SiteStatus.drawDonutChart('offlineSitesChart', 'Offline Sites', sites.offline, totalSites, _constant.SharedColors.Offline, secondaryBgColor, secondaryAlphaColor);
 
           case 17:
           case "end":
@@ -417,9 +417,9 @@ var SiteStatus = {
       }
     });
   },
-  drawDonutChart: function drawDonutChart(elementId, value, total, color, secondaryBgColor, secondaryAlphaColor) {
+  drawDonutChart: function drawDonutChart(elementId, label, value, total, color, secondaryBgColor, secondaryAlphaColor) {
     var windowWidth = window.innerWidth;
-    var data = google.visualization.arrayToDataTable([['Status', 'Sites'], ['Value', value], ['Remaining', total - value]]);
+    var data = google.visualization.arrayToDataTable([['Status', 'Sites'], [label, value], ['Remaining', total - value]]);
     var options = {
       pieHole: 0.65,
       pieStartAngle: 0,
@@ -466,7 +466,12 @@ var SalesTrend = {
     }
   },
   tabSwtch: function tabSwtch(wrapper) {
-    var salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
+    // const salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
+    var salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+    var salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
+    var salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
+    var selectedDate = salesTabs.querySelector('.selectedDate');
+    selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
 
     if (salesTabsNodeList.length) {
       salesTabsNodeList.forEach(function (tab) {
@@ -877,6 +882,146 @@ var ProductSales = {
       }
     });
   }
+}; // Top Five Sites 
+
+var TopSites = {
+  currentTab: 'today',
+  currency: 'SAR',
+  init: function init() {
+    var topFiveSites = document.querySelector('#topFiveSites');
+
+    if (topFiveSites) {
+      TopSites.fetchData();
+      TopSites.tabSwtch(topFiveSites);
+    }
+  },
+  fetchData: function fetchData() {
+    var apiPath, apiPathArray, sites;
+    return regeneratorRuntime.async(function fetchData$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.t0 = TopSites.currentTab;
+            _context8.next = _context8.t0 === 'today' ? 3 : _context8.t0 === 'yesterday' ? 6 : _context8.t0 === 'week' ? 9 : _context8.t0 === 'month' ? 12 : 15;
+            break;
+
+          case 3:
+            apiPath = _constant.API_PATHS.topFiveSitesToday;
+            apiPathArray = 'top_five_today';
+            return _context8.abrupt("break", 17);
+
+          case 6:
+            apiPath = _constant.API_PATHS.topFiveSitesYesterday;
+            apiPathArray = 'top_five_yesterday';
+            return _context8.abrupt("break", 17);
+
+          case 9:
+            apiPath = _constant.API_PATHS.topFiveSitesLastWeek;
+            apiPathArray = 'top_five_week';
+            return _context8.abrupt("break", 17);
+
+          case 12:
+            apiPath = _constant.API_PATHS.topFiveSitesLastMonth;
+            apiPathArray = 'top_five_month';
+            return _context8.abrupt("break", 17);
+
+          case 15:
+            apiPath = _constant.API_PATHS.topFiveSitesToday;
+            apiPathArray = 'top_five_today';
+
+          case 17:
+            _context8.next = 19;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(apiPath));
+
+          case 19:
+            sites = _context8.sent;
+
+            if (sites) {
+              TopSites.progressBars(sites[apiPathArray]);
+            }
+
+          case 21:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    });
+  },
+  tabSwtch: function tabSwtch(wrapper) {
+    var salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+    var salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
+    var salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
+    var selectedDate = salesTabs.querySelector('.selectedDate');
+    selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
+
+    if (salesTabsNodeList.length) {
+      salesTabsNodeList.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          salesTabsNodeList.forEach(function (item) {
+            item.classList.remove('active');
+          });
+          tab.classList.add('active');
+          var selectedTab = tab.getAttribute('data-tab-target');
+          TopSites.setTab(selectedTab);
+          selectedDate.textContent = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1).toLowerCase();
+        });
+      });
+    }
+  },
+  setTab: function setTab(tab) {
+    TopSites.currentTab = tab;
+    TopSites.fetchData();
+  },
+  progressBars: function progressBars(sitesData) {
+    var topFiveSites = document.querySelector('#topFiveSites');
+    topFiveSites.innerHTML = ''; // Clear existing progress bars
+
+    var maxTotalMoney = Math.max.apply(Math, _toConsumableArray(sitesData.map(function (site) {
+      return parseFloat(site.total_money);
+    }))); // Find the maximum value for scaling
+
+    sitesData.forEach(function (site, index) {
+      var totalMoney = parseFloat(site.total_money); // Convert total_money to a float
+
+      var widthPercentage = totalMoney / maxTotalMoney * 100; // Calculate width as a percentage
+
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('site-progressbar-wrapper');
+      var container = document.createElement('div');
+      container.classList.add('site-progressbar-container');
+      var progressBar = document.createElement('div');
+      progressBar.classList.add('site-progressbar');
+      progressBar.style.width = "0%"; // Start from 0 width
+
+      var colors = [_constant.SharedColors.TopFiveSites.First, _constant.SharedColors.TopFiveSites.Second, _constant.SharedColors.TopFiveSites.Third, _constant.SharedColors.TopFiveSites.Fourth, _constant.SharedColors.TopFiveSites.Fifth];
+      progressBar.style.backgroundColor = colors[index % colors.length];
+      var progressBarSiteNumber = document.createElement('span');
+      progressBarSiteNumber.classList.add('site-progressbar-id');
+      progressBarSiteNumber.textContent = "Site ID: ".concat(site.siteid__sitenumber);
+      var progressBarValue = document.createElement('span');
+      progressBarValue.classList.add('site-progressbar-value');
+      progressBarValue.textContent = "".concat((Math.round(totalMoney / 1000) * 1000).toLocaleString(), " ").concat(TopSites.currency);
+      var tooltip = document.createElement('span');
+      tooltip.classList.add('site-progressbar-tooltip');
+      tooltip.textContent = "".concat(totalMoney.toLocaleString(), " ").concat(TopSites.currency, " ");
+      progressBar.addEventListener('mouseover', function () {
+        tooltip.style.display = 'inline';
+      });
+      progressBar.addEventListener('mouseout', function () {
+        tooltip.style.display = 'none';
+      });
+      wrapper.appendChild(container);
+      wrapper.prepend(progressBarSiteNumber);
+      container.appendChild(progressBar);
+      container.appendChild(progressBarValue);
+      container.appendChild(tooltip);
+      topFiveSites.appendChild(wrapper); // Apply the correct width with a delay to create the animation effect
+
+      setTimeout(function () {
+        progressBar.style.width = "".concat(widthPercentage, "%");
+      }, 70); // Delay each bar progressively by 300ms
+    });
+  }
 }; // System Alarms
 
 var SystemAlarms = {
@@ -892,23 +1037,23 @@ var SystemAlarms = {
   },
   fetchData: function fetchData() {
     var alarms;
-    return regeneratorRuntime.async(function fetchData$(_context8) {
+    return regeneratorRuntime.async(function fetchData$(_context9) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
-            _context8.next = 2;
+            _context9.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.systemAlarms));
 
           case 2:
-            alarms = _context8.sent;
+            alarms = _context9.sent;
 
             if (!(!alarms || Object.keys(alarms).length === 0)) {
-              _context8.next = 6;
+              _context9.next = 6;
               break;
             }
 
             console.error("No alarms data available");
-            return _context8.abrupt("return");
+            return _context9.abrupt("return");
 
           case 6:
             // Update the chart with new data
@@ -921,7 +1066,7 @@ var SystemAlarms = {
 
           case 8:
           case "end":
-            return _context8.stop();
+            return _context9.stop();
         }
       }
     });
@@ -929,15 +1074,15 @@ var SystemAlarms = {
   drawChart: function drawChart(alarms) {
     var _ref5, backgroundColor, txtColor, data, formatAlarmName, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context9) {
+    return regeneratorRuntime.async(function drawChart$(_context10) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
-            _context9.next = 2;
+            _context10.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref5 = _context9.sent;
+            _ref5 = _context10.sent;
             backgroundColor = _ref5.backgroundColor;
             txtColor = _ref5.txtColor;
             data = new google.visualization.DataTable(); // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
@@ -1001,7 +1146,7 @@ var SystemAlarms = {
 
           case 15:
           case "end":
-            return _context9.stop();
+            return _context10.stop();
         }
       }
     });
@@ -1021,23 +1166,23 @@ var OperationalAlarms = {
   },
   fetchData: function fetchData() {
     var alarms;
-    return regeneratorRuntime.async(function fetchData$(_context10) {
+    return regeneratorRuntime.async(function fetchData$(_context11) {
       while (1) {
-        switch (_context10.prev = _context10.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
-            _context10.next = 2;
+            _context11.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.operationalAlarms));
 
           case 2:
-            alarms = _context10.sent;
+            alarms = _context11.sent;
 
             if (!(!alarms || alarms.length === 0)) {
-              _context10.next = 6;
+              _context11.next = 6;
               break;
             }
 
             console.error("No operational alarms data available");
-            return _context10.abrupt("return");
+            return _context11.abrupt("return");
 
           case 6:
             // Load Google Charts and draw chart with fetched data
@@ -1047,7 +1192,7 @@ var OperationalAlarms = {
 
           case 7:
           case "end":
-            return _context10.stop();
+            return _context11.stop();
         }
       }
     });
@@ -1055,15 +1200,15 @@ var OperationalAlarms = {
   drawChart: function drawChart(alarms) {
     var _ref6, backgroundColor, data, colors, options, operationalAlarmsDonutChart, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context11) {
+    return regeneratorRuntime.async(function drawChart$(_context12) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context11.next = 2;
+            _context12.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref6 = _context11.sent;
+            _ref6 = _context12.sent;
             backgroundColor = _ref6.backgroundColor;
             data = new google.visualization.DataTable(); // Define the columns
 
@@ -1112,7 +1257,7 @@ var OperationalAlarms = {
 
           case 14:
           case "end":
-            return _context11.stop();
+            return _context12.stop();
         }
       }
     });
@@ -1145,41 +1290,41 @@ var TanksVolume = {
   },
   fetchData: function fetchData() {
     var sitesData, sites;
-    return regeneratorRuntime.async(function fetchData$(_context12) {
+    return regeneratorRuntime.async(function fetchData$(_context13) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
-            _context12.prev = 0;
-            _context12.next = 3;
+            _context13.prev = 0;
+            _context13.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
 
           case 3:
-            sitesData = _context12.sent;
+            sitesData = _context13.sent;
 
             if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
-              _context12.next = 7;
+              _context13.next = 7;
               break;
             }
 
             console.error("No sites data available");
-            return _context12.abrupt("return");
+            return _context13.abrupt("return");
 
           case 7:
             sites = sitesData.sitesnumbers;
             TanksVolume.populateSiteDropdown(sites); // Draw initial chart with the first site by default
 
             TanksVolume.drawColumnChart(sites[0].sitenumber);
-            _context12.next = 15;
+            _context13.next = 15;
             break;
 
           case 12:
-            _context12.prev = 12;
-            _context12.t0 = _context12["catch"](0);
-            console.error("Error fetching data:", _context12.t0);
+            _context13.prev = 12;
+            _context13.t0 = _context13["catch"](0);
+            console.error("Error fetching data:", _context13.t0);
 
           case 15:
           case "end":
-            return _context12.stop();
+            return _context13.stop();
         }
       }
     }, null, null, [[0, 12]]);
@@ -1238,31 +1383,31 @@ var TanksVolume = {
   drawColumnChart: function drawColumnChart(siteNumber) {
     var _ref7, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawColumnChart$(_context13) {
+    return regeneratorRuntime.async(function drawColumnChart$(_context14) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context13.prev = 0;
-            _context13.next = 3;
+            _context14.prev = 0;
+            _context14.next = 3;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 3:
-            _ref7 = _context13.sent;
+            _ref7 = _context14.sent;
             secondaryBgColor = _ref7.secondaryBgColor;
             txtColor = _ref7.txtColor;
-            _context13.next = 8;
+            _context14.next = 8;
             return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
 
           case 8:
-            tanksData = _context13.sent;
+            tanksData = _context14.sent;
 
             if (!(!tanksData || tanksData.length === 0)) {
-              _context13.next = 12;
+              _context14.next = 12;
               break;
             }
 
             console.error("No tank data available");
-            return _context13.abrupt("return");
+            return _context14.abrupt("return");
 
           case 12:
             // Prepare data for the Google Chart
@@ -1304,17 +1449,17 @@ var TanksVolume = {
             };
             chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
             chart.draw(data, options);
-            _context13.next = 24;
+            _context14.next = 24;
             break;
 
           case 21:
-            _context13.prev = 21;
-            _context13.t0 = _context13["catch"](0);
-            console.error("Error drawing column chart:", _context13.t0);
+            _context14.prev = 21;
+            _context14.t0 = _context14["catch"](0);
+            console.error("Error drawing column chart:", _context14.t0);
 
           case 24:
           case "end":
-            return _context13.stop();
+            return _context14.stop();
         }
       }
     }, null, null, [[0, 21]]);
@@ -1337,40 +1482,40 @@ var LowStock = {
   // Fetch stock data from API
   fetchStockData: function fetchStockData() {
     var stockData;
-    return regeneratorRuntime.async(function fetchStockData$(_context14) {
+    return regeneratorRuntime.async(function fetchStockData$(_context15) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context14.prev = 0;
-            _context14.next = 3;
+            _context15.prev = 0;
+            _context15.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.stockData));
 
           case 3:
-            stockData = _context14.sent;
+            stockData = _context15.sent;
 
             if (!(!stockData || !stockData.list)) {
-              _context14.next = 7;
+              _context15.next = 7;
               break;
             }
 
             console.error("No stock data available");
-            return _context14.abrupt("return");
+            return _context15.abrupt("return");
 
           case 7:
             // Update TanksPercentage and populate product list and threshold setup
             LowStock.TanksPercentage = stockData.percent || LowStock.TanksPercentage;
             LowStock.fetchProduct(stockData.list);
-            _context14.next = 14;
+            _context15.next = 14;
             break;
 
           case 11:
-            _context14.prev = 11;
-            _context14.t0 = _context14["catch"](0);
-            console.error("Error fetching stock data:", _context14.t0);
+            _context15.prev = 11;
+            _context15.t0 = _context15["catch"](0);
+            console.error("Error fetching stock data:", _context15.t0);
 
           case 14:
           case "end":
-            return _context14.stop();
+            return _context15.stop();
         }
       }
     }, null, null, [[0, 11]]);
@@ -1433,6 +1578,7 @@ var LowStock = {
 
         if (thresholdWrapper) {
           thresholdWrapper.textContent = "".concat(threshold, "%");
+          LowStock.TanksPercentage = threshold;
         } // Reset active class and set selected item as active
 
 
@@ -1462,11 +1608,11 @@ var LowStock = {
         lighterColor,
         options,
         chart,
-        _args15 = arguments;
+        _args16 = arguments;
 
-    return regeneratorRuntime.async(function drawPieChart$(_context15) {
+    return regeneratorRuntime.async(function drawPieChart$(_context16) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
             adjustColorBrightness = function _ref9(hex, percent) {
               var r = parseInt(hex.slice(1, 3), 16);
@@ -1487,12 +1633,12 @@ var LowStock = {
               return "#".concat(rHex).concat(gHex).concat(bHex);
             };
 
-            selectedProduct = _args15.length > 2 && _args15[2] !== undefined ? _args15[2] : null;
-            _context15.next = 4;
+            selectedProduct = _args16.length > 2 && _args16[2] !== undefined ? _args16[2] : null;
+            _context16.next = 4;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 4:
-            _ref8 = _context15.sent;
+            _ref8 = _context16.sent;
             backgroundColor = _ref8.backgroundColor;
             txtColor = _ref8.txtColor;
             belowThreshold = 0;
@@ -1510,7 +1656,7 @@ var LowStock = {
               });
             }
 
-            data = google.visualization.arrayToDataTable([['Status', 'Count'], ['Below Threshold', belowThreshold], ['Above Threshold', aboveThreshold]]);
+            data = google.visualization.arrayToDataTable([['Status', 'Count'], ['Below ' + threshold + '%', belowThreshold], ['Above ' + threshold + '%', aboveThreshold]]);
             baseColor = selectedProduct && _constant.SharedColors[selectedProduct] ? _constant.SharedColors[selectedProduct] : '#666666';
             lighterColor = adjustColorBrightness(baseColor, -0.4);
             options = {
@@ -1539,7 +1685,7 @@ var LowStock = {
 
           case 16:
           case "end":
-            return _context15.stop();
+            return _context16.stop();
         }
       }
     });
@@ -1559,41 +1705,41 @@ var DeliveryAmount = {
   },
   fetchData: function fetchData() {
     var sitesData, sites;
-    return regeneratorRuntime.async(function fetchData$(_context16) {
+    return regeneratorRuntime.async(function fetchData$(_context17) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
-            _context16.prev = 0;
-            _context16.next = 3;
+            _context17.prev = 0;
+            _context17.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
 
           case 3:
-            sitesData = _context16.sent;
+            sitesData = _context17.sent;
 
             if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
-              _context16.next = 7;
+              _context17.next = 7;
               break;
             }
 
             console.error("No sites data available");
-            return _context16.abrupt("return");
+            return _context17.abrupt("return");
 
           case 7:
             sites = sitesData.sitesnumbers;
             DeliveryAmount.populateSiteDropdown(sites); // Draw initial chart with the first site by default
 
             DeliveryAmount.drawColumnChart(sites[0].sitenumber);
-            _context16.next = 15;
+            _context17.next = 15;
             break;
 
           case 12:
-            _context16.prev = 12;
-            _context16.t0 = _context16["catch"](0);
-            console.error("Error fetching data:", _context16.t0);
+            _context17.prev = 12;
+            _context17.t0 = _context17["catch"](0);
+            console.error("Error fetching data:", _context17.t0);
 
           case 15:
           case "end":
-            return _context16.stop();
+            return _context17.stop();
         }
       }
     }, null, null, [[0, 12]]);
@@ -1652,31 +1798,31 @@ var DeliveryAmount = {
   drawColumnChart: function drawColumnChart(siteNumber) {
     var _ref10, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawColumnChart$(_context17) {
+    return regeneratorRuntime.async(function drawColumnChart$(_context18) {
       while (1) {
-        switch (_context17.prev = _context17.next) {
+        switch (_context18.prev = _context18.next) {
           case 0:
-            _context17.prev = 0;
-            _context17.next = 3;
+            _context18.prev = 0;
+            _context18.next = 3;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 3:
-            _ref10 = _context17.sent;
+            _ref10 = _context18.sent;
             secondaryBgColor = _ref10.secondaryBgColor;
             txtColor = _ref10.txtColor;
-            _context17.next = 8;
+            _context18.next = 8;
             return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
 
           case 8:
-            tanksData = _context17.sent;
+            tanksData = _context18.sent;
 
             if (!(!tanksData || tanksData.length === 0)) {
-              _context17.next = 12;
+              _context18.next = 12;
               break;
             }
 
             console.error("No tank data available");
-            return _context17.abrupt("return");
+            return _context18.abrupt("return");
 
           case 12:
             // Prepare data for the Google Chart
@@ -1718,17 +1864,17 @@ var DeliveryAmount = {
             };
             chart = new google.visualization.ColumnChart(document.querySelector('#deliveryTankChart'));
             chart.draw(data, options);
-            _context17.next = 24;
+            _context18.next = 24;
             break;
 
           case 21:
-            _context17.prev = 21;
-            _context17.t0 = _context17["catch"](0);
-            console.error("Error drawing column chart:", _context17.t0);
+            _context18.prev = 21;
+            _context18.t0 = _context18["catch"](0);
+            console.error("Error drawing column chart:", _context18.t0);
 
           case 24:
           case "end":
-            return _context17.stop();
+            return _context18.stop();
         }
       }
     }, null, null, [[0, 21]]);
@@ -1838,4 +1984,5 @@ var ReloadCharts = {
   DownloadChart.init();
   Products.init();
   RunCharts.init();
+  TopSites.init();
 });
