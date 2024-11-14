@@ -207,12 +207,6 @@
                                                 <span class="mat-icon material-symbols-sharp">schedule</span>
                                                 <span class="selectedDate">No Date Selected</span>
                                             </div>
-                                            <!-- <div class="gts-tabs flex-box">
-                                                <button class="tab-btn active" data-tab-target="today">Today</button>
-                                                <button class="tab-btn" data-tab-target="yesterday">Yesterday</button>
-                                                <button class="tab-btn" data-tab-target="lastWeek">Last Week</button>
-                                                <button class="tab-btn" data-tab-target="lastMonth">Last Month</button>
-                                            </div> -->
                                             <button class="btn btn-icon download-chart"
                                                 data-popover-target="#download-chart">
                                                 <span class="mat-icon material-symbols-sharp">download</span>
@@ -480,10 +474,10 @@
                         </label>
                     </div>
                 </li>
-                <li><a href="mailto:support@gts.sa?subject=Assistance%20Needed%20-%20General%20Support%20or%20Inquiry">
+                <li><div class="href-item" data-modal-target="#supportModal">
                         <span class="mat-icon material-symbols-sharp">support</span>
                         <span>Support</span>
-                    </a></li>
+                </div></li>
                 <li><a href="#">
                         <span class="mat-icon material-symbols-sharp">logout</span>
                         <span>Logout</span>
@@ -665,6 +659,40 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal-wrapper" id="supportModal">
+        <div class="modal-body custom-scroll-bar">
+            <div class="support-wrapper">
+                <div class="location">
+                    <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
+                    width="600" height="450" style="border:0;" allowfullscreen=""
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title=""></iframe>
+                </div>
+                <div class="title">
+                    <h2>Need Assistance? We're Here to Help!</h2>
+                    <p>If you need support, don’t hesitate to reach out. You can contact us via email or phone, or visit us at our location. We’re committed to providing the help you need, whenever you need it.</p>
+                </div>
+                <div class="contact">
+                    <ul>
+                        <li>
+                            <span class="mat-icon material-symbols-sharp">call</span>
+                            <a href="tel:80041001">80041001</a>
+                        </li>
+                        <li>
+                            <span class="mat-icon material-symbols-sharp">mail</span>
+                            <a href="mailto:info@gts.sa?subject=Support%20Request%20for%20Technical%20Assistance%20and%20Inquiries&body=Hello%20GTS%20Support%20Team,%0D%0A%0D%0AI%20am%20reaching%20out%20regarding%20assistance%20with%20your%20services.%20Please%20see%20the%20details%20below%20and%20let%20me%20know%20how%20I%20may%20proceed.%0D%0A%0D%0AThank%20you.%0D%0A">info@gts.sa</a>
+                            </li>
+                        <li>
+                            <span class="mat-icon material-symbols-sharp">location_on</span>
+                            <span>Riyadh - Saudi Arabia</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+         
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>

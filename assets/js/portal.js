@@ -1,4 +1,4 @@
-import { pageReady, PageLoader, Button, Popover } from './script.js';
+import { pageReady, PageLoader, Button, Popover, Modal } from './script.js';
 const MobileNav = {
     init: () => {
         const navigation = document.querySelector("#side-bar");
@@ -390,6 +390,7 @@ const AppearanceToggle = {
 }
 
 pageReady(() => {
+    Modal.init();
     PageLoader.init();
     Button.init();
     Popover.init();

@@ -352,6 +352,8 @@ var AppearanceToggle = {
   }
 };
 (0, _script.pageReady)(function () {
+  _script.Modal.init();
+
   _script.PageLoader.init();
 
   _script.Button.init();
