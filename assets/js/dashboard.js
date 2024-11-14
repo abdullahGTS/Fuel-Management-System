@@ -261,10 +261,9 @@ const ProductsUsage = {
                 // Use SharedColors with lowercase product name as the key
                 slices[index] = {
                     offset: 0.04,
-                    textStyle: { color: backgroundColor },
                     borderColor: backgroundColor,
                     borderWidth: 0,
-                    color: color // Ensure the color is included here
+                    color: color
                 };
             } else {
                 console.warn(`Invalid number value for ${productName}: ${products[key]}`);
@@ -275,7 +274,7 @@ const ProductsUsage = {
         // Set chart options with dynamically created slices
         const options = {
             title: '',
-            is3D: false,
+            tooltip: {isHtml: true},
             backgroundColor: backgroundColor,
             slices: slices, // Dynamic slices based on data
             pieSliceBorderColor: backgroundColor,
@@ -283,7 +282,7 @@ const ProductsUsage = {
                 width: windowWidth < 769 ? '80%' : '75%',
                 height: windowWidth < 769 ? '80%' : '75%'
             },
-            pieSliceText: 'percentage',  // Show percentage in slices
+            // pieSliceText: 'percentage',  // Show percentage in slices
             legend: { position: 'none' }  // Hide the default legend
         };
 
@@ -366,6 +365,7 @@ const SiteStatus = {
         const options = {
             pieHole: 0.65,
             pieStartAngle: 0,
+            tooltip: {isHtml: true},
             pieSliceText: 'none', // Hide value text inside the chart
             slices: {
                 0: { color: color, offset: 0.1 },
@@ -462,7 +462,7 @@ const SalesTrend = {
 
     // Updated drawChart function
     drawChart: async (sales) => {
-        const { backgroundColor } = await ChartBackgroundColor();
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
         // Create the DataTable
         const data = new google.visualization.DataTable();
         const products = [...new Set(sales.map(item => item.gradeid__name))];
@@ -539,15 +539,26 @@ const SalesTrend = {
         // Chart options
         const options = {
             title: '',
-            // curveType: 'function',
+            tooltip: {isHtml: true},
             legend: { position: 'none' },
             isStacked: false,
             backgroundColor: backgroundColor,
             hAxis: {
                 title: SalesTrend.getAxisLabel(),
+                titleTextStyle: {
+                    color: txtColor,
+                    fontSize: 12,
+                },
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             },
             vAxis: {
-                title: '',
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             },
             chartArea: {
                 width: '75%',
@@ -614,7 +625,7 @@ const ProductSales = {
         google.charts.setOnLoadCallback(() => ProductSales.drawChart(sales.sales_by_hour));
     },
     drawChart: async (sales) => {
-        const { backgroundColor } = await ChartBackgroundColor();
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
         const data = new google.visualization.DataTable();
 
         // Add columns for the product name and total sales amount
@@ -641,16 +652,23 @@ const ProductSales = {
         const options = {
             backgroundColor: backgroundColor,
             legend: { position: 'none' },
+            tooltip: {isHtml: true},
             bar: { groupWidth: `${groupWidthPercentage}%` },
             chartArea: {
                 width: '80%',
                 height: '80%',
             },
             hAxis: {
-                title: '',
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             },
             vAxis: {
-                title: '',
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             }
         };
 
@@ -682,7 +700,7 @@ const SystemAlarms = {
     },
 
     drawChart: async (alarms) => {
-        const { backgroundColor } = await ChartBackgroundColor();
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
         const data = new google.visualization.DataTable();
 
         // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
@@ -708,16 +726,23 @@ const SystemAlarms = {
         const options = {
             backgroundColor: backgroundColor,
             legend: { position: 'none' },
-            bar: { groupWidth: `${groupWidthPercentage}%` },
+            tooltip: {isHtml: true},
+            bar: { groupWidth: `${groupWidthPercentage - 5}%` },
             chartArea: {
                 width: '80%',
                 height: '80%',
             },
             hAxis: {
-                title: '',
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             },
             vAxis: {
-                title: '',
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
             }
         };
 
@@ -773,6 +798,7 @@ const OperationalAlarms = {
         const options = {
             backgroundColor: backgroundColor,
             pieSliceBorderColor: backgroundColor,
+            tooltip: {isHtml: true},
             colors: colors,
             pieHole: 0.5,
             slices: {
@@ -886,7 +912,7 @@ const TanksVolume = {
         document.querySelectorAll('.site-item').forEach(item => item.classList.remove('active'));
         listItem.classList.add('active');
 
-        const siteName = document.querySelector('.site-name');
+        const siteName = document.querySelector('[data-popover-target="#tanks-sites-list-target"] .site-name');
         const tanksAmount = document.querySelector('#tanksAmount');
 
         siteName.textContent = site.sitenumber;
@@ -898,7 +924,7 @@ const TanksVolume = {
 
     drawColumnChart: async (siteNumber) => {
         try {
-            const { secondaryBgColor, secondaryAlphaColor } = await ChartBackgroundColor();
+            const { secondaryBgColor, txtColor } = await ChartBackgroundColor();
 
             // Fetch tanks data for the selected site
             const tanksData = await fetchData(`${API_PATHS.tanksVolumes}${siteNumber}.json`);
@@ -920,10 +946,23 @@ const TanksVolume = {
 
             const options = {
                 backgroundColor: secondaryBgColor,
+                tooltip: {isHtml: true},
                 title: '',
                 colors: [SharedColors.TanksVolume],
                 legend: { position: 'none' },
-                bar: { groupWidth: `${groupWidthPercentage}%` }
+                bar: { groupWidth: `${groupWidthPercentage}%` },
+                hAxis: {
+                    textStyle: {
+                        color: txtColor,
+                        fontSize: 12
+                    }
+                },
+                vAxis: {
+                    textStyle: {
+                        color: txtColor,
+                        fontSize: 12
+                    }
+                }
             };
 
             const chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
@@ -933,7 +972,6 @@ const TanksVolume = {
         }
     }
 };
-
 
 // Low Stock
 const LowStock = {
@@ -968,6 +1006,7 @@ const LowStock = {
     // Display products in the UI with click events to update the pie chart
     fetchProduct: (stockList) => {
         const productList = document.querySelector('#stockProductList ul');
+
         if (!productList) return;
 
         // Clear any existing list items
@@ -1045,11 +1084,10 @@ const LowStock = {
     },
 
     // Draw pie chart based on the selected threshold and specific product if chosen
-    drawPieChart: (stockList, threshold, selectedProduct = null) => {
+    drawPieChart: async (stockList, threshold, selectedProduct = null) => {
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
         let belowThreshold = 0;
         let aboveThreshold = 0;
-
-
         // Aggregate data based on the threshold and optionally for a specific product
         if (selectedProduct && stockList[selectedProduct]) {
             // Use specific product's above/below data
@@ -1071,7 +1109,6 @@ const LowStock = {
         ]);
 
         function adjustColorBrightness(hex, percent) {
-            // Convert hex to RGB
             let r = parseInt(hex.slice(1, 3), 16);
             let g = parseInt(hex.slice(3, 5), 16);
             let b = parseInt(hex.slice(5, 7), 16);
@@ -1098,9 +1135,11 @@ const LowStock = {
         const lighterColor = adjustColorBrightness(baseColor, -0.4);
 
         const options = {
-            // title: selectedProduct ? `${selectedProduct} Stock Levels` : 'Total Stock Levels',
             title: '',
             colors: [lighterColor, baseColor],
+            pieSliceBorderColor: backgroundColor,
+            backgroundColor: backgroundColor,
+            tooltip: {isHtml: true},
             legend: { position: 'none' },
             slices: {
                 0: { offset: 0.1 },
@@ -1115,6 +1154,145 @@ const LowStock = {
         chart.draw(data, options);
     }
 }
+
+// Delivery Amount
+const DeliveryAmount = {
+    init: () => {
+        const deliveryTankChart = document.querySelector('#deliveryTankChart');
+        if ( deliveryTankChart ) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(DeliveryAmount.fetchData);
+        }
+    },
+
+    fetchData: async () => {
+        try {
+            const sitesData = await fetchData(API_PATHS.dashboardSites);
+            if (!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0) {
+                console.error("No sites data available");
+                return;
+            }
+
+            const sites = sitesData.sitesnumbers;
+            DeliveryAmount.populateSiteDropdown(sites);
+
+            // Draw initial chart with the first site by default
+            DeliveryAmount.drawColumnChart(sites[0].sitenumber);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    },
+
+    populateSiteDropdown: (sites) => {
+        const sitesList = document.querySelector('#delivery-sites-list ul');
+        const siteFilterInput = document.querySelector('#delivery-sites-list .site-filter input');
+
+        sitesList.innerHTML = '';  // Clear previous items if any
+
+        sites.forEach((site, index) => {
+            const listItem = DeliveryAmount.createSiteListItem(site, index === 0);
+            listItem.addEventListener('click', () => DeliveryAmount.selectSite(listItem, site));
+            sitesList.appendChild(listItem);
+        });
+
+        // Filter functionality for dropdown
+        siteFilterInput.addEventListener('input', () => {
+            const filterValue = siteFilterInput.value.toLowerCase();
+            document.querySelectorAll('.site-item').forEach(item => {
+                item.style.display = item.dataset.sitenumber.includes(filterValue) ? 'flex' : 'none';
+            });
+        });
+
+        // Select the first item by default if sites exist
+        if (sites.length > 0) {
+            DeliveryAmount.selectSite(sitesList.firstChild, sites[0]);
+        }
+    },
+
+    createSiteListItem: (site, isActive) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('site-item');
+        listItem.dataset.sitenumber = site.sitenumber;
+        listItem.dataset.tanks = site.tanks;
+
+        const siteNumberSpan = document.createElement('span');
+        siteNumberSpan.classList.add('site-number');
+        siteNumberSpan.textContent = `#${site.sitenumber}`;
+
+        const tanksLengthSpan = document.createElement('span');
+        tanksLengthSpan.classList.add('tanks-length');
+        tanksLengthSpan.textContent = `${site.tanks} Tanks`;
+
+        listItem.append(siteNumberSpan, tanksLengthSpan);
+
+        if (isActive) listItem.classList.add('active');
+        return listItem;
+    },
+
+    selectSite: (listItem, site) => {
+        document.querySelectorAll('.site-item').forEach(item => item.classList.remove('active'));
+        listItem.classList.add('active');
+
+        const siteName = document.querySelector('[data-popover-target="#delivery-sites-list-target"] .site-name');
+        const tanksAmount = document.querySelector('#deliveryAmount');
+
+        siteName.textContent = site.sitenumber;
+        tanksAmount.textContent = site.tanks;
+
+        // Draw the column chart for the selected site
+        DeliveryAmount.drawColumnChart(site.sitenumber);
+    },
+
+    drawColumnChart: async (siteNumber) => {
+        try {
+            const { secondaryBgColor, txtColor } = await ChartBackgroundColor();
+
+            // Fetch tanks data for the selected site
+            const tanksData = await fetchData(`${API_PATHS.tanksVolumes}${siteNumber}.json`);
+            if (!tanksData || tanksData.length === 0) {
+                console.error("No tank data available");
+                return;
+            }
+
+            // Prepare data for the Google Chart
+            const chartData = [['Tank', 'Volume']];
+            tanksData.forEach(tank => {
+                const [tankName, volume] = tank;
+                chartData.push([tankName, volume]);
+            });
+
+            const data = google.visualization.arrayToDataTable(chartData);
+
+            const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('deliveryTankChart', tanksData.length);
+            
+            const options = {
+                backgroundColor: secondaryBgColor,
+                title: '',
+                colors: [SharedColors.DeliveryAmount],
+                legend: { position: 'none' },
+                tooltip: {isHtml: true},
+                bar: { groupWidth: `${groupWidthPercentage}%` },
+                hAxis: {
+                    textStyle: {
+                        color: txtColor,
+                        fontSize: 12
+                    }
+                },
+                vAxis: {
+                    textStyle: {
+                        color: txtColor,
+                        fontSize: 12
+                    }
+                }
+            };
+
+            const chart = new google.visualization.ColumnChart(document.querySelector('#deliveryTankChart'));
+            chart.draw(data, options);
+        } catch (error) {
+            console.error("Error drawing column chart:", error);
+        }
+    }
+};
 
 // Shared function to set bar width
 const ChartUtils = {
@@ -1138,6 +1316,7 @@ const RunCharts = {
         OperationalAlarms.init();
         TanksVolume.init();
         LowStock.init();
+        DeliveryAmount.init();
         // SystemAlarmsChart.init();
         // OperationalAlarmsBarChart.init();
         // TankVolumeBarChart.init();

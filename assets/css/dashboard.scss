@@ -204,7 +204,7 @@
         grid-template-columns: repeat(3, 1fr);
         height: 100%;
         align-items: center;
-        padding: 10px 40px 10px 30px;
+        padding: 15px 40px 15px 30px;
         .total-sites {
             gap: 15px;
             .icon-wrap {
@@ -243,8 +243,8 @@
             .chart-area {
                 display: inline-block !important;
                 flex: unset !important;
-                width: 140px;
-                height: 140px;
+                width: 130px;
+                height: 130px;
             }
         }
     }
@@ -252,10 +252,10 @@
     .maps-wrapper {
         width: 100%;
         height: 100%;
+        min-height: 380px;
         iframe {
             width: 100%;
             height: 100%;
-            min-height: 340px;
         }
     }
 

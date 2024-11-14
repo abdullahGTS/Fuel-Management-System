@@ -128,6 +128,8 @@ const NotificationSystem = {
     markAllRead: () => {
         // Go through all notifications and remove the 'unread' class
         const unreadNotifications = document.querySelectorAll('.notification-item-wrapper.unread');
+        const gtsNotificationBadge = document.querySelector('.gts-notification .gts-badge');
+        if ( gtsNotificationBadge ) gtsNotificationBadge.remove();
         unreadNotifications.forEach(notification => {
             notification.classList.remove('unread');
         });

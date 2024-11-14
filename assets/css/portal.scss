@@ -177,7 +177,7 @@ body.loaded {
                                     padding: 0 !important;
                                 }
                                 &.gts-charts {
-                                    min-height: 380px;
+                                    min-height: 420px;
                                 }
                                 .gts-card-title {
                                     display: flex;
@@ -476,5 +476,21 @@ body.loaded {
                 }
             }
         }
+    }
+}
+
+
+/* Customize the tooltip's background and text */
+.google-visualization-tooltip {
+    pointer-events: none; 
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    padding: 4px !important;
+    border-radius: var(--gts-sm-curve) !important;
+    box-shadow: 0px 10px 30px -10px rgba(0, 0, 0, 0.1) !important;
+    border: 0 !important;
+    backdrop-filter: blur(10px);
+    * {
+        color: #fff !important; 
+        font-size: 14px !important;
     }
 }

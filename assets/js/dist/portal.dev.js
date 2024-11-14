@@ -118,6 +118,8 @@ var NotificationSystem = {
   markAllRead: function markAllRead() {
     // Go through all notifications and remove the 'unread' class
     var unreadNotifications = document.querySelectorAll('.notification-item-wrapper.unread');
+    var gtsNotificationBadge = document.querySelector('.gts-notification .gts-badge');
+    if (gtsNotificationBadge) gtsNotificationBadge.remove();
     unreadNotifications.forEach(function (notification) {
       notification.classList.remove('unread');
     });

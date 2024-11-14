@@ -49,7 +49,8 @@ const SharedColors = {
     DeleveryReconciliation: '#2D99FC',
     SuddenLoss: '#83D0FF',
     SystemAlarm: '#6B6ED2',
-    TanksVolume: '#156E41'
+    TanksVolume: '#01315D',
+    DeliveryAmount: '#156E41',
 };
 
 const ChartBackgroundColor = () => {
@@ -66,6 +67,7 @@ const ChartBackgroundColor = () => {
                 backgroundColor: isDarkMode ? '#101019' : '#ffffff',
                 secondaryBgColor: isDarkMode ? '#171721' : '#f4f7fe',
                 secondaryAlphaColor: isDarkMode ? '#272731' : '#eceef2',
+                txtColor: isDarkMode ? '#d6cfcf' : '#4D4D4D'
             };
             resolve(colors);
         }, 0); // Adjust timeout if necessary

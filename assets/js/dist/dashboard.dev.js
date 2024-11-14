@@ -296,13 +296,9 @@ var ProductsUsage = {
 
                 slices[index] = {
                   offset: 0.04,
-                  textStyle: {
-                    color: backgroundColor
-                  },
                   borderColor: backgroundColor,
                   borderWidth: 0,
-                  color: color // Ensure the color is included here
-
+                  color: color
                 };
               } else {
                 console.warn("Invalid number value for ".concat(productName, ": ").concat(products[key]));
@@ -312,7 +308,9 @@ var ProductsUsage = {
 
             options = {
               title: '',
-              is3D: false,
+              tooltip: {
+                isHtml: true
+              },
               backgroundColor: backgroundColor,
               slices: slices,
               // Dynamic slices based on data
@@ -321,8 +319,7 @@ var ProductsUsage = {
                 width: windowWidth < 769 ? '80%' : '75%',
                 height: windowWidth < 769 ? '80%' : '75%'
               },
-              pieSliceText: 'percentage',
-              // Show percentage in slices
+              // pieSliceText: 'percentage',  // Show percentage in slices
               legend: {
                 position: 'none'
               } // Hide the default legend
@@ -426,6 +423,9 @@ var SiteStatus = {
     var options = {
       pieHole: 0.65,
       pieStartAngle: 0,
+      tooltip: {
+        isHtml: true
+      },
       pieSliceText: 'none',
       // Hide value text inside the chart
       slices: {
@@ -555,7 +555,7 @@ var SalesTrend = {
   },
   // Updated drawChart function
   drawChart: function drawChart(sales) {
-    var _ref3, backgroundColor, data, products, timeUnit, timeUnits, formatTimeUnit, formattedTimeUnits, options, chart;
+    var _ref3, backgroundColor, txtColor, data, products, timeUnit, timeUnits, formatTimeUnit, formattedTimeUnits, options, chart;
 
     return regeneratorRuntime.async(function drawChart$(_context5) {
       while (1) {
@@ -567,6 +567,7 @@ var SalesTrend = {
           case 2:
             _ref3 = _context5.sent;
             backgroundColor = _ref3.backgroundColor;
+            txtColor = _ref3.txtColor;
             // Create the DataTable
             data = new google.visualization.DataTable();
             products = _toConsumableArray(new Set(sales.map(function (item) {
@@ -574,22 +575,22 @@ var SalesTrend = {
             }))); // Dynamically add columns based on the data structure
 
             _context5.t0 = SalesTrend.currentTab;
-            _context5.next = _context5.t0 === 'today' ? 9 : _context5.t0 === 'yesterday' ? 9 : _context5.t0 === 'lastWeek' ? 11 : _context5.t0 === 'lastMonth' ? 13 : 15;
+            _context5.next = _context5.t0 === 'today' ? 10 : _context5.t0 === 'yesterday' ? 10 : _context5.t0 === 'lastWeek' ? 12 : _context5.t0 === 'lastMonth' ? 14 : 16;
             break;
 
-          case 9:
+          case 10:
             data.addColumn('string', 'Hour');
-            return _context5.abrupt("break", 15);
+            return _context5.abrupt("break", 16);
 
-          case 11:
+          case 12:
             data.addColumn('string', 'Day');
-            return _context5.abrupt("break", 15);
+            return _context5.abrupt("break", 16);
 
-          case 13:
+          case 14:
             data.addColumn('string', 'Week');
-            return _context5.abrupt("break", 15);
+            return _context5.abrupt("break", 16);
 
-          case 15:
+          case 16:
             // Add columns dynamically for each product
             products.forEach(function (product) {
               data.addColumn('number', product);
@@ -667,17 +668,30 @@ var SalesTrend = {
 
             options = {
               title: '',
-              // curveType: 'function',
+              tooltip: {
+                isHtml: true
+              },
               legend: {
                 position: 'none'
               },
               isStacked: false,
               backgroundColor: backgroundColor,
               hAxis: {
-                title: SalesTrend.getAxisLabel()
+                title: SalesTrend.getAxisLabel(),
+                titleTextStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                },
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               },
               vAxis: {
-                title: ''
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               },
               chartArea: {
                 width: '75%',
@@ -692,7 +706,7 @@ var SalesTrend = {
             chart = new google.visualization.LineChart(document.getElementById('salesTrendChart'));
             chart.draw(data, options);
 
-          case 25:
+          case 26:
           case "end":
             return _context5.stop();
         }
@@ -787,7 +801,7 @@ var ProductSales = {
     });
   },
   drawChart: function drawChart(sales) {
-    var _ref4, backgroundColor, data, products, groupWidthPercentage, options, chart;
+    var _ref4, backgroundColor, txtColor, data, products, groupWidthPercentage, options, chart;
 
     return regeneratorRuntime.async(function drawChart$(_context7) {
       while (1) {
@@ -799,6 +813,7 @@ var ProductSales = {
           case 2:
             _ref4 = _context7.sent;
             backgroundColor = _ref4.backgroundColor;
+            txtColor = _ref4.txtColor;
             data = new google.visualization.DataTable(); // Add columns for the product name and total sales amount
 
             data.addColumn('string', 'Product');
@@ -828,6 +843,9 @@ var ProductSales = {
               legend: {
                 position: 'none'
               },
+              tooltip: {
+                isHtml: true
+              },
               bar: {
                 groupWidth: "".concat(groupWidthPercentage, "%")
               },
@@ -836,17 +854,23 @@ var ProductSales = {
                 height: '80%'
               },
               hAxis: {
-                title: ''
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               },
               vAxis: {
-                title: ''
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               }
             }; // Create and draw the bar chart
 
             chart = new google.visualization.ColumnChart(document.getElementById('productSalesChart'));
             chart.draw(data, options);
 
-          case 14:
+          case 15:
           case "end":
             return _context7.stop();
         }
@@ -903,7 +927,7 @@ var SystemAlarms = {
     });
   },
   drawChart: function drawChart(alarms) {
-    var _ref5, backgroundColor, data, formatAlarmName, groupWidthPercentage, options, chart;
+    var _ref5, backgroundColor, txtColor, data, formatAlarmName, groupWidthPercentage, options, chart;
 
     return regeneratorRuntime.async(function drawChart$(_context9) {
       while (1) {
@@ -915,6 +939,7 @@ var SystemAlarms = {
           case 2:
             _ref5 = _context9.sent;
             backgroundColor = _ref5.backgroundColor;
+            txtColor = _ref5.txtColor;
             data = new google.visualization.DataTable(); // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
 
             data.addColumn('string', 'Alarm Type');
@@ -947,25 +972,34 @@ var SystemAlarms = {
               legend: {
                 position: 'none'
               },
+              tooltip: {
+                isHtml: true
+              },
               bar: {
-                groupWidth: "".concat(groupWidthPercentage, "%")
+                groupWidth: "".concat(groupWidthPercentage - 5, "%")
               },
               chartArea: {
                 width: '80%',
                 height: '80%'
               },
               hAxis: {
-                title: ''
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               },
               vAxis: {
-                title: ''
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               }
             }; // Create and draw the waterfall chart
 
             chart = new google.visualization.ColumnChart(document.getElementById('systemAlarmsChart'));
             chart.draw(data, options);
 
-          case 14:
+          case 15:
           case "end":
             return _context9.stop();
         }
@@ -1052,6 +1086,9 @@ var OperationalAlarms = {
             options = {
               backgroundColor: backgroundColor,
               pieSliceBorderColor: backgroundColor,
+              tooltip: {
+                isHtml: true
+              },
               colors: colors,
               pieHole: 0.5,
               slices: {
@@ -1191,7 +1228,7 @@ var TanksVolume = {
       return item.classList.remove('active');
     });
     listItem.classList.add('active');
-    var siteName = document.querySelector('.site-name');
+    var siteName = document.querySelector('[data-popover-target="#tanks-sites-list-target"] .site-name');
     var tanksAmount = document.querySelector('#tanksAmount');
     siteName.textContent = site.sitenumber;
     tanksAmount.textContent = site.tanks; // Draw the column chart for the selected site
@@ -1199,7 +1236,7 @@ var TanksVolume = {
     TanksVolume.drawColumnChart(site.sitenumber);
   },
   drawColumnChart: function drawColumnChart(siteNumber) {
-    var _ref7, secondaryBgColor, secondaryAlphaColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
+    var _ref7, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
 
     return regeneratorRuntime.async(function drawColumnChart$(_context13) {
       while (1) {
@@ -1212,7 +1249,7 @@ var TanksVolume = {
           case 3:
             _ref7 = _context13.sent;
             secondaryBgColor = _ref7.secondaryBgColor;
-            secondaryAlphaColor = _ref7.secondaryAlphaColor;
+            txtColor = _ref7.txtColor;
             _context13.next = 8;
             return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
 
@@ -1241,6 +1278,9 @@ var TanksVolume = {
             groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('tankVolumeChart', tanksData.length);
             options = {
               backgroundColor: secondaryBgColor,
+              tooltip: {
+                isHtml: true
+              },
               title: '',
               colors: [_constant.SharedColors.TanksVolume],
               legend: {
@@ -1248,6 +1288,18 @@ var TanksVolume = {
               },
               bar: {
                 groupWidth: "".concat(groupWidthPercentage, "%")
+              },
+              hAxis: {
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
+              },
+              vAxis: {
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
               }
             };
             chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
@@ -1398,65 +1450,288 @@ var LowStock = {
   },
   // Draw pie chart based on the selected threshold and specific product if chosen
   drawPieChart: function drawPieChart(stockList, threshold) {
-    var selectedProduct = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    var belowThreshold = 0;
-    var aboveThreshold = 0; // Aggregate data based on the threshold and optionally for a specific product
+    var selectedProduct,
+        _ref8,
+        backgroundColor,
+        txtColor,
+        belowThreshold,
+        aboveThreshold,
+        data,
+        adjustColorBrightness,
+        baseColor,
+        lighterColor,
+        options,
+        chart,
+        _args15 = arguments;
 
-    if (selectedProduct && stockList[selectedProduct]) {
-      // Use specific product's above/below data
-      belowThreshold = stockList[selectedProduct].below;
-      aboveThreshold = stockList[selectedProduct].above;
-    } else {
-      // Aggregate data across all products
-      Object.values(stockList).forEach(function (stock) {
-        belowThreshold += stock.below;
-        aboveThreshold += stock.above;
-      });
-    }
+    return regeneratorRuntime.async(function drawPieChart$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            adjustColorBrightness = function _ref9(hex, percent) {
+              var r = parseInt(hex.slice(1, 3), 16);
+              var g = parseInt(hex.slice(3, 5), 16);
+              var b = parseInt(hex.slice(5, 7), 16); // Adjust brightness by the given percentage
 
-    var data = google.visualization.arrayToDataTable([['Status', 'Count'], ['Below Threshold', belowThreshold], ['Above Threshold', aboveThreshold]]);
+              r = Math.round(r * (1 + percent));
+              g = Math.round(g * (1 + percent));
+              b = Math.round(b * (1 + percent)); // Ensure RGB values are within 0-255
 
-    function adjustColorBrightness(hex, percent) {
-      // Convert hex to RGB
-      var r = parseInt(hex.slice(1, 3), 16);
-      var g = parseInt(hex.slice(3, 5), 16);
-      var b = parseInt(hex.slice(5, 7), 16); // Adjust brightness by the given percentage
+              r = Math.min(255, Math.max(0, r));
+              g = Math.min(255, Math.max(0, g));
+              b = Math.min(255, Math.max(0, b)); // Convert RGB back to hex
 
-      r = Math.round(r * (1 + percent));
-      g = Math.round(g * (1 + percent));
-      b = Math.round(b * (1 + percent)); // Ensure RGB values are within 0-255
+              var rHex = r.toString(16).padStart(2, '0');
+              var gHex = g.toString(16).padStart(2, '0');
+              var bHex = b.toString(16).padStart(2, '0');
+              return "#".concat(rHex).concat(gHex).concat(bHex);
+            };
 
-      r = Math.min(255, Math.max(0, r));
-      g = Math.min(255, Math.max(0, g));
-      b = Math.min(255, Math.max(0, b)); // Convert RGB back to hex
+            selectedProduct = _args15.length > 2 && _args15[2] !== undefined ? _args15[2] : null;
+            _context15.next = 4;
+            return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
-      var rHex = r.toString(16).padStart(2, '0');
-      var gHex = g.toString(16).padStart(2, '0');
-      var bHex = b.toString(16).padStart(2, '0');
-      return "#".concat(rHex).concat(gHex).concat(bHex);
-    }
+          case 4:
+            _ref8 = _context15.sent;
+            backgroundColor = _ref8.backgroundColor;
+            txtColor = _ref8.txtColor;
+            belowThreshold = 0;
+            aboveThreshold = 0; // Aggregate data based on the threshold and optionally for a specific product
 
-    var baseColor = selectedProduct && _constant.SharedColors[selectedProduct] ? _constant.SharedColors[selectedProduct] : '#666666';
-    var lighterColor = adjustColorBrightness(baseColor, -0.4);
-    var options = {
-      // title: selectedProduct ? `${selectedProduct} Stock Levels` : 'Total Stock Levels',
-      title: '',
-      colors: [lighterColor, baseColor],
-      legend: {
-        position: 'none'
-      },
-      slices: {
-        0: {
-          offset: 0.1
+            if (selectedProduct && stockList[selectedProduct]) {
+              // Use specific product's above/below data
+              belowThreshold = stockList[selectedProduct].below;
+              aboveThreshold = stockList[selectedProduct].above;
+            } else {
+              // Aggregate data across all products
+              Object.values(stockList).forEach(function (stock) {
+                belowThreshold += stock.below;
+                aboveThreshold += stock.above;
+              });
+            }
+
+            data = google.visualization.arrayToDataTable([['Status', 'Count'], ['Below Threshold', belowThreshold], ['Above Threshold', aboveThreshold]]);
+            baseColor = selectedProduct && _constant.SharedColors[selectedProduct] ? _constant.SharedColors[selectedProduct] : '#666666';
+            lighterColor = adjustColorBrightness(baseColor, -0.4);
+            options = {
+              title: '',
+              colors: [lighterColor, baseColor],
+              pieSliceBorderColor: backgroundColor,
+              backgroundColor: backgroundColor,
+              tooltip: {
+                isHtml: true
+              },
+              legend: {
+                position: 'none'
+              },
+              slices: {
+                0: {
+                  offset: 0.1
+                }
+              },
+              chartArea: {
+                width: '80%',
+                height: '80%'
+              }
+            };
+            chart = new google.visualization.PieChart(document.querySelector('#tankPercentageChart'));
+            chart.draw(data, options);
+
+          case 16:
+          case "end":
+            return _context15.stop();
         }
-      },
-      chartArea: {
-        width: '80%',
-        height: '80%'
       }
-    };
-    var chart = new google.visualization.PieChart(document.querySelector('#tankPercentageChart'));
-    chart.draw(data, options);
+    });
+  }
+}; // Delivery Amount
+
+var DeliveryAmount = {
+  init: function init() {
+    var deliveryTankChart = document.querySelector('#deliveryTankChart');
+
+    if (deliveryTankChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(DeliveryAmount.fetchData);
+    }
+  },
+  fetchData: function fetchData() {
+    var sitesData, sites;
+    return regeneratorRuntime.async(function fetchData$(_context16) {
+      while (1) {
+        switch (_context16.prev = _context16.next) {
+          case 0:
+            _context16.prev = 0;
+            _context16.next = 3;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
+
+          case 3:
+            sitesData = _context16.sent;
+
+            if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
+              _context16.next = 7;
+              break;
+            }
+
+            console.error("No sites data available");
+            return _context16.abrupt("return");
+
+          case 7:
+            sites = sitesData.sitesnumbers;
+            DeliveryAmount.populateSiteDropdown(sites); // Draw initial chart with the first site by default
+
+            DeliveryAmount.drawColumnChart(sites[0].sitenumber);
+            _context16.next = 15;
+            break;
+
+          case 12:
+            _context16.prev = 12;
+            _context16.t0 = _context16["catch"](0);
+            console.error("Error fetching data:", _context16.t0);
+
+          case 15:
+          case "end":
+            return _context16.stop();
+        }
+      }
+    }, null, null, [[0, 12]]);
+  },
+  populateSiteDropdown: function populateSiteDropdown(sites) {
+    var sitesList = document.querySelector('#delivery-sites-list ul');
+    var siteFilterInput = document.querySelector('#delivery-sites-list .site-filter input');
+    sitesList.innerHTML = ''; // Clear previous items if any
+
+    sites.forEach(function (site, index) {
+      var listItem = DeliveryAmount.createSiteListItem(site, index === 0);
+      listItem.addEventListener('click', function () {
+        return DeliveryAmount.selectSite(listItem, site);
+      });
+      sitesList.appendChild(listItem);
+    }); // Filter functionality for dropdown
+
+    siteFilterInput.addEventListener('input', function () {
+      var filterValue = siteFilterInput.value.toLowerCase();
+      document.querySelectorAll('.site-item').forEach(function (item) {
+        item.style.display = item.dataset.sitenumber.includes(filterValue) ? 'flex' : 'none';
+      });
+    }); // Select the first item by default if sites exist
+
+    if (sites.length > 0) {
+      DeliveryAmount.selectSite(sitesList.firstChild, sites[0]);
+    }
+  },
+  createSiteListItem: function createSiteListItem(site, isActive) {
+    var listItem = document.createElement('li');
+    listItem.classList.add('site-item');
+    listItem.dataset.sitenumber = site.sitenumber;
+    listItem.dataset.tanks = site.tanks;
+    var siteNumberSpan = document.createElement('span');
+    siteNumberSpan.classList.add('site-number');
+    siteNumberSpan.textContent = "#".concat(site.sitenumber);
+    var tanksLengthSpan = document.createElement('span');
+    tanksLengthSpan.classList.add('tanks-length');
+    tanksLengthSpan.textContent = "".concat(site.tanks, " Tanks");
+    listItem.append(siteNumberSpan, tanksLengthSpan);
+    if (isActive) listItem.classList.add('active');
+    return listItem;
+  },
+  selectSite: function selectSite(listItem, site) {
+    document.querySelectorAll('.site-item').forEach(function (item) {
+      return item.classList.remove('active');
+    });
+    listItem.classList.add('active');
+    var siteName = document.querySelector('[data-popover-target="#delivery-sites-list-target"] .site-name');
+    var tanksAmount = document.querySelector('#deliveryAmount');
+    siteName.textContent = site.sitenumber;
+    tanksAmount.textContent = site.tanks; // Draw the column chart for the selected site
+
+    DeliveryAmount.drawColumnChart(site.sitenumber);
+  },
+  drawColumnChart: function drawColumnChart(siteNumber) {
+    var _ref10, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
+
+    return regeneratorRuntime.async(function drawColumnChart$(_context17) {
+      while (1) {
+        switch (_context17.prev = _context17.next) {
+          case 0:
+            _context17.prev = 0;
+            _context17.next = 3;
+            return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
+
+          case 3:
+            _ref10 = _context17.sent;
+            secondaryBgColor = _ref10.secondaryBgColor;
+            txtColor = _ref10.txtColor;
+            _context17.next = 8;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
+
+          case 8:
+            tanksData = _context17.sent;
+
+            if (!(!tanksData || tanksData.length === 0)) {
+              _context17.next = 12;
+              break;
+            }
+
+            console.error("No tank data available");
+            return _context17.abrupt("return");
+
+          case 12:
+            // Prepare data for the Google Chart
+            chartData = [['Tank', 'Volume']];
+            tanksData.forEach(function (tank) {
+              var _tank2 = _slicedToArray(tank, 2),
+                  tankName = _tank2[0],
+                  volume = _tank2[1];
+
+              chartData.push([tankName, volume]);
+            });
+            data = google.visualization.arrayToDataTable(chartData);
+            groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('deliveryTankChart', tanksData.length);
+            options = {
+              backgroundColor: secondaryBgColor,
+              title: '',
+              colors: [_constant.SharedColors.DeliveryAmount],
+              legend: {
+                position: 'none'
+              },
+              tooltip: {
+                isHtml: true
+              },
+              bar: {
+                groupWidth: "".concat(groupWidthPercentage, "%")
+              },
+              hAxis: {
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
+              },
+              vAxis: {
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
+              }
+            };
+            chart = new google.visualization.ColumnChart(document.querySelector('#deliveryTankChart'));
+            chart.draw(data, options);
+            _context17.next = 24;
+            break;
+
+          case 21:
+            _context17.prev = 21;
+            _context17.t0 = _context17["catch"](0);
+            console.error("Error drawing column chart:", _context17.t0);
+
+          case 24:
+          case "end":
+            return _context17.stop();
+        }
+      }
+    }, null, null, [[0, 21]]);
   }
 }; // Shared function to set bar width
 
@@ -1480,7 +1755,8 @@ var RunCharts = {
     SystemAlarms.init();
     OperationalAlarms.init();
     TanksVolume.init();
-    LowStock.init(); // SystemAlarmsChart.init();
+    LowStock.init();
+    DeliveryAmount.init(); // SystemAlarmsChart.init();
     // OperationalAlarmsBarChart.init();
     // TankVolumeBarChart.init();
 
