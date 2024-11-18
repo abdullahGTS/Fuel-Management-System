@@ -1,0 +1,24 @@
+{
+    "fill_status_today": [
+        {
+            "gradeid__name": "Diesel",
+            "total_txn": 253,
+            "avg_volume": "12.2515810276679832924173751962371170520782470703125"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "total_txn": 673,
+            "avg_volume": "6.40946508172366069544523270451463758945465087890625"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "total_txn": 1294,
+            "avg_volume": "14.8892040185471099533742744824849069118499755859375"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "total_txn": 87,
+            "avg_volume": "28.427356321839084785096929408609867095947265625"
+        }
+    ]
+}

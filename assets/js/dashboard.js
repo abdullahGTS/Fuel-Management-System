@@ -119,6 +119,62 @@ const DownloadChart = {
     }
 };
 
+// DateSwitch
+const DateSwitch = {
+    init: (wrapper, component) => {
+        // Step 1: Clone and append a unique popover
+        const uniquePopoverId = `${wrapper.id.toLowerCase()}-popover`; // Unique ID for each wrapper
+        if (!document.getElementById(uniquePopoverId)) {
+            const sharedPopover = document.querySelector('#date-filter'); // Shared template
+            const clonedPopover = sharedPopover.cloneNode(true); // Clone the popover
+            clonedPopover.id = uniquePopoverId; // Assign unique ID
+            wrapper.parentNode.appendChild(clonedPopover); // Append to the wrapper's parent
+        }
+
+        // Step 2: Use the unique popover
+        const cardTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+        if ( cardTabs ) {
+            cardTabs.setAttribute('data-popover-target', `#${uniquePopoverId}`); // Update to unique ID
+            const selectedDate = cardTabs.querySelector('.selectedDate');
+            const uniquePopover = document.getElementById(uniquePopoverId); // Use unique popover
+            const cardTabsNodeList = uniquePopover.querySelectorAll('.tab-btn'); // Buttons in this popover
+
+            // Initialize the selected date text
+            selectedDate.textContent = DateSwitch.formatTabName(component.currentTab);
+
+            if (cardTabsNodeList.length) {
+                cardTabsNodeList.forEach((tab) => {
+                    // Attach event listeners scoped to this popover
+                    tab.addEventListener('click', function () {
+                        console.log('Clicked on:', wrapper.id); // Log correct wrapper
+
+                        // Clear 'active' class only in this unique popover
+                        cardTabsNodeList.forEach((item) => item.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        const selectedTab = tab.getAttribute('data-tab-target');
+                        DateSwitch.setTab(selectedTab, component);
+
+                        // Update the selected date text for this wrapper only
+                        selectedDate.textContent = DateSwitch.formatTabName(selectedTab);
+                    });
+                });
+            }
+        }
+    },
+    setTab: (selectedTab, component) => {
+        component.currentTab = selectedTab; 
+        component.fetchData(); // Trigger data fetch only for the specific component
+    },
+    formatTabName: (tabName) => {
+        // Format the tab name for display
+        return tabName
+        .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+        .replace(/^./, (str) => str.toUpperCase()) // Capitalize the first letter
+        .trim();
+    }
+};
+
 // Fetch Product Data
 const Products = {
 
@@ -396,37 +452,8 @@ const SalesTrend = {
         if (salesTrendChart) {
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(SalesTrend.fetchData);
-            SalesTrend.tabSwtch(salesTrendChart);
+            DateSwitch.init(salesTrendChart, SalesTrend);
         }
-    },
-
-    tabSwtch: (wrapper) => {
-        // const salesTabsNodeList = wrapper.parentNode.querySelectorAll('.tab-btn');
-        const salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
-        const salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
-        const salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
-        const selectedDate = salesTabs.querySelector('.selectedDate');
-        selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
-
-        if (salesTabsNodeList.length) {
-            salesTabsNodeList.forEach((tab) => {
-                tab.addEventListener('click', function () {
-                    salesTabsNodeList.forEach((item) => {
-                        item.classList.remove('active');
-                    });
-                    tab.classList.add('active');
-                    const selectedTab = tab.getAttribute('data-tab-target');
-                    console.log('salesTabsNodeList', selectedTab);
-                    SalesTrend.setTab(selectedTab);
-                });
-            });
-        }
-    },
-
-    // This function will set the current tab and trigger data fetching
-    setTab: (tab) => {
-        SalesTrend.currentTab = tab; // Set the current tab
-        SalesTrend.fetchData(); // Fetch data based on the selected tab
     },
 
     fetchData: async () => {
@@ -611,6 +638,65 @@ const SalesTrend = {
     }
 };
 
+// SalesInventorySwitch
+const SalesInventorySwitch = {
+    init: () => {
+        // Handle tab switching
+        const salesInventory = document.querySelector('#salesInventory');
+        const tabContainer = salesInventory.querySelector('.card-tabs');
+        if (tabContainer && !tabContainer.dataset.listenerAdded) {
+            tabContainer.dataset.listenerAdded = true;
+            tabContainer.addEventListener('click', (e) => {
+                // Get the closest button, whether the click was on the button or its wrapper
+                const targetButton = e.target.closest('button');
+                if (!targetButton) return; // Ignore clicks outside buttons
+    
+                const targetChart = targetButton.getAttribute('data-target-chart');
+                if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+    
+                // Remove 'active' class from all buttons and set it to the clicked one
+                tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                targetButton.classList.add('active');
+                
+                // Handle chart switching logic
+                switch (targetChart) {
+                    case 'sales':
+                        SalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
+                        break;
+                    case 'inventory':
+                        SalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
+                        break;
+                    default:
+                        console.error('Unknown chart type:', targetChart);
+                }
+            });
+        }
+    },
+    
+    handleChartSwitch: (chartId, initFunction) => {
+        const salesInventory = document.querySelector('#salesInventory');
+        const existingChartContainer = salesInventory.querySelector('.chart-area');
+        if (existingChartContainer) {
+            existingChartContainer.remove(); 
+        }
+    
+        // Create a new chart container
+        const newChartContainer = document.createElement('div');
+        newChartContainer.setAttribute('id', chartId);
+        newChartContainer.classList.add('chart-area');
+    
+        // Append the new container to the parent element of the tabs
+        salesInventory.querySelector('.gts-item-content').appendChild(newChartContainer);
+    
+        // Initialize the appropriate chart
+        if (typeof initFunction === 'function') {
+            initFunction();
+        } else {
+            console.error('Invalid initialization function provided');
+        }
+    }    
+}
+
 // Product Sales
 const ProductSales = {
     init: () => {
@@ -685,6 +771,81 @@ const ProductSales = {
     }
 }
 
+// Product Inventory
+const ProductInventory = {
+    init: () => {
+        const productInventoryChart = document.querySelector('#productInventoryChart');
+        if (productInventoryChart) {
+            console.log('productInventoryChart', productInventoryChart);
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(ProductInventory.fetchData);
+        }
+    },    
+    fetchData: async () => {
+        const inventory = await fetchData(API_PATHS.currnentInventory);
+        if (!inventory || Object.keys(inventory).length === 0) {
+            console.error("No inventory data available");
+            return;
+        }
+
+        // Update the chart with new data
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(() => ProductInventory.drawChart(inventory.current_inventory));
+    },
+    drawChart: async (inventory) => {
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
+        const data = new google.visualization.DataTable();
+
+        // Add columns for the product name and total sales amount
+        data.addColumn('string', 'Product');
+        data.addColumn('number', 'Total Inventory');
+        data.addColumn({ type: 'string', role: 'style' });
+
+        // Get unique products from the sales data
+        const products = [...new Set(inventory.map(item => item.ProductName))];
+
+        // Calculate total sales and add rows with color for each product
+        products.forEach(product => {
+            const totalInventory = inventory
+                .filter(item => item.ProductName === product)
+                .reduce((sum, item) => sum + parseFloat(item.TotalProductVolume), 0);
+
+            const color = SharedColors[product] || '#ccc';
+            data.addRow([product, totalInventory, `color: ${color}`]); // Adding color to each row
+        });
+
+        const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('productInventoryChart', products.length);
+
+        // Set up chart options
+        const options = {
+            backgroundColor: backgroundColor,
+            legend: { position: 'none' },
+            tooltip: {isHtml: true},
+            bar: { groupWidth: `${groupWidthPercentage}%` },
+            chartArea: {
+                width: '80%',
+                height: '80%',
+            },
+            hAxis: {
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
+            },
+            vAxis: {
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
+            }
+        };
+
+        // Create and draw the bar chart
+        const chart = new google.visualization.ColumnChart(document.getElementById('productInventoryChart'));
+        chart.draw(data, options);
+    }
+}
+
 // Top Five Sites 
 const TopSites = {
     currentTab: 'today',
@@ -693,11 +854,11 @@ const TopSites = {
         const topFiveSites = document.querySelector('#topFiveSites');
         if (topFiveSites) {
             TopSites.fetchData();
-            TopSites.tabSwtch(topFiveSites);
+            DateSwitch.init(topFiveSites, TopSites)
         }
     },
     
-    fetchData: async () => {
+    fetchData: async() => {
         let apiPath;
         let apiPathArray;
         switch (TopSites.currentTab) {
@@ -728,33 +889,6 @@ const TopSites = {
         }
     },
     
-    tabSwtch: (wrapper) => {
-        const salesTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
-        const salesTabsPopOver = document.querySelector(salesTabs.getAttribute('data-popover-target'));
-        const salesTabsNodeList = salesTabsPopOver.querySelectorAll('.tab-btn');
-        const selectedDate = salesTabs.querySelector('.selectedDate');
-        selectedDate.textContent = TopSites.currentTab.charAt(0).toUpperCase() + TopSites.currentTab.slice(1).toLowerCase();
-
-        if (salesTabsNodeList.length) {
-            salesTabsNodeList.forEach((tab) => {
-                tab.addEventListener('click', function () {
-                    salesTabsNodeList.forEach((item) => {
-                        item.classList.remove('active');
-                    });
-                    tab.classList.add('active');
-                    const selectedTab = tab.getAttribute('data-tab-target');
-                    TopSites.setTab(selectedTab);
-                    selectedDate.textContent = selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1).toLowerCase();
-                });
-            });
-        }
-    },
-    
-    setTab: (tab) => {
-        TopSites.currentTab = tab;
-        TopSites.fetchData();
-    },
-
     progressBars: (sitesData) => {
         const topFiveSites = document.querySelector('#topFiveSites');
         topFiveSites.innerHTML = ''; // Clear existing progress bars
@@ -790,11 +924,11 @@ const TopSites = {
 
             const progressBarValue = document.createElement('span');
             progressBarValue.classList.add('site-progressbar-value');
-            progressBarValue.textContent = `${(Math.round(totalMoney / 1000) * 1000).toLocaleString()} ${TopSites.currency}`;
+            progressBarValue.innerHTML = `${(Math.round(totalMoney / 1000) * 1000).toLocaleString()} <span>${TopSites.currency}</span>`;
 
             const tooltip = document.createElement('span');
-            tooltip.classList.add('site-progressbar-tooltip');
-            tooltip.textContent = `${totalMoney.toLocaleString()} ${TopSites.currency} `;
+            tooltip.classList.add('site-progressbar-tooltip');            
+            tooltip.innerHTML = `${totalMoney.toLocaleString()} <span>${TopSites.currency}<span> `;
             
             progressBar.addEventListener('mouseover', () => {
                 tooltip.style.display = 'inline';
@@ -817,6 +951,100 @@ const TopSites = {
             }, 70); // Delay each bar progressively by 300ms
         });
     }    
+};
+
+// Fill Status
+const FillStatus = {
+    currentTab: 'today',
+    init: () => {
+        const fillStatusList = document.querySelector('#fillStatusList');
+        if (fillStatusList) {
+            FillStatus.fetchData();
+            DateSwitch.init(fillStatusList.parentNode, FillStatus)
+        }
+    },
+    
+    fetchData: async () => {
+        const apiDetails = FillStatus.getApiDetails(FillStatus.currentTab);
+        console.log('apiDetails', apiDetails);
+        try {
+            const fills = await fetchData(apiDetails.path);
+            if (fills) {
+                FillStatus.createFillStatusList(fills[apiDetails.arrayKey]);
+            }
+        } catch (error) {
+            console.error('Error fetching fill status data:', error);
+        }
+    },
+
+    getApiDetails: (tab) => {
+        console.log('tab', tab);
+        const apiMappings = {
+            today: { path: API_PATHS.fillStatusToday, arrayKey: 'fill_status_today' },
+            yesterday: { path: API_PATHS.fillStatusYesterday, arrayKey: 'fill_status_yesterday' },
+            lastWeek: { path: API_PATHS.fillStatusWeek, arrayKey: 'fill_status_week' },
+            lastMonth: { path: API_PATHS.fillStatusMonth, arrayKey: 'fill_status_month' },
+        };
+
+        return apiMappings[tab] || apiMappings['today'];
+    },
+
+    createFillStatusList: (fills) => {
+        const fillStatusList = document.querySelector('#fillStatusList');
+        if (!fillStatusList) return;
+
+        // Clear the existing list
+        fillStatusList.innerHTML = '';
+
+        let totalTxn = 0;
+        let totalAvgVolume = 0;
+
+        // Loop through fills to create elements
+        fills.forEach((fill) => {
+            const { gradeid__name, total_txn, avg_volume } = fill;
+            const avgVolumeParsed = parseFloat(avg_volume);
+            totalTxn += total_txn;
+            totalAvgVolume += avgVolumeParsed;
+
+            const element = document.createElement('div');
+            element.classList.add('fill-status-product', gradeid__name.toLowerCase());
+
+            element.innerHTML = `
+                <div class="product-name">${gradeid__name}</div>
+                <div class="fill-product-wrapper">
+                    <div class="fill-product-value">
+                        <div class="fill-product-value-wrapper">
+                            <h3>Total</h3>
+                            <div class="total-fill-value">
+                                <span>${total_txn}</span> TXN
+                            </div>
+                        </div>
+                    </div>
+                    <div class="average-product-value">
+                        <div class="average-product-value-wrapper">
+                            <h3>Average</h3>
+                            <div class="total-average-value">
+                                <span>${Math.round(avgVolumeParsed)}</span> LTR
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            fillStatusList.appendChild(element);
+        });
+
+        // Update stats
+        FillStatus.updateStats({ totalTxn, totalAvgVolume });
+    },
+
+    updateStats: ({ totalTxn, totalAvgVolume }) => {
+        const fillValue = document.querySelector('#fillValue span');
+        const avgValue = document.querySelector('#avgValue span');
+
+        if (fillValue) fillValue.textContent = totalTxn;
+        if (avgValue) avgValue.textContent = Math.round(totalAvgVolume);
+    },
 };
 
 // System Alarms
@@ -1387,7 +1615,7 @@ const DeliveryAmount = {
 
     drawColumnChart: async (siteNumber) => {
         try {
-            const { secondaryBgColor, txtColor } = await ChartBackgroundColor();
+            const { backgroundColor, txtColor } = await ChartBackgroundColor();
 
             // Fetch tanks data for the selected site
             const tanksData = await fetchData(`${API_PATHS.tanksVolumes}${siteNumber}.json`);
@@ -1408,7 +1636,7 @@ const DeliveryAmount = {
             const groupWidthPercentage = ChartUtils.calculateGroupWidthPercentage('deliveryTankChart', tanksData.length);
             
             const options = {
-                backgroundColor: secondaryBgColor,
+                backgroundColor: backgroundColor,
                 title: '',
                 colors: [SharedColors.DeliveryAmount],
                 legend: { position: 'none' },
@@ -1453,12 +1681,15 @@ const RunCharts = {
         ProductsUsage.init();
         SiteStatus.init();
         SalesTrend.init();
+        SalesInventorySwitch.init();
         ProductSales.init();
+        // ProductInventory.init();
         SystemAlarms.init();
         OperationalAlarms.init();
         TanksVolume.init();
         LowStock.init();
         DeliveryAmount.init();
+
         // SystemAlarmsChart.init();
         // OperationalAlarmsBarChart.init();
         // TankVolumeBarChart.init();
@@ -1467,20 +1698,11 @@ const RunCharts = {
 }
 
 // We will Reload Charts on Menu Collapsed And Apperacnce Toggle
-const ReloadCharts = {
+export const ReloadCharts = {
     // Initialize the menu toggle functionality
     init: () => {
         // Attach the click event listener to #toggle-menu
         document.getElementById('toggle-menu').addEventListener('click', ReloadCharts.chartReload);
-
-        // Attach the event listener to appearnce toggle
-        const appearanceWrapper = document.querySelector('#appearance-wrapper');
-        if (appearanceWrapper) {
-            const appearanceItems = appearanceWrapper.querySelectorAll('label');
-            appearanceItems.forEach((item) => {
-                item.addEventListener('click', ReloadCharts.chartReload);
-            });
-        }
     },
 
     chartReload: () => {
@@ -1539,4 +1761,5 @@ pageReady(() => {
     Products.init();
     RunCharts.init();
     TopSites.init();
+    FillStatus.init();
 });

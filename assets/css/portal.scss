@@ -25,7 +25,7 @@
         width: 180px;
 
         .gts-logo-loader {
-            width: 65%;
+            width: 100%;
             margin: 5px auto 21px;
         }
 
@@ -34,7 +34,7 @@
             height: 4px;
             background-color: var(--gts-light-color);
             position: relative;
-            margin-top: 20px;
+            margin-top: 10px;
 
             .gts-progress-bar {
                 width: 0;
@@ -159,7 +159,8 @@ body.loaded {
                                 width: 100%;
                                 height: 100%;
                                 background-color: var(--gts-light-color);
-                                border: 1px var(--gts-light-color) solid !important;
+                                border: 1px solid !important;
+                                border-color: rgba(var(--gts-brd-color), 0.1) !important;
                                 padding: 30px;
                                 display: flex;
                                 flex-direction: column;
@@ -179,6 +180,7 @@ body.loaded {
                                 &.gts-charts {
                                     min-height: 420px;
                                 }
+
                                 .gts-card-title {
                                     display: flex;
                                     align-items: center;
@@ -201,14 +203,14 @@ body.loaded {
                                         }
                                         .dropdown-btn {
                                             display: flex;
-                                            padding: 0px 3px !important;
+                                            padding: 2px 2px 2px 4px !important;
                                             border: 0 !important;
                                             gap: 10px;
                                             align-items: center;
                                             font-size: var(--gts-normal-fs) !important;
                                             color: var(--gts-gray-color) !important;
                                             font-weight: 600;
-
+                                            background-color: transparent;
                                             .selected-site {
                                                 display: flex;
                                                 gap: 2px;
@@ -238,6 +240,40 @@ body.loaded {
                                         .toggle-chart-btn {
                                             background-color: rgba(var(--gts-brd-color), 0.1) !important;
                                         }
+                                        .card-tabs {
+                                            display: flex;
+                                            gap: 4px;
+                                            button {
+                                                padding: 7px 14px;
+                                                background-color: transparent;
+                                                border: 0;
+                                                white-space: nowrap;
+                                                cursor: pointer;
+                                                border-radius: 100px;
+                                                transition: background-color 420ms ease;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                                gap: 7px;
+                                                color: var(--gts-dark-color);
+                                                .mat-icon {
+                                                    margin: 0 !important;
+                                                }
+                                                span {
+                                                    white-space: nowrap;
+                                                }
+                                                &.active {
+                                                    background-color: var(--gts-primary-color);
+                                                    color: #fff !important;
+                                                    .mat-icon {
+                                                        color: #fff !important;
+                                                    }
+                                                }
+                                                &:hover:not(.active) {
+                                                    background-color: rgba(var(--gts-brd-color), 0.2);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -257,7 +293,7 @@ body.loaded {
 #notification-panel {
     .popover-body {
         min-width: 380px;
-        margin-left: -21px;
+        // margin-left: -21px;
         padding: 0 !important;
         .notification-wrapper {
             .notification-header {
@@ -383,6 +419,9 @@ body.loaded {
                 .role-href {
                     padding: 3px 14px;
                     width: 100%;
+                    label, input {
+                        cursor: pointer !important;
+                    }
                     .download-item {
                         display: flex;
                         align-items: center;
@@ -493,4 +532,9 @@ body.loaded {
         color: #fff !important; 
         font-size: 14px !important;
     }
+}
+
+#appearance-wrapper {
+    padding-bottom: 0 !important;
+    border: 0 !important;
 }

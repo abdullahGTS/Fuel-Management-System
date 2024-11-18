@@ -2,24 +2,53 @@
 
 // Define the API paths as constants or an object
 const API_PATHS = {
-    dashboardSites: '/api/dashboard_sites_api.json',
+
+
+    // Low Stock
     stockData:'/api/dashboard_stock.json',
+
+    // Sites & Tanks Dropdown list
     tanksVolumes: '/api/sites/',
+
+    // Tanks Volume
+    dashboardSites: '/api/dashboard_sites_api.json',
+
+    // Delivery Tanks
     dashboardDeliveryAmount: '/api/dashboard_delivery_amount_api_column_chart.json',
+
+    // Product Sales
     dashboardSalesToday: '/api/dashboard_sales_today.json',
     dashboardSalesYesterday: '/api/dashboard_sales_yesterday.json',
     dashboardSalesLastWeek: '/api/dashboard_sales_last_week.json',
     dashboardSalesLastMonth: '/api/dashboard_sales_last_month.json',
+
+    // Site Status
     dashboardOnlineOffline: '/api/dashboard_online_ofline_api.json',
+
+    // Unused Map Data
     dashboardMaps: '/api/dashboard_maps_api.json',
+
+    // Products
     dashboardProducts: '/api/dashboard_cards_api.json',
+
+    // Alarms
     systemAlarms: '/api/alarms_pie_charts.json',
     operationalAlarms: '/api/alarms_operational_pie_charts.json',
+
+    // Top Five
     topFiveSitesToday: '/api/topFiveSites/dashboard_top_five_today.json',
     topFiveSitesYesterday: '/api/topFiveSites/dashboard_top_five_yesterday.json',
     topFiveSitesLastWeek: '/api/topFiveSites/dashboard_top_five_week.json',
-    topFiveSitesLastMonth: '/api/topFiveSites/dashboard_top_five_month.json'
+    topFiveSitesLastMonth: '/api/topFiveSites/dashboard_top_five_month.json',
 
+    // Inventory
+    currnentInventory: '/api/inventory/currnent_inventory.json',
+
+    // Fill Status
+    fillStatusToday: '/api/fillStatus/fill_status_today.json',
+    fillStatusYesterday: '/api/fillStatus/fill_status_yesterday.json',
+    fillStatusWeek: '/api/fillStatus/fill_status_week.json',
+    fillStatusMonth: '/api/fillStatus/fill_status_month.json'
 };
 
 // Shared function to fetch data from JSON files
@@ -60,8 +89,8 @@ const SharedColors = {
         First: '#156E41',
         Second: '#6B6ED2',
         Third: '#83D0FF',
-        Fourth: '#FAB75C',
-        Fifth: '#e54141'
+        Fourth: '#ff8f67',
+        Fifth: '#FAB75C'
     }
 };
 
@@ -76,7 +105,7 @@ const ChartBackgroundColor = () => {
 
             // Resolve with the background color
             const colors = {
-                backgroundColor: isDarkMode ? '#101019' : '#ffffff',
+                backgroundColor: isDarkMode ? '#202029' : '#ffffff',
                 secondaryBgColor: isDarkMode ? '#171721' : '#f4f7fe',
                 secondaryAlphaColor: isDarkMode ? '#272731' : '#eceef2',
                 txtColor: isDarkMode ? '#d6cfcf' : '#4D4D4D'

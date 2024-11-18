@@ -43,7 +43,7 @@
     <div id="gts-loader">
         <div class="gts-loader-wrapper">
             <div class="gts-logo-loader">
-                <img src="../assets/imgs/gts-logo-mobile.png" alt="Loading Logo" />
+                <img src="../assets/imgs/gts-logo.png" alt="Loading Logo" />
             </div>
             <div class="gts-page-loader">
                 <div class="gts-progress-bar"></div>
@@ -56,7 +56,7 @@
         <div id="side-bar">
             <div class="gts-logo">
                 <a href="./index.html">
-                    <img src="../assets/imgs/gts-logo-mobile.png" class="desktop" alt="GTS Logo" />
+                    <img src="../assets/imgs/gts-logo.png" class="desktop" alt="GTS Logo" />
                     <img src="../assets/imgs/gts-logo-mobile.png" class="collapsed" alt="GTS Logo" />
                     <img src="../assets/imgs/gts-logo-mobile.png" class="mobile" alt="GTS Logo" />
                 </a>
@@ -103,7 +103,7 @@
                         </button>
                     </div>
 
-                    <div class="nav-footer">
+                    <!-- <div class="nav-footer">
                         <div class="nav-footer-wrapper" data-popover-target="#user-profile">
                             <div class="gts-avatar">
                                 <img src="../assets/imgs/avatar.jpg" alt="User Avatar" />
@@ -117,7 +117,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
@@ -134,15 +134,31 @@
                             <h1>Dashboard</h1>
                         </div>
                         <div class="gts-head-right">
-                            <div class="gts-search">
+                            <!-- <div class="gts-search">
                                 <span class="mat-icon material-symbols-sharp">manage_search</span>
                                 <input type="search" placeholder="Search ..." />
-                            </div>
+                            </div> -->
+
                             <div class="gts-notification">
-                                <span class="gts-badge"></span>
                                 <button class="btn btn-icon" data-popover-target="#notification-panel">
                                     <span class="mat-icon material-symbols-sharp">notifications</span>
                                 </button>
+                                <span class="gts-badge"></span>
+                            </div>
+                            <div class="guest-welcome">
+                                <div class="guest-welcome-wrapper" data-popover-target="#user-profile">
+                                    <div class="gts-avatar">
+                                        <img src="../assets/imgs/profile.jpg" alt="User Avatar" />
+                                    </div>
+
+                                    <div class="gts-profile">
+                                        <div class="welcome-user">Hi, <strong>Monther Younis</strong>
+                                            <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
+                                        </div>
+                                        <span class="user-email">monther.younis@outlook.com</span>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -220,9 +236,9 @@
 
 
                             <div class="gts-grid-item triple-col">
-                                <div class="gts-grid grid-4">
+                                <div class="gts-grid grid-5">
                                     <!-- Sites -->
-                                    <div class="gts-grid-item double-col on-mobile">
+                                    <div class="gts-grid-item triple-col on-mobile">
                                         <div class="gts-item-content no-padding">
                                             <div class="site-status" id="siteStatus">
 
@@ -267,15 +283,23 @@
                                         </div>
                                     </div>
 
-                                    <!-- Product Sales -->
-                                    <div div class="gts-grid-item double-col double-row">
+                                    <!-- Product Sales & Inventory -->
+                                    <div div class="gts-grid-item triple-col" id="salesInventory">
                                         <div class="gts-item-content gts-charts white-box">
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
                                                     <span class="mat-icon material-symbols-sharp">trending_up</span>
-                                                    <h3>Product sales</h3>
+                                                    <h3>Current sales & inventory</h3>
                                                 </div>
                                                 <div class="chart-controls">
+                                                    <div class="card-tabs">
+                                                        <button class="active" data-target-chart="sales">
+                                                            <span>Sales</span>
+                                                        </button>
+                                                        <button data-target-chart="inventory">
+                                                            <span>Inventory</span>
+                                                        </button>
+                                                    </div>
                                                     <button class="btn btn-icon download-chart"
                                                         data-popover-target="#download-chart">
                                                         <span class="mat-icon material-symbols-sharp">download</span>
@@ -283,13 +307,201 @@
                                                 </div>
                                             </div>
                                             <div id="productSalesChart" class="chart-area"></div>
-                                            <div class="chart-legend"></div>
+                                            <!-- <div id="productInventoryChart" class="chart-area"></div> -->
                                         </div>
                                     </div>
 
+                                    <!-- Fill Status -->
+                                    <div div class="gts-grid-item triple-col">
+                                        <div class="gts-item-content gts-charts" id="fillStatus">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">opacity</span>
+                                                    <h3>Fill status</h3>
+                                                </div>
+                                                <div class="chart-controls">
+
+                                                    <div class="date-filter" data-popover-target="#date-filter">
+                                                        <span class="mat-icon material-symbols-sharp">schedule</span>
+                                                        <span class="selectedDate">No Date Selected</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="fillStatusWrapper">
+                                                <div class="total-fill-status-wrapper">
+                                                    <div class="total-fill-status">
+                                                        <!-- <div class="icon-wrapper">
+                                                                                                <span class="mat-icon material-symbols-sharp">opacity</span>
+                                                                                            </div> -->
+                                                        <div class="total-fill-value-wrapper">
+                                                            <h3>Total fill</h3>
+                                                            <div class="total-fill-value" id="fillValue">
+                                                                <span>0000</span>
+                                                                TXN
+                                                            </div>
+                                                        </div>
+                                                        <div class="wave-container">
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave-below _50"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="average-fill-status">
+                                                        <!-- <div class="icon-wrapper">
+                                                                                                <span class="mat-icon material-symbols-sharp">opacity</span>
+                                                                                            </div> -->
+                                                        <div class="average-fill-value-wrapper">
+                                                            <h3>Average fill</h3>
+                                                            <div class="average-fill-value" id="avgValue">
+                                                                <span>000.00</span>
+                                                                LTR
+                                                            </div>
+                                                        </div>
+                                                        <div class="wave-container delay-animation">
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave _50"></div>
+                                                            <div class="wave-below _50"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="list-fill-status-wrapper custom-scroll-bar"
+                                                    id="fillStatusList">
+
+                                                    <div class="fill-status-product">
+                                                        <div class="product-name">Gas 95</div>
+                                                        <div class="fill-product-wrapper">
+                                                            <div class="fill-product-value">
+                                                                <div class="fill-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-fill-value">
+                                                                        <span>000</span>TXN
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="average-product-value">
+                                                                <div class="average-product-value-wrapper">
+                                                                    <h3>Average</h3>
+                                                                    <div class="total-average-value">
+                                                                        <span>00.000</span>LTR
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="fill-status-product">
+                                                        <div class="product-name">Gas 95</div>
+                                                        <div class="fill-product-wrapper">
+                                                            <div class="fill-product-value">
+                                                                <div class="fill-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-fill-value">
+                                                                        <span>000</span>TXN
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="average-product-value">
+                                                                <div class="average-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-average-value">
+                                                                        <span>00.000</span>LTR
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="fill-status-product">
+                                                        <div class="product-name">Gas 95</div>
+                                                        <div class="fill-product-wrapper">
+                                                            <div class="fill-product-value">
+                                                                <div class="fill-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-fill-value">
+                                                                        <span>000</span>TXN
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="average-product-value">
+                                                                <div class="average-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-average-value">
+                                                                        <span>00.000</span>LTR
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="fill-status-product">
+                                                        <div class="product-name">Gas 95</div>
+                                                        <div class="fill-product-wrapper">
+                                                            <div class="fill-product-value">
+                                                                <div class="fill-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-fill-value">
+                                                                        <span>000</span>TXN
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="average-product-value">
+                                                                <div class="average-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-average-value">
+                                                                        <span>00.000</span>LTR
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="fill-status-product">
+                                                        <div class="product-name">Gas 95</div>
+                                                        <div class="fill-product-wrapper">
+                                                            <div class="fill-product-value">
+                                                                <div class="fill-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-fill-value">
+                                                                        <span>000</span>TXN
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="average-product-value">
+                                                                <div class="average-product-value-wrapper">
+                                                                    <h3>Total</h3>
+                                                                    <div class="total-average-value">
+                                                                        <span>00.000</span>LTR
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
 
                                     <!-- Top 5 Sites -->
-                                    <div div class="gts-grid-item double-col double-row">
+                                    <div div class="gts-grid-item double-col">
                                         <div class="gts-item-content gts-charts">
                                             <div class="gts-card-title">
                                                 <div class="gts-card-title-wrapper">
@@ -311,11 +523,6 @@
                                             </div>
                                             <div id="topFiveSites"></div>
                                         </div>
-                                    </div>
-
-                                    <!-- Fill Status -->
-                                    <div div class="gts-grid-item double-col">
-                                        <div class="gts-item-content no-padding" style="height: 280px;"></div>
                                     </div>
 
                                 </div>
@@ -341,7 +548,7 @@
 
                                 </div>
                             </div>
-                            
+
                             <!-- Operational Alarms -->
                             <div class="gts-grid-item">
                                 <div class="gts-item-content gts-charts white-box">
@@ -396,9 +603,9 @@
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">gas_meter</span>
-                                            <h3><span id="tanksAmount">0</span> Tanks volume</h3>
+                                            <h3><span id="tanksAmount">0</span> Tanks volume - </h3>
                                             <button class="dropdown-btn" data-popover-target="#tanks-sites-list-target">
-                                                <div class="selected-site">- <strong> On site #:</strong>
+                                                <div class="selected-site"><strong>On site #:</strong>
                                                     <span class="site-name">Select Site...</span>
                                                 </div>
                                                 <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
@@ -417,18 +624,19 @@
 
 
                             <div class="gts-grid-item">
-                                <div class="gts-item-content"></div>
+                                <!-- <div class="gts-item-content"></div> -->
                             </div>
 
                             <!-- Delivery Amount -->
                             <div class="gts-grid-item double-col">
-                                <div class="gts-item-content gts-charts">
+                                <div class="gts-item-content gts-charts white-box">
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">modeling</span>
-                                            <h3><span id="deliveryAmount">0</span> Delivery tanks amount</h3>
-                                            <button class="dropdown-btn" data-popover-target="#delivery-sites-list-target">
-                                                <div class="selected-site">- <strong> On site #:</strong>
+                                            <h3><span id="deliveryAmount">0</span> Delivery tanks amount - </h3>
+                                            <button class="dropdown-btn"
+                                                data-popover-target="#delivery-sites-list-target">
+                                                <div class="selected-site"><strong>On site #:</strong>
                                                     <span class="site-name">Select Site...</span>
                                                 </div>
                                                 <span class="mat-icon material-symbols-sharp">keyboard_arrow_down</span>
@@ -453,9 +661,19 @@
     </div>
 
     <!-- Popover User Profile -->
-    <div class="popover-wrapper" id="user-profile" data-position="top">
+    <div class="popover-wrapper" id="user-profile" data-position="bottom">
         <div class="popover-body">
             <ul>
+                <li>
+                    <div class="href-item" data-modal-target="#supportModal">
+                        <span class="mat-icon material-symbols-sharp">support</span>
+                        <span>Support</span>
+                    </div>
+                </li>
+                <li><a href="#">
+                        <span class="mat-icon material-symbols-sharp">logout</span>
+                        <span>Logout</span>
+                    </a></li>
                 <li>
                     <div id="appearance-wrapper" class="role-href">
                         <label for="light-mode-checkbox">
@@ -474,14 +692,6 @@
                         </label>
                     </div>
                 </li>
-                <li><div class="href-item" data-modal-target="#supportModal">
-                        <span class="mat-icon material-symbols-sharp">support</span>
-                        <span>Support</span>
-                </div></li>
-                <li><a href="#">
-                        <span class="mat-icon material-symbols-sharp">logout</span>
-                        <span>Logout</span>
-                    </a></li>
             </ul>
         </div>
     </div>
@@ -651,8 +861,8 @@
                     <ul>
                         <li><button class="tab-btn active" data-tab-target="today">Today</button></li>
                         <li><button class="tab-btn" data-tab-target="yesterday">Yesterday</button></li>
-                        <li><button class="tab-btn" data-tab-target="lastWeek">Last Week</button></li>
-                        <li><button class="tab-btn" data-tab-target="lastMonth">Last Month</button></li>
+                        <li><button class="tab-btn" data-tab-target="lastWeek">Last week</button></li>
+                        <li><button class="tab-btn" data-tab-target="lastMonth">Last month</button></li>
                     </ul>
                 </div>
             </div>
@@ -665,13 +875,14 @@
             <div class="support-wrapper">
                 <div class="location">
                     <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
-                    width="600" height="450" style="border:0;" allowfullscreen=""
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title=""></iframe>
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" title=""></iframe>
                 </div>
                 <div class="title">
                     <h2>Need Assistance? We're Here to Help!</h2>
-                    <p>If you need support, don’t hesitate to reach out. You can contact us via email or phone, or visit us at our location. We’re committed to providing the help you need, whenever you need it.</p>
+                    <p>If you need support, don’t hesitate to reach out. You can contact us via email or phone, or visit
+                        us at our location. We’re committed to providing the help you need, whenever you need it.</p>
                 </div>
                 <div class="contact">
                     <ul>
@@ -681,8 +892,9 @@
                         </li>
                         <li>
                             <span class="mat-icon material-symbols-sharp">mail</span>
-                            <a href="mailto:info@gts.sa?subject=Support%20Request%20for%20Technical%20Assistance%20and%20Inquiries&body=Hello%20GTS%20Support%20Team,%0D%0A%0D%0AI%20am%20reaching%20out%20regarding%20assistance%20with%20your%20services.%20Please%20see%20the%20details%20below%20and%20let%20me%20know%20how%20I%20may%20proceed.%0D%0A%0D%0AThank%20you.%0D%0A">info@gts.sa</a>
-                            </li>
+                            <a
+                                href="mailto:info@gts.sa?subject=Support%20Request%20for%20Technical%20Assistance%20and%20Inquiries&body=Hello%20GTS%20Support%20Team,%0D%0A%0D%0AI%20am%20reaching%20out%20regarding%20assistance%20with%20your%20services.%20Please%20see%20the%20details%20below%20and%20let%20me%20know%20how%20I%20may%20proceed.%0D%0A%0D%0AThank%20you.%0D%0A">info@gts.sa</a>
+                        </li>
                         <li>
                             <span class="mat-icon material-symbols-sharp">location_on</span>
                             <span>Riyadh - Saudi Arabia</span>
@@ -692,7 +904,7 @@
             </div>
         </div>
     </div>
-         
+
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>

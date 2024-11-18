@@ -8,11 +8,11 @@
         position: relative;
 
         .gts-logo {
-            padding: 0 150px 0 40px;
+            padding: 0 90px 0 37px;
             display: flex;
             align-items: center;
             min-height: var(--menu-gap);
-            min-width: 90px;
+            min-width: 70px;
 
             a {
                 display: flex;
@@ -81,7 +81,7 @@
                                             top: -2px;
                                             min-width: 10px;
                                             min-height: 10px;
-                                            line-height: 10px;
+                                            line-height: normal;
                                             padding: 2px 5px;
                                             color: var(--gts-white-color);
                                             background-color: var(--gts-red-color);

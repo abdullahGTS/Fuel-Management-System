@@ -1,0 +1,19 @@
+{
+    "inventory_by_today": [
+        {
+            "tankid__productid__name": "Diesel",
+            "lastmodifieddate__hour": 12,
+            "hourly_prodvol": "87687.684"
+        },
+        {
+            "tankid__productid__name": "Gasoline92",
+            "lastmodifieddate__hour": 12,
+            "hourly_prodvol": "129088.699"
+        },
+        {
+            "tankid__productid__name": "Gasoline95",
+            "lastmodifieddate__hour": 12,
+            "hourly_prodvol": "67886.408"
+        }
+    ]
+}

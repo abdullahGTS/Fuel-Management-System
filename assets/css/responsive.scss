@@ -380,9 +380,8 @@
                     flex-direction: row;
                     height: 100%;
                     display: flex;
-                    padding: 0 0 0 60px;
-                    justify-content: flex-end;
-
+                    padding: 0;
+                    justify-content: center;
                     .nav-items {
                         display: flex;
                         align-items: center;
@@ -443,7 +442,7 @@
         }
         #gts-stage {
             padding: 7px;
-            height: calc(100% - 69px);
+            height: calc(100% - 81px);
             .gts-container {
                 .gts-content {
                     .gts-row {
@@ -559,13 +558,17 @@
         #gts-header {
             padding: 0 34px !important;
             .gts-head {
-                padding: 28px 0 !important;
+                // padding: 28px 0 !important;
+                .guest-welcome {
+                    padding-top: 18px !important;
+                    padding-bottom: 18px !important;
+                }
             }
         }
         #gts-stage {
             .gts-container {
                 .gts-content {
-                    padding: 42px 34px;
+                    padding: 28px;
                 }
             }
         }
@@ -574,53 +577,14 @@
 
 @media (max-width: 768px) {
     #gts-wrapper {
-        #side-bar {
-            #nav-wrapper {
-                .nav-stage {
-                    .nav-items {
-                        nav {
-                            display: flex;
-                            z-index: 2147483647;
-                            border-radius: var(--gts-md-curve) var(--gts-md-curve) 0 0;
-                            background-color: var(--gts-white-color);
-                            position: fixed;
-                            left: 0;
-                            bottom: 0;
-                            width: 100%;
-                            height: auto;
-                            padding: 30px;
-                            visibility: hidden;
-                            opacity: 0;
-                            box-shadow: var(--gts-lg-shadow) !important;
-                            transform: translateY(100%);
-                            transition: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
-                            transition-delay: 0ms;
-                            &.open {
-                                transform: translateY(0%);
-                            }
-                            ul {
-                                li {
-                                    width: 100%;
-                                    a {
-                                        padding: 21px 14px;
-                                        .nav-item {
-                                            display: inline-block;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        #mobile-menu.btn-icon {
-                            display: flex !important;
-                        }
-                    }
-                }
-            }
-        }
         #gts-header {
             padding: 0 28px !important;
             .gts-head {
-                padding: 21px 0 !important;
+                // padding: 21px 0 !important;
+                .guest-welcome {
+                    padding-top: 18px !important;
+                    padding-bottom: 18px !important;
+                }
                 .gts-head-right {
                     .gts-search {
                         input {
@@ -654,7 +618,59 @@
         }
     }
 }
+@media(max-width: 640px) {
+    #gts-wrapper {
+        #side-bar {
+            #nav-wrapper {
+                .nav-stage {
+                    justify-content: flex-end !important;
 
+                    .nav-items {
+                        nav {
+                            display: flex;
+                            z-index: 2147483647;
+                            border-radius: var(--gts-md-curve) var(--gts-md-curve) 0 0;
+                            background-color: var(--gts-white-color);
+                            position: fixed;
+                            left: 0;
+                            bottom: 0;
+                            width: 100%;
+                            height: auto;
+                            padding: 30px;
+                            visibility: hidden;
+                            opacity: 0;
+                            box-shadow: var(--gts-lg-shadow) !important;
+                            transform: translateY(100%);
+                            transition: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
+                            transition-delay: 0ms;
+                            &.open {
+                                transform: translateY(0%);
+                            }
+                            ul {
+                                li {
+                                    width: 100%;
+                                    a {
+                                        padding: 21px 14px;
+                                        .nav-item {
+                                            display: inline-block;
+                                            .gts-badge {
+                                                top: 0 !important;
+                                                line-height: normal;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        #mobile-menu.btn-icon {
+                            display: flex !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 @media (max-width: 521px) {
     #gts-wrapper {
         #side-bar {
@@ -671,7 +687,11 @@
         #gts-header {
             padding: 0 21px !important;
             .gts-head {
-                padding: 14px 0 !important;
+                // padding: 14px 0 !important;
+                .guest-welcome {
+                    padding-top: 14px !important;
+                    padding-bottom: 14px !important;
+                }
                 .gts-head-right {
                     .gts-search {
                         width: 48px;

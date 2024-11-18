@@ -1,0 +1,24 @@
+{
+    "fill_status_month": [
+        {
+            "gradeid__name": "Diesel",
+            "total_txn": 15757,
+            "avg_volume": "11.595365678745903181834364659152925014495849609375"
+        },
+        {
+            "gradeid__name": "Gasoline80",
+            "total_txn": 51955,
+            "avg_volume": "6.1278646905989742066367398365400731563568115234375"
+        },
+        {
+            "gradeid__name": "Gasoline92",
+            "total_txn": 112810,
+            "avg_volume": "13.855491002574797931856664945371448993682861328125"
+        },
+        {
+            "gradeid__name": "Gasoline95",
+            "total_txn": 9308,
+            "avg_volume": "24.969960249247993289145597373135387897491455078125"
+        }
+    ]
+}

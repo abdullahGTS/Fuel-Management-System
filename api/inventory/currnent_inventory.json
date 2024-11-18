@@ -1,0 +1,24 @@
+{
+    "current_inventory": [
+        {
+            "ProductNumber": 1,
+            "ProductName": "Gasoline95",
+            "TotalProductVolume": "111038.997"
+        },
+        {
+            "ProductNumber": 2,
+            "ProductName": "Gasoline92",
+            "TotalProductVolume": "209528.547"
+        },
+        {
+            "ProductNumber": 3,
+            "ProductName": "Gasoline80",
+            "TotalProductVolume": "44142.437"
+        },
+        {
+            "ProductNumber": 4,
+            "ProductName": "Diesel",
+            "TotalProductVolume": "142660.820"
+        }
+    ]
+}

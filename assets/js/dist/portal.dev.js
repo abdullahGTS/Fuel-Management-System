@@ -2,16 +2,18 @@
 
 var _script = require("./script.js");
 
+var _dashboard = require("./dashboard.js");
+
 var MobileNav = {
   init: function init() {
     var navigation = document.querySelector("#side-bar");
 
-    if (navigation && window.innerWidth < 769) {
+    if (navigation && window.innerWidth < 641) {
       MobileNav.bindMenuEvents(); // Bind events only once
     }
 
     window.addEventListener('resize', function () {
-      if (window.innerWidth < 769) {
+      if (window.innerWidth < 641) {
         MobileNav.bindMenuEvents(); // Ensure events are bound on mobile
       } else {
         MobileNav.unbindMenuEvents(); // Unbind events for desktop
@@ -124,43 +126,7 @@ var NotificationSystem = {
       notification.classList.remove('unread');
     });
   }
-}; // const CollabsedMenu = {
-//     // Initialize the menu toggle functionality
-//     init: () => {
-//         // Attach the click event listener to #toggle-menu
-//         document.getElementById('toggle-menu').addEventListener('click', CollabsedMenu.toggle(null));
-//     },
-//     // Function to toggle the class on the body
-//     toggle: (mode) => {
-//         if ( mode === null ) document.body.classList.toggle('gts-menu-collapsed');
-//         if ( mode ) document.body.classList.add('gts-menu-collapsed');
-//         if ( !mode ) document.body.classList.remove('gts-menu-collapsed');
-//         // If the menu is collapsed then fire the toolip function
-//         // if the menu is uncollapsed then kill the toolip function
-//     },
-//     // Toolip init
-//     toolip: () => {
-//         // in this function we will go though #side-bar .nav-items nav ul li a .nav-item and get the text in this element .nav-item.
-//         // on hover on #side-bar .nav-items nav ul li a then we will append a div.toolip with textContent the textContent of the hovered href .nav-item
-//         // on mouseout we will remove this toolip
-//         // the position of the toolip will be the mousehover event element right and 50% top of it
-//     }
-// };
-// // Also chekc if we are implementing below function correctly
-// const ForceResponsive = {
-//     init: () => {
-//         ForceResponsive.checkWidth(); // Check width on initialization
-//         window.addEventListener('resize', ForceResponsive.checkWidth); // Set up resize listener
-//     },
-//     checkWidth: () => {
-//         if (window.innerWidth < 1581) {
-//             CollabsedMenu.toggle(true);
-//         } else {
-//             CollabsedMenu.toggle(false);
-//         }
-//     }
-// };
-
+};
 var CollapsedMenu = {
   // Track whether tooltips are active
   isTooltipActive: false,
@@ -182,8 +148,9 @@ var CollapsedMenu = {
     }
 
     var isCollapsed = document.body.classList.contains('gts-menu-collapsed');
+    var windiwWidth = window.innerWidth;
 
-    if (isCollapsed && !CollapsedMenu.isTooltipActive) {
+    if (isCollapsed && !CollapsedMenu.isTooltipActive && windiwWidth > 1024) {
       CollapsedMenu.activateTooltips();
     } else if (!isCollapsed && CollapsedMenu.isTooltipActive) {
       CollapsedMenu.deactivateTooltips();
@@ -313,17 +280,22 @@ var AppearanceToggle = {
     if (mode === 'light') {
       body.classList.remove('dark-mode');
       logoImages.forEach(function (img) {
-        img.src = img.src.replace('-dark', ''); // Remove -dark from image filenames
+        img.src = img.src.replace('-light', ''); // Remove -light from image filenames
       });
     } // Apply dark mode
     else if (mode === 'dark') {
-        body.classList.add('dark-mode'); // logoImages.forEach(img => {
-        //     if (!img.src.includes('-dark')) {
-        //         const extensionIndex = img.src.lastIndexOf('.');
-        //         img.src = img.src.slice(0, extensionIndex) + '-dark' + img.src.slice(extensionIndex);
-        //     }
-        // });
+        body.classList.add('dark-mode');
+        logoImages.forEach(function (img) {
+          if (img.classList.contains('desktop')) {
+            if (!img.src.includes('-light')) {
+              var extensionIndex = img.src.lastIndexOf('.');
+              img.src = img.src.slice(0, extensionIndex) + '-light' + img.src.slice(extensionIndex);
+            }
+          }
+        });
       }
+
+    _dashboard.ReloadCharts.chartReload();
   },
   setCheckedMode: function setCheckedMode(mode) {
     // Uncheck all checkboxes first
