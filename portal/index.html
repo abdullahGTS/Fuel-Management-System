@@ -211,18 +211,28 @@
 
 
                             <!-- Sales -->
-                            <div class="gts-grid-item double-col">
+                            <div class="gts-grid-item double-col" id="salesInventoryHistory">
                                 <div class="gts-item-content gts-charts white-box">
                                     <div class="gts-card-title">
                                         <div class="gts-card-title-wrapper">
                                             <span class="mat-icon material-symbols-sharp">ssid_chart</span>
-                                            <h3>Sales trends</h3>
+                                            <h3>Sales & inventory trends</h3>
                                         </div>
                                         <div class="chart-controls">
                                             <div class="date-filter" data-popover-target="#date-filter">
                                                 <span class="mat-icon material-symbols-sharp">schedule</span>
                                                 <span class="selectedDate">No Date Selected</span>
                                             </div>
+
+                                            <div class="card-tabs">
+                                                <button class="active" data-target-chart="sales">
+                                                    <span>Sales</span>
+                                                </button>
+                                                <button data-target-chart="inventory">
+                                                    <span>Inventory</span>
+                                                </button>
+                                            </div>
+
                                             <button class="btn btn-icon download-chart"
                                                 data-popover-target="#download-chart">
                                                 <span class="mat-icon material-symbols-sharp">download</span>
@@ -515,10 +525,6 @@
                                                         <span class="selectedDate">No Date Selected</span>
                                                     </div>
 
-                                                    <!-- <button class="btn btn-icon download-chart"
-                                                        data-popover-target="#download-chart">
-                                                        <span class="mat-icon material-symbols-sharp">download</span>
-                                                    </button> -->
                                                 </div>
                                             </div>
                                             <div id="topFiveSites"></div>

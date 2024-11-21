@@ -17,10 +17,10 @@ var API_PATHS = {
   // Delivery Tanks
   dashboardDeliveryAmount: '/api/dashboard_delivery_amount_api_column_chart.json',
   // Product Sales
-  dashboardSalesToday: '/api/dashboard_sales_today.json',
-  dashboardSalesYesterday: '/api/dashboard_sales_yesterday.json',
-  dashboardSalesLastWeek: '/api/dashboard_sales_last_week.json',
-  dashboardSalesLastMonth: '/api/dashboard_sales_last_month.json',
+  dashboardSalesToday: '/api/sales/dashboard_sales_today.json',
+  dashboardSalesYesterday: '/api/sales/dashboard_sales_yesterday.json',
+  dashboardSalesLastWeek: '/api/sales/dashboard_sales_last_week.json',
+  dashboardSalesLastMonth: '/api/sales/dashboard_sales_last_month.json',
   // Site Status
   dashboardOnlineOffline: '/api/dashboard_online_ofline_api.json',
   // Unused Map Data
@@ -37,6 +37,10 @@ var API_PATHS = {
   topFiveSitesLastMonth: '/api/topFiveSites/dashboard_top_five_month.json',
   // Inventory
   currnentInventory: '/api/inventory/currnent_inventory.json',
+  todayInventory: '/api/inventory/inventory_today.json',
+  yesterdayInventory: '/api/inventory/inventory_yesterday.json',
+  weekInventory: '/api/inventory/inventory_week.json',
+  monthInventory: '/api/inventory/inventory_month.json',
   // Fill Status
   fillStatusToday: '/api/fillStatus/fill_status_today.json',
   fillStatusYesterday: '/api/fillStatus/fill_status_yesterday.json',

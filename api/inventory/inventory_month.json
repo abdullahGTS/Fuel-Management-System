@@ -1,0 +1,64 @@
+{
+    "inventory_by_month": [
+        {
+            "tankid__productid__name": "Diesel",
+            "lastmodifieddate__week": 49,
+            "weekly_prodvol": "142660.820"
+        },
+        {
+            "tankid__productid__name": "Gasoline80",
+            "lastmodifieddate__week": 49,
+            "weekly_prodvol": "8283.717"
+        },
+        {
+            "tankid__productid__name": "Gasoline92",
+            "lastmodifieddate__week": 49,
+            "weekly_prodvol": "147522.599"
+        },
+        {
+            "tankid__productid__name": "Gasoline95",
+            "lastmodifieddate__week": 49,
+            "weekly_prodvol": "79553.904"
+        },
+        {
+            "tankid__productid__name": "Diesel",
+            "lastmodifieddate__week": 48,
+            "weekly_prodvol": "119490.776"
+        },
+        {
+            "tankid__productid__name": "Gasoline80",
+            "lastmodifieddate__week": 48,
+            "weekly_prodvol": "28171.983"
+        },
+        {
+            "tankid__productid__name": "Gasoline92",
+            "lastmodifieddate__week": 48,
+            "weekly_prodvol": "154760.937"
+        },
+        {
+            "tankid__productid__name": "Gasoline95",
+            "lastmodifieddate__week": 48,
+            "weekly_prodvol": "80560.921"
+        },
+        {
+            "tankid__productid__name": "Diesel",
+            "lastmodifieddate__week": 47,
+            "weekly_prodvol": "192151.628"
+        },
+        {
+            "tankid__productid__name": "Gasoline80",
+            "lastmodifieddate__week": 47,
+            "weekly_prodvol": "22442.869"
+        },
+        {
+            "tankid__productid__name": "Gasoline92",
+            "lastmodifieddate__week": 47,
+            "weekly_prodvol": "127580.070"
+        },
+        {
+            "tankid__productid__name": "Gasoline95",
+            "lastmodifieddate__week": 47,
+            "weekly_prodvol": "95477.073"
+        }
+    ]
+}

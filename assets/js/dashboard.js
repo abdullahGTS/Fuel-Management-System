@@ -132,7 +132,7 @@ const DateSwitch = {
         }
 
         // Step 2: Use the unique popover
-        const cardTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+        const cardTabs = wrapper.parentNode.querySelector('.date-filter');
         if ( cardTabs ) {
             cardTabs.setAttribute('data-popover-target', `#${uniquePopoverId}`); // Update to unique ID
             const selectedDate = cardTabs.querySelector('.selectedDate');
@@ -146,7 +146,6 @@ const DateSwitch = {
                 cardTabsNodeList.forEach((tab) => {
                     // Attach event listeners scoped to this popover
                     tab.addEventListener('click', function () {
-                        console.log('Clicked on:', wrapper.id); // Log correct wrapper
 
                         // Clear 'active' class only in this unique popover
                         cardTabsNodeList.forEach((item) => item.classList.remove('active'));
@@ -443,6 +442,68 @@ const SiteStatus = {
     },
 };
 
+// Trend Sales Inventory Switch
+const SalesInventorySwitch = {
+    init: () => {
+        // Handle tab switching
+        const salesInventory = document.querySelector('#salesInventoryHistory');
+
+        const tabContainer = salesInventory.querySelector('.card-tabs');
+        if (tabContainer && !tabContainer.dataset.listenerAdded) {
+            tabContainer.dataset.listenerAdded = true;
+            tabContainer.addEventListener('click', (e) => {
+                // Get the closest button, whether the click was on the button or its wrapper
+                const targetButton = e.target.closest('button');
+                if (!targetButton) return; // Ignore clicks outside buttons
+    
+                const targetChart = targetButton.getAttribute('data-target-chart');
+                if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+    
+                if ( salesInventory.querySelector('.popover-wrapper') ) salesInventory.querySelector('.popover-wrapper').remove();
+                // Remove 'active' class from all buttons and set it to the clicked one
+                tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                targetButton.classList.add('active');
+
+                // Handle chart switching logic
+                switch (targetChart) {
+                    case 'sales':
+                        SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
+                        break;
+                    case 'inventory':
+                        SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
+                        break;
+                    default:
+                        console.error('Unknown chart type:', targetChart);
+                }
+            });
+        }
+    },
+    
+    handleChartSwitch: (chartId, initFunction) => {
+        const salesInventory = document.querySelector('#salesInventoryHistory');
+        const existingChartContainer = salesInventory.querySelector('.chart-area');
+        if (existingChartContainer) {
+            existingChartContainer.remove(); 
+        }
+    
+        // Create a new chart container
+        const newChartContainer = document.createElement('div');
+        newChartContainer.setAttribute('id', chartId);
+        newChartContainer.classList.add('chart-area');
+    
+        // Append the new container to the parent element of the tabs
+        salesInventory.querySelector('.gts-item-content').appendChild(newChartContainer);
+    
+        // Initialize the appropriate chart
+        if (typeof initFunction === 'function') {
+            initFunction();
+        } else {
+            console.error('Invalid initialization function provided');
+        }
+        Popover.init();
+    }    
+}
+
 // Sales Trend
 const SalesTrend = {
     currentTab: 'today', // Default to 'today'
@@ -638,8 +699,204 @@ const SalesTrend = {
     }
 };
 
-// SalesInventorySwitch
-const SalesInventorySwitch = {
+// Inventory Trend
+const InventoryTrend = {
+    currentTab: 'today', // Default to 'today'
+
+    init: () => {
+        const inventoryTrendChart = document.getElementById('inventoryTrendChart');
+        if (inventoryTrendChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(InventoryTrend.fetchData);
+            DateSwitch.init(inventoryTrendChart, InventoryTrend);
+        }
+    },
+
+    fetchData: async () => {
+        let inventoryByDate;
+        let inventoryArray;
+
+        // Use the currentTab to determine which inventory data to fetch
+        switch (InventoryTrend.currentTab) {
+            case 'today':
+                inventoryByDate = API_PATHS.todayInventory;
+                inventoryArray = 'inventory_by_today';
+                break;
+            case 'yesterday':
+                inventoryByDate = API_PATHS.yesterdayInventory;
+                inventoryArray = 'inventory_by_yesterday';
+                break;
+            case 'lastWeek':
+                inventoryByDate = API_PATHS.weekInventory;
+                inventoryArray = 'inventory_by_day';
+                break;
+            case 'lastMonth':
+                inventoryByDate = API_PATHS.monthInventory;
+                inventoryArray = 'inventory_by_month';
+                break;
+            default:
+                console.error('Unknown tab:', InventoryTrend.currentTab);
+                return;
+        }
+
+        const inventory = await fetchData(inventoryByDate);
+        if (!inventory || !inventory[inventoryArray] || inventory[inventoryArray].length === 0) {
+            console.error("No inventory data available");
+            return;
+        }
+
+        // Update the chart with new data
+        google.charts.setOnLoadCallback(() => InventoryTrend.drawChart(inventory[inventoryArray]));
+    },
+
+    drawChart: async (inventory) => {
+        const chartContainer = document.getElementById('inventoryTrendChart');
+        if (!chartContainer) {
+            console.error("Chart container not found in the DOM.");
+            return;
+        }
+
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
+        // Create the DataTable
+        const data = new google.visualization.DataTable();
+        const products = [...new Set(inventory.map(item => item.tankid__productid__name))];
+
+        // Dynamically add columns based on the data structure
+        switch (InventoryTrend.currentTab) {
+            case 'today':
+            case 'yesterday':
+                data.addColumn('string', 'Hour');
+                break;
+            case 'lastWeek':
+                data.addColumn('string', 'Day');
+                break;
+            case 'lastMonth':
+                data.addColumn('string', 'Week');
+                break;
+        }
+
+        // Add columns dynamically for each product
+        products.forEach(product => {
+            data.addColumn('number', product);
+        });
+
+        // Determine the correct time unit and data field for the selected tab
+        const { timeUnit, dataField } = InventoryTrend.getDataFields();
+
+        // Extract raw time units
+        const timeUnits = [...new Set(inventory.map(item => item[timeUnit]))];
+
+        // Format time units for display
+        const formattedTimeUnits = timeUnits.map(unit => InventoryTrend.formatTimeUnit(unit, timeUnit));
+
+        // Prepare data rows based on the selected time period
+        formattedTimeUnits.forEach((unit, index) => {
+            const row = [unit]; // Initialize row with the formatted time unit
+
+            // For each product, filter the inventory data and sum the values
+            products.forEach(product => {
+                const inventoryForProduct = inventory.filter(
+                    item => item.tankid__productid__name === product && item[timeUnit] === timeUnits[index]
+                );
+                const totalVolume = inventoryForProduct.reduce((sum, item) => sum + parseFloat(item[dataField] || 0), 0); // Sum the volumes
+                row.push(totalVolume); // Add the total volume for the product in that time unit
+            });
+
+            // Add the row to the DataTable
+            data.addRow(row);
+        });
+
+        // Chart options
+        const options = {
+            title: '',
+            tooltip: { isHtml: true },
+            legend: { position: 'none' },
+            isStacked: false,
+            backgroundColor: backgroundColor,
+            hAxis: {
+                title: InventoryTrend.getAxisLabel(),
+                titleTextStyle: {
+                    color: txtColor,
+                    fontSize: 12,
+                },
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
+            },
+            vAxis: {
+                textStyle: {
+                    color: txtColor,
+                    fontSize: 12
+                }
+            },
+            chartArea: {
+                width: '75%',
+                height: '80%',
+            },
+            colors: products.map((product, index) => SharedColors[product]),
+            lineWidth: 3,
+        };
+
+        // Create and draw the chart
+        const chart = new google.visualization.LineChart(document.getElementById('inventoryTrendChart'));
+        chart.draw(data, options);
+    },
+
+    // Utility function to get the time unit and data field based on the selected tab
+    getDataFields: () => {
+        switch (InventoryTrend.currentTab) {
+            case 'today':
+                return { timeUnit: 'lastmodifieddate__hour', dataField: 'hourly_prodvol' };
+            case 'yesterday':
+                return { timeUnit: 'lastmodifieddate__hour', dataField: 'hourly_prodvol' };
+            case 'lastWeek':
+                return { timeUnit: 'lastmodifieddate__day', dataField: 'daily_prodvol' };
+            case 'lastMonth':
+                return { timeUnit: 'lastmodifieddate__week', dataField: 'weekly_prodvol' };
+            default:
+                return { timeUnit: 'lastmodifieddate__hour', dataField: 'hourly_prodvol' };
+        }
+    },
+
+    // Utility function to format time units for display
+    formatTimeUnit: (unit, timeUnit) => {
+        const date = new Date(unit); // Create a Date object from the time unit
+        switch (timeUnit) {
+            case 'lastmodifieddate__hour':
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const period = hours >= 12 ? 'PM' : 'AM';
+                return `${hours % 12 || 12}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
+            case 'lastmodifieddate__day':
+                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            case 'lastmodifieddate__week':
+                const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
+                return `Week of ${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+            default:
+                return unit;
+        }
+    },
+
+    // Utility function to get the label for the x-axis based on the selected tab
+    getAxisLabel: () => {
+        switch (InventoryTrend.currentTab) {
+            case 'today':
+            case 'yesterday':
+                return 'Hour';
+            case 'lastWeek':
+                return 'Day';
+            case 'lastMonth':
+                return 'Week';
+            default:
+                return 'Time';
+        }
+    }
+};
+
+// Current Sales Inventory Switch
+const CurrentSalesInventorySwitch = {
     init: () => {
         // Handle tab switching
         const salesInventory = document.querySelector('#salesInventory');
@@ -661,10 +918,10 @@ const SalesInventorySwitch = {
                 // Handle chart switching logic
                 switch (targetChart) {
                     case 'sales':
-                        SalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
+                        CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
                         break;
                     case 'inventory':
-                        SalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
+                        CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
                         break;
                     default:
                         console.error('Unknown chart type:', targetChart);
@@ -776,7 +1033,6 @@ const ProductInventory = {
     init: () => {
         const productInventoryChart = document.querySelector('#productInventoryChart');
         if (productInventoryChart) {
-            console.log('productInventoryChart', productInventoryChart);
             google.charts.load('current', { packages: ['corechart'] });
             google.charts.setOnLoadCallback(ProductInventory.fetchData);
         }
@@ -966,7 +1222,6 @@ const FillStatus = {
     
     fetchData: async () => {
         const apiDetails = FillStatus.getApiDetails(FillStatus.currentTab);
-        console.log('apiDetails', apiDetails);
         try {
             const fills = await fetchData(apiDetails.path);
             if (fills) {
@@ -978,7 +1233,6 @@ const FillStatus = {
     },
 
     getApiDetails: (tab) => {
-        console.log('tab', tab);
         const apiMappings = {
             today: { path: API_PATHS.fillStatusToday, arrayKey: 'fill_status_today' },
             yesterday: { path: API_PATHS.fillStatusYesterday, arrayKey: 'fill_status_yesterday' },
@@ -1680,8 +1934,10 @@ const RunCharts = {
     init: () => {
         ProductsUsage.init();
         SiteStatus.init();
-        SalesTrend.init();
         SalesInventorySwitch.init();
+        SalesTrend.init();
+
+        CurrentSalesInventorySwitch.init();
         ProductSales.init();
         // ProductInventory.init();
         SystemAlarms.init();

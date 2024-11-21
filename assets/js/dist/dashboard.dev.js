@@ -152,7 +152,7 @@ var DateSwitch = {
     } // Step 2: Use the unique popover
 
 
-    var cardTabs = wrapper.parentNode.querySelector('[data-popover-target="#date-filter"]');
+    var cardTabs = wrapper.parentNode.querySelector('.date-filter');
 
     if (cardTabs) {
       cardTabs.setAttribute('data-popover-target', "#".concat(uniquePopoverId)); // Update to unique ID
@@ -169,9 +169,7 @@ var DateSwitch = {
         cardTabsNodeList.forEach(function (tab) {
           // Attach event listeners scoped to this popover
           tab.addEventListener('click', function () {
-            console.log('Clicked on:', wrapper.id); // Log correct wrapper
             // Clear 'active' class only in this unique popover
-
             cardTabsNodeList.forEach(function (item) {
               return item.classList.remove('active');
             });
@@ -517,6 +515,69 @@ var SiteStatus = {
     var chart = new google.visualization.PieChart(document.getElementById(elementId));
     chart.draw(data, options);
   }
+}; // Trend Sales Inventory Switch
+
+var SalesInventorySwitch = {
+  init: function init() {
+    // Handle tab switching
+    var salesInventory = document.querySelector('#salesInventoryHistory');
+    var tabContainer = salesInventory.querySelector('.card-tabs');
+
+    if (tabContainer && !tabContainer.dataset.listenerAdded) {
+      tabContainer.dataset.listenerAdded = true;
+      tabContainer.addEventListener('click', function (e) {
+        // Get the closest button, whether the click was on the button or its wrapper
+        var targetButton = e.target.closest('button');
+        if (!targetButton) return; // Ignore clicks outside buttons
+
+        var targetChart = targetButton.getAttribute('data-target-chart');
+        if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+
+        if (salesInventory.querySelector('.popover-wrapper')) salesInventory.querySelector('.popover-wrapper').remove(); // Remove 'active' class from all buttons and set it to the clicked one
+
+        tabContainer.querySelectorAll('button').forEach(function (btn) {
+          return btn.classList.remove('active');
+        });
+        targetButton.classList.add('active'); // Handle chart switching logic
+
+        switch (targetChart) {
+          case 'sales':
+            SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
+            break;
+
+          case 'inventory':
+            SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
+            break;
+
+          default:
+            console.error('Unknown chart type:', targetChart);
+        }
+      });
+    }
+  },
+  handleChartSwitch: function handleChartSwitch(chartId, initFunction) {
+    var salesInventory = document.querySelector('#salesInventoryHistory');
+    var existingChartContainer = salesInventory.querySelector('.chart-area');
+
+    if (existingChartContainer) {
+      existingChartContainer.remove();
+    } // Create a new chart container
+
+
+    var newChartContainer = document.createElement('div');
+    newChartContainer.setAttribute('id', chartId);
+    newChartContainer.classList.add('chart-area'); // Append the new container to the parent element of the tabs
+
+    salesInventory.querySelector('.gts-item-content').appendChild(newChartContainer); // Initialize the appropriate chart
+
+    if (typeof initFunction === 'function') {
+      initFunction();
+    } else {
+      console.error('Invalid initialization function provided');
+    }
+
+    _script.Popover.init();
+  }
 }; // Sales Trend
 
 var SalesTrend = {
@@ -796,9 +857,297 @@ var SalesTrend = {
         return 'Time';
     }
   }
-}; // SalesInventorySwitch
+}; // Inventory Trend
 
-var SalesInventorySwitch = {
+var InventoryTrend = {
+  currentTab: 'today',
+  // Default to 'today'
+  init: function init() {
+    var inventoryTrendChart = document.getElementById('inventoryTrendChart');
+
+    if (inventoryTrendChart) {
+      google.charts.load('current', {
+        packages: ['corechart']
+      });
+      google.charts.setOnLoadCallback(InventoryTrend.fetchData);
+      DateSwitch.init(inventoryTrendChart, InventoryTrend);
+    }
+  },
+  fetchData: function fetchData() {
+    var inventoryByDate, inventoryArray, inventory;
+    return regeneratorRuntime.async(function fetchData$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.t0 = InventoryTrend.currentTab;
+            _context6.next = _context6.t0 === 'today' ? 3 : _context6.t0 === 'yesterday' ? 6 : _context6.t0 === 'lastWeek' ? 9 : _context6.t0 === 'lastMonth' ? 12 : 15;
+            break;
+
+          case 3:
+            inventoryByDate = _constant.API_PATHS.todayInventory;
+            inventoryArray = 'inventory_by_today';
+            return _context6.abrupt("break", 17);
+
+          case 6:
+            inventoryByDate = _constant.API_PATHS.yesterdayInventory;
+            inventoryArray = 'inventory_by_yesterday';
+            return _context6.abrupt("break", 17);
+
+          case 9:
+            inventoryByDate = _constant.API_PATHS.weekInventory;
+            inventoryArray = 'inventory_by_day';
+            return _context6.abrupt("break", 17);
+
+          case 12:
+            inventoryByDate = _constant.API_PATHS.monthInventory;
+            inventoryArray = 'inventory_by_month';
+            return _context6.abrupt("break", 17);
+
+          case 15:
+            console.error('Unknown tab:', InventoryTrend.currentTab);
+            return _context6.abrupt("return");
+
+          case 17:
+            _context6.next = 19;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(inventoryByDate));
+
+          case 19:
+            inventory = _context6.sent;
+
+            if (!(!inventory || !inventory[inventoryArray] || inventory[inventoryArray].length === 0)) {
+              _context6.next = 23;
+              break;
+            }
+
+            console.error("No inventory data available");
+            return _context6.abrupt("return");
+
+          case 23:
+            // Update the chart with new data
+            google.charts.setOnLoadCallback(function () {
+              return InventoryTrend.drawChart(inventory[inventoryArray]);
+            });
+
+          case 24:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    });
+  },
+  drawChart: function drawChart(inventory) {
+    var chartContainer, _ref4, backgroundColor, txtColor, data, products, _InventoryTrend$getDa, timeUnit, dataField, timeUnits, formattedTimeUnits, options, chart;
+
+    return regeneratorRuntime.async(function drawChart$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            chartContainer = document.getElementById('inventoryTrendChart');
+
+            if (chartContainer) {
+              _context7.next = 4;
+              break;
+            }
+
+            console.error("Chart container not found in the DOM.");
+            return _context7.abrupt("return");
+
+          case 4:
+            _context7.next = 6;
+            return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
+
+          case 6:
+            _ref4 = _context7.sent;
+            backgroundColor = _ref4.backgroundColor;
+            txtColor = _ref4.txtColor;
+            // Create the DataTable
+            data = new google.visualization.DataTable();
+            products = _toConsumableArray(new Set(inventory.map(function (item) {
+              return item.tankid__productid__name;
+            }))); // Dynamically add columns based on the data structure
+
+            _context7.t0 = InventoryTrend.currentTab;
+            _context7.next = _context7.t0 === 'today' ? 14 : _context7.t0 === 'yesterday' ? 14 : _context7.t0 === 'lastWeek' ? 16 : _context7.t0 === 'lastMonth' ? 18 : 20;
+            break;
+
+          case 14:
+            data.addColumn('string', 'Hour');
+            return _context7.abrupt("break", 20);
+
+          case 16:
+            data.addColumn('string', 'Day');
+            return _context7.abrupt("break", 20);
+
+          case 18:
+            data.addColumn('string', 'Week');
+            return _context7.abrupt("break", 20);
+
+          case 20:
+            // Add columns dynamically for each product
+            products.forEach(function (product) {
+              data.addColumn('number', product);
+            }); // Determine the correct time unit and data field for the selected tab
+
+            _InventoryTrend$getDa = InventoryTrend.getDataFields(), timeUnit = _InventoryTrend$getDa.timeUnit, dataField = _InventoryTrend$getDa.dataField; // Extract raw time units
+
+            timeUnits = _toConsumableArray(new Set(inventory.map(function (item) {
+              return item[timeUnit];
+            }))); // Format time units for display
+
+            formattedTimeUnits = timeUnits.map(function (unit) {
+              return InventoryTrend.formatTimeUnit(unit, timeUnit);
+            }); // Prepare data rows based on the selected time period
+
+            formattedTimeUnits.forEach(function (unit, index) {
+              var row = [unit]; // Initialize row with the formatted time unit
+              // For each product, filter the inventory data and sum the values
+
+              products.forEach(function (product) {
+                var inventoryForProduct = inventory.filter(function (item) {
+                  return item.tankid__productid__name === product && item[timeUnit] === timeUnits[index];
+                });
+                var totalVolume = inventoryForProduct.reduce(function (sum, item) {
+                  return sum + parseFloat(item[dataField] || 0);
+                }, 0); // Sum the volumes
+
+                row.push(totalVolume); // Add the total volume for the product in that time unit
+              }); // Add the row to the DataTable
+
+              data.addRow(row);
+            }); // Chart options
+
+            options = {
+              title: '',
+              tooltip: {
+                isHtml: true
+              },
+              legend: {
+                position: 'none'
+              },
+              isStacked: false,
+              backgroundColor: backgroundColor,
+              hAxis: {
+                title: InventoryTrend.getAxisLabel(),
+                titleTextStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                },
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
+              },
+              vAxis: {
+                textStyle: {
+                  color: txtColor,
+                  fontSize: 12
+                }
+              },
+              chartArea: {
+                width: '75%',
+                height: '80%'
+              },
+              colors: products.map(function (product, index) {
+                return _constant.SharedColors[product];
+              }),
+              lineWidth: 3
+            }; // Create and draw the chart
+
+            chart = new google.visualization.LineChart(document.getElementById('inventoryTrendChart'));
+            chart.draw(data, options);
+
+          case 28:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    });
+  },
+  // Utility function to get the time unit and data field based on the selected tab
+  getDataFields: function getDataFields() {
+    switch (InventoryTrend.currentTab) {
+      case 'today':
+        return {
+          timeUnit: 'lastmodifieddate__hour',
+          dataField: 'hourly_prodvol'
+        };
+
+      case 'yesterday':
+        return {
+          timeUnit: 'lastmodifieddate__hour',
+          dataField: 'hourly_prodvol'
+        };
+
+      case 'lastWeek':
+        return {
+          timeUnit: 'lastmodifieddate__day',
+          dataField: 'daily_prodvol'
+        };
+
+      case 'lastMonth':
+        return {
+          timeUnit: 'lastmodifieddate__week',
+          dataField: 'weekly_prodvol'
+        };
+
+      default:
+        return {
+          timeUnit: 'lastmodifieddate__hour',
+          dataField: 'hourly_prodvol'
+        };
+    }
+  },
+  // Utility function to format time units for display
+  formatTimeUnit: function formatTimeUnit(unit, timeUnit) {
+    var date = new Date(unit); // Create a Date object from the time unit
+
+    switch (timeUnit) {
+      case 'lastmodifieddate__hour':
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var period = hours >= 12 ? 'PM' : 'AM';
+        return "".concat(hours % 12 || 12, ":").concat(minutes < 10 ? '0' : '').concat(minutes, " ").concat(period);
+
+      case 'lastmodifieddate__day':
+        var options = {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        };
+        return date.toLocaleDateString('en-US', options);
+
+      case 'lastmodifieddate__week':
+        var startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
+        return "Week of ".concat(startOfWeek.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric'
+        }));
+
+      default:
+        return unit;
+    }
+  },
+  // Utility function to get the label for the x-axis based on the selected tab
+  getAxisLabel: function getAxisLabel() {
+    switch (InventoryTrend.currentTab) {
+      case 'today':
+      case 'yesterday':
+        return 'Hour';
+
+      case 'lastWeek':
+        return 'Day';
+
+      case 'lastMonth':
+        return 'Week';
+
+      default:
+        return 'Time';
+    }
+  }
+}; // Current Sales Inventory Switch
+
+var CurrentSalesInventorySwitch = {
   init: function init() {
     // Handle tab switching
     var salesInventory = document.querySelector('#salesInventory');
@@ -822,11 +1171,11 @@ var SalesInventorySwitch = {
 
         switch (targetChart) {
           case 'sales':
-            SalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
+            CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
             break;
 
           case 'inventory':
-            SalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
+            CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
             break;
 
           default:
@@ -871,23 +1220,23 @@ var ProductSales = {
   },
   fetchData: function fetchData() {
     var sales;
-    return regeneratorRuntime.async(function fetchData$(_context6) {
+    return regeneratorRuntime.async(function fetchData$(_context8) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context8.prev = _context8.next) {
           case 0:
-            _context6.next = 2;
+            _context8.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSalesToday));
 
           case 2:
-            sales = _context6.sent;
+            sales = _context8.sent;
 
             if (!(!sales || Object.keys(sales).length === 0)) {
-              _context6.next = 6;
+              _context8.next = 6;
               break;
             }
 
             console.error("No sales data available");
-            return _context6.abrupt("return");
+            return _context8.abrupt("return");
 
           case 6:
             // Update the chart with new data
@@ -900,25 +1249,25 @@ var ProductSales = {
 
           case 8:
           case "end":
-            return _context6.stop();
+            return _context8.stop();
         }
       }
     });
   },
   drawChart: function drawChart(sales) {
-    var _ref4, backgroundColor, txtColor, data, products, groupWidthPercentage, options, chart;
+    var _ref5, backgroundColor, txtColor, data, products, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context7) {
+    return regeneratorRuntime.async(function drawChart$(_context9) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
-            _context7.next = 2;
+            _context9.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref4 = _context7.sent;
-            backgroundColor = _ref4.backgroundColor;
-            txtColor = _ref4.txtColor;
+            _ref5 = _context9.sent;
+            backgroundColor = _ref5.backgroundColor;
+            txtColor = _ref5.txtColor;
             data = new google.visualization.DataTable(); // Add columns for the product name and total sales amount
 
             data.addColumn('string', 'Product');
@@ -977,7 +1326,7 @@ var ProductSales = {
 
           case 15:
           case "end":
-            return _context7.stop();
+            return _context9.stop();
         }
       }
     });
@@ -989,7 +1338,6 @@ var ProductInventory = {
     var productInventoryChart = document.querySelector('#productInventoryChart');
 
     if (productInventoryChart) {
-      console.log('productInventoryChart', productInventoryChart);
       google.charts.load('current', {
         packages: ['corechart']
       });
@@ -998,23 +1346,23 @@ var ProductInventory = {
   },
   fetchData: function fetchData() {
     var inventory;
-    return regeneratorRuntime.async(function fetchData$(_context8) {
+    return regeneratorRuntime.async(function fetchData$(_context10) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
-            _context8.next = 2;
+            _context10.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.currnentInventory));
 
           case 2:
-            inventory = _context8.sent;
+            inventory = _context10.sent;
 
             if (!(!inventory || Object.keys(inventory).length === 0)) {
-              _context8.next = 6;
+              _context10.next = 6;
               break;
             }
 
             console.error("No inventory data available");
-            return _context8.abrupt("return");
+            return _context10.abrupt("return");
 
           case 6:
             // Update the chart with new data
@@ -1027,25 +1375,25 @@ var ProductInventory = {
 
           case 8:
           case "end":
-            return _context8.stop();
+            return _context10.stop();
         }
       }
     });
   },
   drawChart: function drawChart(inventory) {
-    var _ref5, backgroundColor, txtColor, data, products, groupWidthPercentage, options, chart;
+    var _ref6, backgroundColor, txtColor, data, products, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context9) {
+    return regeneratorRuntime.async(function drawChart$(_context11) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
-            _context9.next = 2;
+            _context11.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref5 = _context9.sent;
-            backgroundColor = _ref5.backgroundColor;
-            txtColor = _ref5.txtColor;
+            _ref6 = _context11.sent;
+            backgroundColor = _ref6.backgroundColor;
+            txtColor = _ref6.txtColor;
             data = new google.visualization.DataTable(); // Add columns for the product name and total sales amount
 
             data.addColumn('string', 'Product');
@@ -1104,7 +1452,7 @@ var ProductInventory = {
 
           case 15:
           case "end":
-            return _context9.stop();
+            return _context11.stop();
         }
       }
     });
@@ -1124,44 +1472,44 @@ var TopSites = {
   },
   fetchData: function fetchData() {
     var apiPath, apiPathArray, sites;
-    return regeneratorRuntime.async(function fetchData$(_context10) {
+    return regeneratorRuntime.async(function fetchData$(_context12) {
       while (1) {
-        switch (_context10.prev = _context10.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
-            _context10.t0 = TopSites.currentTab;
-            _context10.next = _context10.t0 === 'today' ? 3 : _context10.t0 === 'yesterday' ? 6 : _context10.t0 === 'week' ? 9 : _context10.t0 === 'month' ? 12 : 15;
+            _context12.t0 = TopSites.currentTab;
+            _context12.next = _context12.t0 === 'today' ? 3 : _context12.t0 === 'yesterday' ? 6 : _context12.t0 === 'week' ? 9 : _context12.t0 === 'month' ? 12 : 15;
             break;
 
           case 3:
             apiPath = _constant.API_PATHS.topFiveSitesToday;
             apiPathArray = 'top_five_today';
-            return _context10.abrupt("break", 17);
+            return _context12.abrupt("break", 17);
 
           case 6:
             apiPath = _constant.API_PATHS.topFiveSitesYesterday;
             apiPathArray = 'top_five_yesterday';
-            return _context10.abrupt("break", 17);
+            return _context12.abrupt("break", 17);
 
           case 9:
             apiPath = _constant.API_PATHS.topFiveSitesLastWeek;
             apiPathArray = 'top_five_week';
-            return _context10.abrupt("break", 17);
+            return _context12.abrupt("break", 17);
 
           case 12:
             apiPath = _constant.API_PATHS.topFiveSitesLastMonth;
             apiPathArray = 'top_five_month';
-            return _context10.abrupt("break", 17);
+            return _context12.abrupt("break", 17);
 
           case 15:
             apiPath = _constant.API_PATHS.topFiveSitesToday;
             apiPathArray = 'top_five_today';
 
           case 17:
-            _context10.next = 19;
+            _context12.next = 19;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(apiPath));
 
           case 19:
-            sites = _context10.sent;
+            sites = _context12.sent;
 
             if (sites) {
               TopSites.progressBars(sites[apiPathArray]);
@@ -1169,7 +1517,7 @@ var TopSites = {
 
           case 21:
           case "end":
-            return _context10.stop();
+            return _context12.stop();
         }
       }
     });
@@ -1238,40 +1586,38 @@ var FillStatus = {
   },
   fetchData: function fetchData() {
     var apiDetails, fills;
-    return regeneratorRuntime.async(function fetchData$(_context11) {
+    return regeneratorRuntime.async(function fetchData$(_context13) {
       while (1) {
-        switch (_context11.prev = _context11.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
             apiDetails = FillStatus.getApiDetails(FillStatus.currentTab);
-            console.log('apiDetails', apiDetails);
-            _context11.prev = 2;
-            _context11.next = 5;
+            _context13.prev = 1;
+            _context13.next = 4;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(apiDetails.path));
 
-          case 5:
-            fills = _context11.sent;
+          case 4:
+            fills = _context13.sent;
 
             if (fills) {
               FillStatus.createFillStatusList(fills[apiDetails.arrayKey]);
             }
 
-            _context11.next = 12;
+            _context13.next = 11;
             break;
 
-          case 9:
-            _context11.prev = 9;
-            _context11.t0 = _context11["catch"](2);
-            console.error('Error fetching fill status data:', _context11.t0);
+          case 8:
+            _context13.prev = 8;
+            _context13.t0 = _context13["catch"](1);
+            console.error('Error fetching fill status data:', _context13.t0);
 
-          case 12:
+          case 11:
           case "end":
-            return _context11.stop();
+            return _context13.stop();
         }
       }
-    }, null, null, [[2, 9]]);
+    }, null, null, [[1, 8]]);
   },
   getApiDetails: function getApiDetails(tab) {
-    console.log('tab', tab);
     var apiMappings = {
       today: {
         path: _constant.API_PATHS.fillStatusToday,
@@ -1318,9 +1664,9 @@ var FillStatus = {
       totalAvgVolume: totalAvgVolume
     });
   },
-  updateStats: function updateStats(_ref6) {
-    var totalTxn = _ref6.totalTxn,
-        totalAvgVolume = _ref6.totalAvgVolume;
+  updateStats: function updateStats(_ref7) {
+    var totalTxn = _ref7.totalTxn,
+        totalAvgVolume = _ref7.totalAvgVolume;
     var fillValue = document.querySelector('#fillValue span');
     var avgValue = document.querySelector('#avgValue span');
     if (fillValue) fillValue.textContent = totalTxn;
@@ -1341,23 +1687,23 @@ var SystemAlarms = {
   },
   fetchData: function fetchData() {
     var alarms;
-    return regeneratorRuntime.async(function fetchData$(_context12) {
+    return regeneratorRuntime.async(function fetchData$(_context14) {
       while (1) {
-        switch (_context12.prev = _context12.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
-            _context12.next = 2;
+            _context14.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.systemAlarms));
 
           case 2:
-            alarms = _context12.sent;
+            alarms = _context14.sent;
 
             if (!(!alarms || Object.keys(alarms).length === 0)) {
-              _context12.next = 6;
+              _context14.next = 6;
               break;
             }
 
             console.error("No alarms data available");
-            return _context12.abrupt("return");
+            return _context14.abrupt("return");
 
           case 6:
             // Update the chart with new data
@@ -1370,25 +1716,25 @@ var SystemAlarms = {
 
           case 8:
           case "end":
-            return _context12.stop();
+            return _context14.stop();
         }
       }
     });
   },
   drawChart: function drawChart(alarms) {
-    var _ref7, backgroundColor, txtColor, data, formatAlarmName, groupWidthPercentage, options, chart;
+    var _ref8, backgroundColor, txtColor, data, formatAlarmName, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context13) {
+    return regeneratorRuntime.async(function drawChart$(_context15) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context13.next = 2;
+            _context15.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref7 = _context13.sent;
-            backgroundColor = _ref7.backgroundColor;
-            txtColor = _ref7.txtColor;
+            _ref8 = _context15.sent;
+            backgroundColor = _ref8.backgroundColor;
+            txtColor = _ref8.txtColor;
             data = new google.visualization.DataTable(); // Define columns: 'Alarm Type' for the name, 'Count' for the value, and 'Style' for the color
 
             data.addColumn('string', 'Alarm Type');
@@ -1450,7 +1796,7 @@ var SystemAlarms = {
 
           case 15:
           case "end":
-            return _context13.stop();
+            return _context15.stop();
         }
       }
     });
@@ -1470,23 +1816,23 @@ var OperationalAlarms = {
   },
   fetchData: function fetchData() {
     var alarms;
-    return regeneratorRuntime.async(function fetchData$(_context14) {
+    return regeneratorRuntime.async(function fetchData$(_context16) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
-            _context14.next = 2;
+            _context16.next = 2;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.operationalAlarms));
 
           case 2:
-            alarms = _context14.sent;
+            alarms = _context16.sent;
 
             if (!(!alarms || alarms.length === 0)) {
-              _context14.next = 6;
+              _context16.next = 6;
               break;
             }
 
             console.error("No operational alarms data available");
-            return _context14.abrupt("return");
+            return _context16.abrupt("return");
 
           case 6:
             // Load Google Charts and draw chart with fetched data
@@ -1496,24 +1842,24 @@ var OperationalAlarms = {
 
           case 7:
           case "end":
-            return _context14.stop();
+            return _context16.stop();
         }
       }
     });
   },
   drawChart: function drawChart(alarms) {
-    var _ref8, backgroundColor, data, colors, options, operationalAlarmsDonutChart, chart;
+    var _ref9, backgroundColor, data, colors, options, operationalAlarmsDonutChart, chart;
 
-    return regeneratorRuntime.async(function drawChart$(_context15) {
+    return regeneratorRuntime.async(function drawChart$(_context17) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context17.prev = _context17.next) {
           case 0:
-            _context15.next = 2;
+            _context17.next = 2;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 2:
-            _ref8 = _context15.sent;
-            backgroundColor = _ref8.backgroundColor;
+            _ref9 = _context17.sent;
+            backgroundColor = _ref9.backgroundColor;
             data = new google.visualization.DataTable(); // Define the columns
 
             data.addColumn('string', 'Alarm Type');
@@ -1561,7 +1907,7 @@ var OperationalAlarms = {
 
           case 14:
           case "end":
-            return _context15.stop();
+            return _context17.stop();
         }
       }
     });
@@ -1594,41 +1940,41 @@ var TanksVolume = {
   },
   fetchData: function fetchData() {
     var sitesData, sites;
-    return regeneratorRuntime.async(function fetchData$(_context16) {
+    return regeneratorRuntime.async(function fetchData$(_context18) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context18.prev = _context18.next) {
           case 0:
-            _context16.prev = 0;
-            _context16.next = 3;
+            _context18.prev = 0;
+            _context18.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
 
           case 3:
-            sitesData = _context16.sent;
+            sitesData = _context18.sent;
 
             if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
-              _context16.next = 7;
+              _context18.next = 7;
               break;
             }
 
             console.error("No sites data available");
-            return _context16.abrupt("return");
+            return _context18.abrupt("return");
 
           case 7:
             sites = sitesData.sitesnumbers;
             TanksVolume.populateSiteDropdown(sites); // Draw initial chart with the first site by default
 
             TanksVolume.drawColumnChart(sites[0].sitenumber);
-            _context16.next = 15;
+            _context18.next = 15;
             break;
 
           case 12:
-            _context16.prev = 12;
-            _context16.t0 = _context16["catch"](0);
-            console.error("Error fetching data:", _context16.t0);
+            _context18.prev = 12;
+            _context18.t0 = _context18["catch"](0);
+            console.error("Error fetching data:", _context18.t0);
 
           case 15:
           case "end":
-            return _context16.stop();
+            return _context18.stop();
         }
       }
     }, null, null, [[0, 12]]);
@@ -1685,33 +2031,33 @@ var TanksVolume = {
     TanksVolume.drawColumnChart(site.sitenumber);
   },
   drawColumnChart: function drawColumnChart(siteNumber) {
-    var _ref9, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
+    var _ref10, secondaryBgColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawColumnChart$(_context17) {
+    return regeneratorRuntime.async(function drawColumnChart$(_context19) {
       while (1) {
-        switch (_context17.prev = _context17.next) {
+        switch (_context19.prev = _context19.next) {
           case 0:
-            _context17.prev = 0;
-            _context17.next = 3;
+            _context19.prev = 0;
+            _context19.next = 3;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 3:
-            _ref9 = _context17.sent;
-            secondaryBgColor = _ref9.secondaryBgColor;
-            txtColor = _ref9.txtColor;
-            _context17.next = 8;
+            _ref10 = _context19.sent;
+            secondaryBgColor = _ref10.secondaryBgColor;
+            txtColor = _ref10.txtColor;
+            _context19.next = 8;
             return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
 
           case 8:
-            tanksData = _context17.sent;
+            tanksData = _context19.sent;
 
             if (!(!tanksData || tanksData.length === 0)) {
-              _context17.next = 12;
+              _context19.next = 12;
               break;
             }
 
             console.error("No tank data available");
-            return _context17.abrupt("return");
+            return _context19.abrupt("return");
 
           case 12:
             // Prepare data for the Google Chart
@@ -1753,17 +2099,17 @@ var TanksVolume = {
             };
             chart = new google.visualization.ColumnChart(document.querySelector('#tankVolumeChart'));
             chart.draw(data, options);
-            _context17.next = 24;
+            _context19.next = 24;
             break;
 
           case 21:
-            _context17.prev = 21;
-            _context17.t0 = _context17["catch"](0);
-            console.error("Error drawing column chart:", _context17.t0);
+            _context19.prev = 21;
+            _context19.t0 = _context19["catch"](0);
+            console.error("Error drawing column chart:", _context19.t0);
 
           case 24:
           case "end":
-            return _context17.stop();
+            return _context19.stop();
         }
       }
     }, null, null, [[0, 21]]);
@@ -1786,40 +2132,40 @@ var LowStock = {
   // Fetch stock data from API
   fetchStockData: function fetchStockData() {
     var stockData;
-    return regeneratorRuntime.async(function fetchStockData$(_context18) {
+    return regeneratorRuntime.async(function fetchStockData$(_context20) {
       while (1) {
-        switch (_context18.prev = _context18.next) {
+        switch (_context20.prev = _context20.next) {
           case 0:
-            _context18.prev = 0;
-            _context18.next = 3;
+            _context20.prev = 0;
+            _context20.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.stockData));
 
           case 3:
-            stockData = _context18.sent;
+            stockData = _context20.sent;
 
             if (!(!stockData || !stockData.list)) {
-              _context18.next = 7;
+              _context20.next = 7;
               break;
             }
 
             console.error("No stock data available");
-            return _context18.abrupt("return");
+            return _context20.abrupt("return");
 
           case 7:
             // Update TanksPercentage and populate product list and threshold setup
             LowStock.TanksPercentage = stockData.percent || LowStock.TanksPercentage;
             LowStock.fetchProduct(stockData.list);
-            _context18.next = 14;
+            _context20.next = 14;
             break;
 
           case 11:
-            _context18.prev = 11;
-            _context18.t0 = _context18["catch"](0);
-            console.error("Error fetching stock data:", _context18.t0);
+            _context20.prev = 11;
+            _context20.t0 = _context20["catch"](0);
+            console.error("Error fetching stock data:", _context20.t0);
 
           case 14:
           case "end":
-            return _context18.stop();
+            return _context20.stop();
         }
       }
     }, null, null, [[0, 11]]);
@@ -1901,7 +2247,7 @@ var LowStock = {
   // Draw pie chart based on the selected threshold and specific product if chosen
   drawPieChart: function drawPieChart(stockList, threshold) {
     var selectedProduct,
-        _ref10,
+        _ref11,
         backgroundColor,
         txtColor,
         belowThreshold,
@@ -1912,13 +2258,13 @@ var LowStock = {
         lighterColor,
         options,
         chart,
-        _args19 = arguments;
+        _args21 = arguments;
 
-    return regeneratorRuntime.async(function drawPieChart$(_context19) {
+    return regeneratorRuntime.async(function drawPieChart$(_context21) {
       while (1) {
-        switch (_context19.prev = _context19.next) {
+        switch (_context21.prev = _context21.next) {
           case 0:
-            adjustColorBrightness = function _ref11(hex, percent) {
+            adjustColorBrightness = function _ref12(hex, percent) {
               var r = parseInt(hex.slice(1, 3), 16);
               var g = parseInt(hex.slice(3, 5), 16);
               var b = parseInt(hex.slice(5, 7), 16); // Adjust brightness by the given percentage
@@ -1937,14 +2283,14 @@ var LowStock = {
               return "#".concat(rHex).concat(gHex).concat(bHex);
             };
 
-            selectedProduct = _args19.length > 2 && _args19[2] !== undefined ? _args19[2] : null;
-            _context19.next = 4;
+            selectedProduct = _args21.length > 2 && _args21[2] !== undefined ? _args21[2] : null;
+            _context21.next = 4;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 4:
-            _ref10 = _context19.sent;
-            backgroundColor = _ref10.backgroundColor;
-            txtColor = _ref10.txtColor;
+            _ref11 = _context21.sent;
+            backgroundColor = _ref11.backgroundColor;
+            txtColor = _ref11.txtColor;
             belowThreshold = 0;
             aboveThreshold = 0; // Aggregate data based on the threshold and optionally for a specific product
 
@@ -1989,7 +2335,7 @@ var LowStock = {
 
           case 16:
           case "end":
-            return _context19.stop();
+            return _context21.stop();
         }
       }
     });
@@ -2009,41 +2355,41 @@ var DeliveryAmount = {
   },
   fetchData: function fetchData() {
     var sitesData, sites;
-    return regeneratorRuntime.async(function fetchData$(_context20) {
+    return regeneratorRuntime.async(function fetchData$(_context22) {
       while (1) {
-        switch (_context20.prev = _context20.next) {
+        switch (_context22.prev = _context22.next) {
           case 0:
-            _context20.prev = 0;
-            _context20.next = 3;
+            _context22.prev = 0;
+            _context22.next = 3;
             return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.dashboardSites));
 
           case 3:
-            sitesData = _context20.sent;
+            sitesData = _context22.sent;
 
             if (!(!sitesData || !sitesData.sitesnumbers || sitesData.sitesnumbers.length === 0)) {
-              _context20.next = 7;
+              _context22.next = 7;
               break;
             }
 
             console.error("No sites data available");
-            return _context20.abrupt("return");
+            return _context22.abrupt("return");
 
           case 7:
             sites = sitesData.sitesnumbers;
             DeliveryAmount.populateSiteDropdown(sites); // Draw initial chart with the first site by default
 
             DeliveryAmount.drawColumnChart(sites[0].sitenumber);
-            _context20.next = 15;
+            _context22.next = 15;
             break;
 
           case 12:
-            _context20.prev = 12;
-            _context20.t0 = _context20["catch"](0);
-            console.error("Error fetching data:", _context20.t0);
+            _context22.prev = 12;
+            _context22.t0 = _context22["catch"](0);
+            console.error("Error fetching data:", _context22.t0);
 
           case 15:
           case "end":
-            return _context20.stop();
+            return _context22.stop();
         }
       }
     }, null, null, [[0, 12]]);
@@ -2100,33 +2446,33 @@ var DeliveryAmount = {
     DeliveryAmount.drawColumnChart(site.sitenumber);
   },
   drawColumnChart: function drawColumnChart(siteNumber) {
-    var _ref12, backgroundColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
+    var _ref13, backgroundColor, txtColor, tanksData, chartData, data, groupWidthPercentage, options, chart;
 
-    return regeneratorRuntime.async(function drawColumnChart$(_context21) {
+    return regeneratorRuntime.async(function drawColumnChart$(_context23) {
       while (1) {
-        switch (_context21.prev = _context21.next) {
+        switch (_context23.prev = _context23.next) {
           case 0:
-            _context21.prev = 0;
-            _context21.next = 3;
+            _context23.prev = 0;
+            _context23.next = 3;
             return regeneratorRuntime.awrap((0, _constant.ChartBackgroundColor)());
 
           case 3:
-            _ref12 = _context21.sent;
-            backgroundColor = _ref12.backgroundColor;
-            txtColor = _ref12.txtColor;
-            _context21.next = 8;
+            _ref13 = _context23.sent;
+            backgroundColor = _ref13.backgroundColor;
+            txtColor = _ref13.txtColor;
+            _context23.next = 8;
             return regeneratorRuntime.awrap((0, _constant.fetchData)("".concat(_constant.API_PATHS.tanksVolumes).concat(siteNumber, ".json")));
 
           case 8:
-            tanksData = _context21.sent;
+            tanksData = _context23.sent;
 
             if (!(!tanksData || tanksData.length === 0)) {
-              _context21.next = 12;
+              _context23.next = 12;
               break;
             }
 
             console.error("No tank data available");
-            return _context21.abrupt("return");
+            return _context23.abrupt("return");
 
           case 12:
             // Prepare data for the Google Chart
@@ -2168,17 +2514,17 @@ var DeliveryAmount = {
             };
             chart = new google.visualization.ColumnChart(document.querySelector('#deliveryTankChart'));
             chart.draw(data, options);
-            _context21.next = 24;
+            _context23.next = 24;
             break;
 
           case 21:
-            _context21.prev = 21;
-            _context21.t0 = _context21["catch"](0);
-            console.error("Error drawing column chart:", _context21.t0);
+            _context23.prev = 21;
+            _context23.t0 = _context23["catch"](0);
+            console.error("Error drawing column chart:", _context23.t0);
 
           case 24:
           case "end":
-            return _context21.stop();
+            return _context23.stop();
         }
       }
     }, null, null, [[0, 21]]);
@@ -2200,8 +2546,9 @@ var RunCharts = {
   init: function init() {
     ProductsUsage.init();
     SiteStatus.init();
-    SalesTrend.init();
     SalesInventorySwitch.init();
+    SalesTrend.init();
+    CurrentSalesInventorySwitch.init();
     ProductSales.init(); // ProductInventory.init();
 
     SystemAlarms.init();

@@ -772,9 +772,8 @@ $ease-out: cubic-bezier(0, 0, 0.42, 0.58);
     height: 100%;
     background: url("/assets/imgs/wave.svg") repeat-x;
     opacity: 0.7;
-    animation-duration: 5s, 7s;
-    // animation-duration: 9s, 13s;
-    animation-delay: 0s, 5s;
+    animation-duration: 7s, 9s;
+    animation-delay: 0s, 7s;
     animation-fill-mode: forwards, none;
     animation-iteration-count: 1, infinite;
     animation-timing-function: $ease-in, $ease-out;
@@ -782,17 +781,15 @@ $ease-out: cubic-bezier(0, 0, 0.42, 0.58);
     animation-name: fill-wave, wave-50;
     background-position: 0% 57%;
     &:nth-child(1) {
-        // animation-duration: 7s, 13s;
-        animation-duration: 5s, 11s !important;
+        animation-duration: 7s, 13s !important;
     }  
     &:nth-child(2) {
-        // animation-duration: 7s, 15s;
-        animation-duration: 5s, 13s !important;
+        animation-duration: 9s, 17s !important;
     }
   }
   .wave-below {
     background-color: #3b46d3;
-    animation: fill-below 7s -2s $ease-in forwards;
+    animation: fill-below 2s -2s $ease-in forwards;
     clip-path: polygon(0% 110%, 0% 58%, 110% 58%, 110% 110%);
     position: absolute;
     top: 0px;
@@ -804,12 +801,6 @@ $ease-out: cubic-bezier(0, 0, 0.42, 0.58);
   &.delay-animation {
     .wave {
       animation-delay: 1s, 6s; // Delays shifted slightly
-    //   &:nth-child(1) {
-    //     animation-duration: 6s, 12s; // Matching delays
-    //   }  
-    //   &:nth-child(2) {
-    //     animation-duration: 6s, 14s; // Incrementally adjusted
-    //   }
     }
   }
   
