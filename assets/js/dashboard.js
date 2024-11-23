@@ -271,10 +271,7 @@ const ProductsUsage = {
     init: () => {
         const gasolineChartWrapper = document.getElementById('currentUsageChart');
         if (gasolineChartWrapper) {
-            // Step 1: Load Google Charts library
             google.charts.load('current', { packages: ['corechart'] });
-
-            // Step 2: Set callback to run when the library is loaded
             google.charts.setOnLoadCallback(ProductsUsage.drawPieChart);
         }
     },
@@ -447,35 +444,36 @@ const SalesInventorySwitch = {
     init: () => {
         // Handle tab switching
         const salesInventory = document.querySelector('#salesInventoryHistory');
+        if ( salesInventory ) {
+            const tabContainer = salesInventory.querySelector('.card-tabs');
+            if (tabContainer && !tabContainer.dataset.listenerAdded) {
+                tabContainer.dataset.listenerAdded = true;
+                tabContainer.addEventListener('click', (e) => {
+                    // Get the closest button, whether the click was on the button or its wrapper
+                    const targetButton = e.target.closest('button');
+                    if (!targetButton) return; // Ignore clicks outside buttons
+        
+                    const targetChart = targetButton.getAttribute('data-target-chart');
+                    if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+        
+                    if ( salesInventory.querySelector('.popover-wrapper') ) salesInventory.querySelector('.popover-wrapper').remove();
+                    // Remove 'active' class from all buttons and set it to the clicked one
+                    tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                    targetButton.classList.add('active');
 
-        const tabContainer = salesInventory.querySelector('.card-tabs');
-        if (tabContainer && !tabContainer.dataset.listenerAdded) {
-            tabContainer.dataset.listenerAdded = true;
-            tabContainer.addEventListener('click', (e) => {
-                // Get the closest button, whether the click was on the button or its wrapper
-                const targetButton = e.target.closest('button');
-                if (!targetButton) return; // Ignore clicks outside buttons
-    
-                const targetChart = targetButton.getAttribute('data-target-chart');
-                if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
-    
-                if ( salesInventory.querySelector('.popover-wrapper') ) salesInventory.querySelector('.popover-wrapper').remove();
-                // Remove 'active' class from all buttons and set it to the clicked one
-                tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                targetButton.classList.add('active');
-
-                // Handle chart switching logic
-                switch (targetChart) {
-                    case 'sales':
-                        SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
-                        break;
-                    case 'inventory':
-                        SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
-                        break;
-                    default:
-                        console.error('Unknown chart type:', targetChart);
-                }
-            });
+                    // Handle chart switching logic
+                    switch (targetChart) {
+                        case 'sales':
+                            SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
+                            break;
+                        case 'inventory':
+                            SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
+                            break;
+                        default:
+                            console.error('Unknown chart type:', targetChart);
+                    }
+                });
+            }
         }
     },
     
@@ -900,33 +898,35 @@ const CurrentSalesInventorySwitch = {
     init: () => {
         // Handle tab switching
         const salesInventory = document.querySelector('#salesInventory');
-        const tabContainer = salesInventory.querySelector('.card-tabs');
-        if (tabContainer && !tabContainer.dataset.listenerAdded) {
-            tabContainer.dataset.listenerAdded = true;
-            tabContainer.addEventListener('click', (e) => {
-                // Get the closest button, whether the click was on the button or its wrapper
-                const targetButton = e.target.closest('button');
-                if (!targetButton) return; // Ignore clicks outside buttons
-    
-                const targetChart = targetButton.getAttribute('data-target-chart');
-                if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
-    
-                // Remove 'active' class from all buttons and set it to the clicked one
-                tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                targetButton.classList.add('active');
-                
-                // Handle chart switching logic
-                switch (targetChart) {
-                    case 'sales':
-                        CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
-                        break;
-                    case 'inventory':
-                        CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
-                        break;
-                    default:
-                        console.error('Unknown chart type:', targetChart);
-                }
-            });
+        if ( salesInventory ) {
+            const tabContainer = salesInventory.querySelector('.card-tabs');
+            if (tabContainer && !tabContainer.dataset.listenerAdded) {
+                tabContainer.dataset.listenerAdded = true;
+                tabContainer.addEventListener('click', (e) => {
+                    // Get the closest button, whether the click was on the button or its wrapper
+                    const targetButton = e.target.closest('button');
+                    if (!targetButton) return; // Ignore clicks outside buttons
+        
+                    const targetChart = targetButton.getAttribute('data-target-chart');
+                    if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+        
+                    // Remove 'active' class from all buttons and set it to the clicked one
+                    tabContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                    targetButton.classList.add('active');
+                    
+                    // Handle chart switching logic
+                    switch (targetChart) {
+                        case 'sales':
+                            CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
+                            break;
+                        case 'inventory':
+                            CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
+                            break;
+                        default:
+                            console.error('Unknown chart type:', targetChart);
+                    }
+                });
+            }
         }
     },
     
@@ -1936,19 +1936,13 @@ const RunCharts = {
         SiteStatus.init();
         SalesInventorySwitch.init();
         SalesTrend.init();
-
         CurrentSalesInventorySwitch.init();
         ProductSales.init();
-        // ProductInventory.init();
         SystemAlarms.init();
         OperationalAlarms.init();
         TanksVolume.init();
         LowStock.init();
         DeliveryAmount.init();
-
-        // SystemAlarmsChart.init();
-        // OperationalAlarmsBarChart.init();
-        // TankVolumeBarChart.init();
         ReloadCharts.init();
     }
 }

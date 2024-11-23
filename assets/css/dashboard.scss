@@ -155,50 +155,6 @@
         }
     }
 
-    .gts-grid-item {
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-            padding: 10px 0 20px;
-            flex-wrap: wrap;
-            max-width: 100% !important;
-            margin: 0 auto;
-            .legend-item {
-                display: flex;
-                align-items: center;
-                gap: 7px;
-
-                .legend-color {
-                    border-radius: 50%;
-                    width: 14px;
-                    height: 14px;
-                }
-
-                .legend-label {
-                    font-size: var(--gts-small-fs);
-                }
-            }
-        }
-        
-        .chart-area {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .gts-card-title {
-            h3 {
-                #tanksAmount,
-                #deliveryAmount {
-                    color: var(--gts-primary-color);
-                    font-weight: 700;
-                }
-            }
-        }
-    }
-
     #siteStatus {
         display: flex;
         gap: 15px;

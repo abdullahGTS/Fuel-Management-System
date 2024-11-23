@@ -52,7 +52,11 @@ const API_PATHS = {
     fillStatusToday: '/api/fillStatus/fill_status_today.json',
     fillStatusYesterday: '/api/fillStatus/fill_status_yesterday.json',
     fillStatusWeek: '/api/fillStatus/fill_status_week.json',
-    fillStatusMonth: '/api/fillStatus/fill_status_month.json'
+    fillStatusMonth: '/api/fillStatus/fill_status_month.json',
+
+    // DataTable
+    sitesList: '/api/inner/site_page.json',
+    sitesDT: '/api/inner/site_table.json',
 };
 
 // Shared function to fetch data from JSON files

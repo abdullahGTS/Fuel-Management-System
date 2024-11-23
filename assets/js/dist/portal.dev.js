@@ -4,6 +4,8 @@ var _script = require("./script.js");
 
 var _dashboard = require("./dashboard.js");
 
+var _inner = require("./inner.js");
+
 var MobileNav = {
   init: function init() {
     var navigation = document.querySelector("#side-bar");
@@ -140,8 +142,7 @@ var CollapsedMenu = {
   toggle: function toggle(force) {
     if (force === true) {
       document.body.classList.add('gts-menu-collapsed');
-    } else if (force === false) {
-      document.body.classList.remove('gts-menu-collapsed');
+    } else if (force === false) {//document.body.classList.remove('gts-menu-collapsed');
     } else {
       // 'toggle' mode to switch between collapsed/expanded states
       document.body.classList.toggle('gts-menu-collapsed');
@@ -296,6 +297,8 @@ var AppearanceToggle = {
       }
 
     _dashboard.ReloadCharts.chartReload();
+
+    _inner.ReloadInnerCharts.chartReload();
   },
   setCheckedMode: function setCheckedMode(mode) {
     // Uncheck all checkboxes first

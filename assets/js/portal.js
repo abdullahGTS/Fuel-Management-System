@@ -1,5 +1,6 @@
 import { pageReady, PageLoader, Button, Popover, Modal } from './script.js';
 import { ReloadCharts } from './dashboard.js';
+import { ReloadInnerCharts } from './inner.js';
 
 const MobileNav = {
     init: () => {
@@ -152,7 +153,7 @@ const CollapsedMenu = {
         if (force === true) {
             document.body.classList.add('gts-menu-collapsed');
         } else if (force === false) {
-            document.body.classList.remove('gts-menu-collapsed');
+            //document.body.classList.remove('gts-menu-collapsed');
         } else {
             // 'toggle' mode to switch between collapsed/expanded states
             document.body.classList.toggle('gts-menu-collapsed');
@@ -322,6 +323,7 @@ const AppearanceToggle = {
         } 
 
         ReloadCharts.chartReload();
+        ReloadInnerCharts.chartReload();
     },    
 
     setCheckedMode: (mode) => {

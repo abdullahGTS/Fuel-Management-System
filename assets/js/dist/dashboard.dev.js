@@ -298,11 +298,9 @@ var ProductsUsage = {
     var gasolineChartWrapper = document.getElementById('currentUsageChart');
 
     if (gasolineChartWrapper) {
-      // Step 1: Load Google Charts library
       google.charts.load('current', {
         packages: ['corechart']
-      }); // Step 2: Set callback to run when the library is loaded
-
+      });
       google.charts.setOnLoadCallback(ProductsUsage.drawPieChart);
     }
   },
@@ -521,38 +519,41 @@ var SalesInventorySwitch = {
   init: function init() {
     // Handle tab switching
     var salesInventory = document.querySelector('#salesInventoryHistory');
-    var tabContainer = salesInventory.querySelector('.card-tabs');
 
-    if (tabContainer && !tabContainer.dataset.listenerAdded) {
-      tabContainer.dataset.listenerAdded = true;
-      tabContainer.addEventListener('click', function (e) {
-        // Get the closest button, whether the click was on the button or its wrapper
-        var targetButton = e.target.closest('button');
-        if (!targetButton) return; // Ignore clicks outside buttons
+    if (salesInventory) {
+      var tabContainer = salesInventory.querySelector('.card-tabs');
 
-        var targetChart = targetButton.getAttribute('data-target-chart');
-        if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+      if (tabContainer && !tabContainer.dataset.listenerAdded) {
+        tabContainer.dataset.listenerAdded = true;
+        tabContainer.addEventListener('click', function (e) {
+          // Get the closest button, whether the click was on the button or its wrapper
+          var targetButton = e.target.closest('button');
+          if (!targetButton) return; // Ignore clicks outside buttons
 
-        if (salesInventory.querySelector('.popover-wrapper')) salesInventory.querySelector('.popover-wrapper').remove(); // Remove 'active' class from all buttons and set it to the clicked one
+          var targetChart = targetButton.getAttribute('data-target-chart');
+          if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
 
-        tabContainer.querySelectorAll('button').forEach(function (btn) {
-          return btn.classList.remove('active');
+          if (salesInventory.querySelector('.popover-wrapper')) salesInventory.querySelector('.popover-wrapper').remove(); // Remove 'active' class from all buttons and set it to the clicked one
+
+          tabContainer.querySelectorAll('button').forEach(function (btn) {
+            return btn.classList.remove('active');
+          });
+          targetButton.classList.add('active'); // Handle chart switching logic
+
+          switch (targetChart) {
+            case 'sales':
+              SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
+              break;
+
+            case 'inventory':
+              SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
+              break;
+
+            default:
+              console.error('Unknown chart type:', targetChart);
+          }
         });
-        targetButton.classList.add('active'); // Handle chart switching logic
-
-        switch (targetChart) {
-          case 'sales':
-            SalesInventorySwitch.handleChartSwitch('salesTrendChart', SalesTrend.init);
-            break;
-
-          case 'inventory':
-            SalesInventorySwitch.handleChartSwitch('inventoryTrendChart', InventoryTrend.init);
-            break;
-
-          default:
-            console.error('Unknown chart type:', targetChart);
-        }
-      });
+      }
     }
   },
   handleChartSwitch: function handleChartSwitch(chartId, initFunction) {
@@ -1151,37 +1152,40 @@ var CurrentSalesInventorySwitch = {
   init: function init() {
     // Handle tab switching
     var salesInventory = document.querySelector('#salesInventory');
-    var tabContainer = salesInventory.querySelector('.card-tabs');
 
-    if (tabContainer && !tabContainer.dataset.listenerAdded) {
-      tabContainer.dataset.listenerAdded = true;
-      tabContainer.addEventListener('click', function (e) {
-        // Get the closest button, whether the click was on the button or its wrapper
-        var targetButton = e.target.closest('button');
-        if (!targetButton) return; // Ignore clicks outside buttons
+    if (salesInventory) {
+      var tabContainer = salesInventory.querySelector('.card-tabs');
 
-        var targetChart = targetButton.getAttribute('data-target-chart');
-        if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
-        // Remove 'active' class from all buttons and set it to the clicked one
+      if (tabContainer && !tabContainer.dataset.listenerAdded) {
+        tabContainer.dataset.listenerAdded = true;
+        tabContainer.addEventListener('click', function (e) {
+          // Get the closest button, whether the click was on the button or its wrapper
+          var targetButton = e.target.closest('button');
+          if (!targetButton) return; // Ignore clicks outside buttons
 
-        tabContainer.querySelectorAll('button').forEach(function (btn) {
-          return btn.classList.remove('active');
+          var targetChart = targetButton.getAttribute('data-target-chart');
+          if (!targetChart) return; // Ignore clicks on buttons without a data-target-chart
+          // Remove 'active' class from all buttons and set it to the clicked one
+
+          tabContainer.querySelectorAll('button').forEach(function (btn) {
+            return btn.classList.remove('active');
+          });
+          targetButton.classList.add('active'); // Handle chart switching logic
+
+          switch (targetChart) {
+            case 'sales':
+              CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
+              break;
+
+            case 'inventory':
+              CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
+              break;
+
+            default:
+              console.error('Unknown chart type:', targetChart);
+          }
         });
-        targetButton.classList.add('active'); // Handle chart switching logic
-
-        switch (targetChart) {
-          case 'sales':
-            CurrentSalesInventorySwitch.handleChartSwitch('productSalesChart', ProductSales.init);
-            break;
-
-          case 'inventory':
-            CurrentSalesInventorySwitch.handleChartSwitch('productInventoryChart', ProductInventory.init);
-            break;
-
-          default:
-            console.error('Unknown chart type:', targetChart);
-        }
-      });
+      }
     }
   },
   handleChartSwitch: function handleChartSwitch(chartId, initFunction) {
@@ -2549,16 +2553,12 @@ var RunCharts = {
     SalesInventorySwitch.init();
     SalesTrend.init();
     CurrentSalesInventorySwitch.init();
-    ProductSales.init(); // ProductInventory.init();
-
+    ProductSales.init();
     SystemAlarms.init();
     OperationalAlarms.init();
     TanksVolume.init();
     LowStock.init();
-    DeliveryAmount.init(); // SystemAlarmsChart.init();
-    // OperationalAlarmsBarChart.init();
-    // TankVolumeBarChart.init();
-
+    DeliveryAmount.init();
     ReloadCharts.init();
   }
 }; // We will Reload Charts on Menu Collapsed And Apperacnce Toggle

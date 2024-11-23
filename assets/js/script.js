@@ -83,11 +83,11 @@ const Button = {
   },
 
   createRipple: function (e) {
+
     const target = e.target; // The button element
     const x = e.clientX - target.getBoundingClientRect().left;
     const y = e.clientY - target.getBoundingClientRect().top;
     const rEffect = document.createElement("span");
-
     rEffect.style.left = `${x}px`;
     rEffect.style.top = `${y}px`;
     rEffect.classList.add("ripple"); // Add a class to the span for styling
