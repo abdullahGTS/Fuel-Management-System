@@ -1,0 +1,452 @@
+{
+    "tanks": [
+        {
+            "id": 12,
+            "fusiontankid": 1,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline92",
+            "productid__number": 2,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "6226.183"
+        },
+        {
+            "id": 13,
+            "fusiontankid": 2,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline92",
+            "productid__number": 2,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "20640.137"
+        },
+        {
+            "id": 14,
+            "fusiontankid": 3,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline92",
+            "productid__number": 2,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "465.811"
+        },
+        {
+            "id": 15,
+            "fusiontankid": 4,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline92",
+            "productid__number": 2,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "22368.872"
+        },
+        {
+            "id": 16,
+            "fusiontankid": 5,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline95",
+            "productid__number": 1,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "31485.093"
+        },
+        {
+            "id": 17,
+            "fusiontankid": 6,
+            "siteid__sitenumber": 1003,
+            "siteid__name": "El Abasia",
+            "productid__name": "Gasoline95",
+            "productid__number": 1,
+            "capacity": "35000.00000",
+            "tanklastinfoid__prodvol": "33684.788"
+        }
+    ],
+    "alarms": [
+        {
+            "id": 58,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 4"
+        },
+        {
+            "id": 59,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 7"
+        },
+        {
+            "id": 60,
+            "type": "LOW_FLOW_HOSE_1",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Warning",
+            "device": "Pump 2"
+        },
+        {
+            "id": 61,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 3"
+        },
+        {
+            "id": 63,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Warning",
+            "device": "Pump 6"
+        },
+        {
+            "id": 64,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Warning",
+            "device": "Pump 1"
+        },
+        {
+            "id": 65,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 2"
+        },
+        {
+            "id": 66,
+            "type": "LOW_FLOW_HOSE_1",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 4"
+        },
+        {
+            "id": 68,
+            "type": "LOW_FLOW_HOSE_1",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Warning",
+            "device": "Pump 6"
+        },
+        {
+            "id": 69,
+            "type": "LOW_FLOW_HOSE_1",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 8"
+        },
+        {
+            "id": 76,
+            "type": "PRODUCT_LOW",
+            "source": "FC",
+            "isactive": "solved",
+            "time": "12/08/2022 11:16",
+            "severity": "Warning",
+            "device": "Tank 1"
+        },
+        {
+            "id": 79,
+            "type": "SUCTION",
+            "source": "FC",
+            "isactive": "solved",
+            "time": "12/08/2022 11:10",
+            "severity": "Unknown",
+            "device": "Tank 1"
+        },
+        {
+            "id": 87,
+            "type": "OVERFLOW",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 11:26",
+            "severity": "Unknown",
+            "device": "Tank 6"
+        },
+        {
+            "id": 88,
+            "type": "PRODUCT_HIGH",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 11:24",
+            "severity": "Warning",
+            "device": "Tank 6"
+        },
+        {
+            "id": 90,
+            "type": "PRODUCT_LOW",
+            "source": "FC",
+            "isactive": "solved",
+            "time": "12/08/2022 11:39",
+            "severity": "Warning",
+            "device": "Tank 4"
+        },
+        {
+            "id": 95,
+            "type": "TANK_NO_LEVEL",
+            "source": "FC",
+            "isactive": "solved",
+            "time": "12/08/2022 10:56",
+            "severity": "Info",
+            "device": "Tank 6"
+        },
+        {
+            "id": 98,
+            "type": "Disconnected",
+            "source": "FC",
+            "isactive": "solved",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Unknown 1"
+        },
+        {
+            "id": 101,
+            "type": "LOW_FLOW_HOSE_2",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Warning",
+            "device": "Pump 8"
+        },
+        {
+            "id": 103,
+            "type": "LOW_FLOW_HOSE_1",
+            "source": "FC",
+            "isactive": "Active",
+            "time": "12/08/2022 10:55",
+            "severity": "Alarm",
+            "device": "Pump 7"
+        },
+        {
+            "id": 11736,
+            "type": "DISCONNECTED",
+            "source": "FHO",
+            "isactive": "solved",
+            "time": "12/08/2022 10:59",
+            "severity": "Alarm",
+            "device": "Probe 6"
+        }
+    ],
+    "pumps": [
+        {
+            "id": 821,
+            "fusionid": 1,
+            "brand": "IFSF",
+            "hose": 1389,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "50.040",
+            "last_sale_volume": "6.902",
+            "last_sale_startdate": "2022-12-08T10:58:06",
+            "last_sale_enddate": "2022-12-08T11:03:28"
+        },
+        {
+            "id": 821,
+            "fusionid": 1,
+            "brand": "IFSF",
+            "hose": 1390,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "200.000",
+            "last_sale_volume": "21.620",
+            "last_sale_startdate": "2022-12-08T12:12:50",
+            "last_sale_enddate": "2022-12-08T12:13:45"
+        },
+        {
+            "id": 821,
+            "fusionid": 1,
+            "brand": "IFSF",
+            "hose": 1390,
+            "hose__logicalid": 3,
+            "hose__gradeid__name": "Diesel",
+            "last_sale_money": "200.000",
+            "last_sale_volume": "21.620",
+            "last_sale_startdate": "2022-12-08T12:12:50",
+            "last_sale_enddate": "2022-12-08T12:13:45"
+        },
+        {
+            "id": 822,
+            "fusionid": 2,
+            "brand": "IFSF",
+            "hose": 1391,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "98.000",
+            "last_sale_volume": "9.120",
+            "last_sale_startdate": "2022-12-08T12:45:10",
+            "last_sale_enddate": "2022-12-08T12:45:38"
+        },
+        {
+            "id": 822,
+            "fusionid": 2,
+            "brand": "IFSF",
+            "hose": 1392,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "98.000",
+            "last_sale_volume": "10.590",
+            "last_sale_startdate": "2022-12-08T10:55:39",
+            "last_sale_enddate": "2022-12-08T10:55:39"
+        },
+        {
+            "id": 823,
+            "fusionid": 3,
+            "brand": "IFSF",
+            "hose": 1393,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "65.860",
+            "last_sale_volume": "7.120",
+            "last_sale_startdate": "2022-12-08T12:51:24",
+            "last_sale_enddate": "2022-12-08T12:51:49"
+        },
+        {
+            "id": 823,
+            "fusionid": 3,
+            "brand": "IFSF",
+            "hose": 1394,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "49.030",
+            "last_sale_volume": "5.300",
+            "last_sale_startdate": "2022-12-08T12:43:34",
+            "last_sale_enddate": "2022-12-08T12:43:51"
+        },
+        {
+            "id": 824,
+            "fusionid": 4,
+            "brand": "IFSF",
+            "hose": 1395,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "98.330",
+            "last_sale_volume": "10.630",
+            "last_sale_startdate": "2022-12-08T12:48:57",
+            "last_sale_enddate": "2022-12-08T12:49:33"
+        },
+        {
+            "id": 824,
+            "fusionid": 4,
+            "brand": "IFSF",
+            "hose": 1396,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "100.090",
+            "last_sale_volume": "10.820",
+            "last_sale_startdate": "2022-12-08T12:40:53",
+            "last_sale_enddate": "2022-12-08T12:41:34"
+        },
+        {
+            "id": 825,
+            "fusionid": 5,
+            "brand": "IFSF",
+            "hose": 1397,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "351.870",
+            "last_sale_volume": "38.040",
+            "last_sale_startdate": "2022-12-08T12:50:33",
+            "last_sale_enddate": "2022-12-08T12:52:12"
+        },
+        {
+            "id": 825,
+            "fusionid": 5,
+            "brand": "IFSF",
+            "hose": 1398,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "14.060",
+            "last_sale_volume": "1.520",
+            "last_sale_startdate": "2022-12-08T12:36:34",
+            "last_sale_enddate": "2022-12-08T12:36:52"
+        },
+        {
+            "id": 826,
+            "fusionid": 6,
+            "brand": "IFSF",
+            "hose": 1399,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "198.040",
+            "last_sale_volume": "21.410",
+            "last_sale_startdate": "2022-12-08T12:46:52",
+            "last_sale_enddate": "2022-12-08T12:47:36"
+        },
+        {
+            "id": 826,
+            "fusionid": 6,
+            "brand": "IFSF",
+            "hose": 1400,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "98.000",
+            "last_sale_volume": "10.590",
+            "last_sale_startdate": "2022-12-08T12:49:13",
+            "last_sale_enddate": "2022-12-08T12:49:46"
+        },
+        {
+            "id": 827,
+            "fusionid": 7,
+            "brand": "IFSF",
+            "hose": 1401,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "98.510",
+            "last_sale_volume": "10.650",
+            "last_sale_startdate": "2022-12-08T12:47:20",
+            "last_sale_enddate": "2022-12-08T12:47:59"
+        },
+        {
+            "id": 827,
+            "fusionid": 7,
+            "brand": "IFSF",
+            "hose": 1402,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "19.060",
+            "last_sale_volume": "2.060",
+            "last_sale_startdate": "2022-12-08T12:46:40",
+            "last_sale_enddate": "2022-12-08T12:47:06"
+        },
+        {
+            "id": 828,
+            "fusionid": 8,
+            "brand": "IFSF",
+            "hose": 1403,
+            "hose__logicalid": 1,
+            "hose__gradeid__name": "Gasoline95",
+            "last_sale_money": "9.000",
+            "last_sale_volume": "1.130",
+            "last_sale_startdate": "2022-12-08T12:47:54",
+            "last_sale_enddate": "2022-12-08T12:48:15"
+        },
+        {
+            "id": 828,
+            "fusionid": 8,
+            "brand": "IFSF",
+            "hose": 1404,
+            "hose__logicalid": 2,
+            "hose__gradeid__name": "Gasoline92",
+            "last_sale_money": "140.000",
+            "last_sale_volume": "15.140",
+            "last_sale_startdate": "2022-12-08T12:43:11",
+            "last_sale_enddate": "2022-12-08T12:43:56"
+        }
+    ]
+}

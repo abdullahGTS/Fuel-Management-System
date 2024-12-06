@@ -47,8 +47,9 @@ var API_PATHS = {
   fillStatusWeek: '/api/fillStatus/fill_status_week.json',
   fillStatusMonth: '/api/fillStatus/fill_status_month.json',
   // DataTable
-  sitesList: '/api/inner/site_page.json',
-  sitesDT: '/api/inner/site_table.json'
+  siteDetails: '/api/inner/site_details.json',
+  sitesData: '/api/inner/site_page.json' // sitesDT: '/api/inner/site_table.json',
+
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;
@@ -128,8 +129,10 @@ var ChartBackgroundColor = function ChartBackgroundColor() {
       var isDarkMode = appearance === 'dark' || appearance === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches || document.body.classList.contains('dark-mode'); // Resolve with the background color
 
       var colors = {
-        backgroundColor: isDarkMode ? '#202029' : '#ffffff',
-        secondaryBgColor: isDarkMode ? '#171721' : '#f4f7fe',
+        // --gts-white-color: #1c1f27;//1b1e25
+        // --gts-light-color: #141420;
+        backgroundColor: isDarkMode ? '#1c1f29' : '#ffffff',
+        secondaryBgColor: isDarkMode ? '#141420' : '#f4f7fe',
         secondaryAlphaColor: isDarkMode ? '#272731' : '#eceef2',
         txtColor: isDarkMode ? '#d6cfcf' : '#4D4D4D'
       };

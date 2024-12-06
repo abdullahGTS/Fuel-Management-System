@@ -4,7 +4,7 @@ var _script = require("./script.js");
 
 var _dashboard = require("./dashboard.js");
 
-var _inner = require("./inner.js");
+var _sites = require("./sites.js");
 
 var MobileNav = {
   init: function init() {
@@ -298,7 +298,7 @@ var AppearanceToggle = {
 
     _dashboard.ReloadCharts.chartReload();
 
-    _inner.ReloadInnerCharts.chartReload();
+    _sites.ReloadInnerCharts.chartReload();
   },
   setCheckedMode: function setCheckedMode(mode) {
     // Uncheck all checkboxes first
@@ -334,6 +334,10 @@ var AppearanceToggle = {
   _script.Button.init();
 
   _script.Popover.init();
+
+  _script.Drawer.init();
+
+  _script.Tab.init();
 
   AppearanceToggle.init();
   MobileNav.init();

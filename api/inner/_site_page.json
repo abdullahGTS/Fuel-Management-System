@@ -1,0 +1,114 @@
+[
+    {
+        "id": 1,
+        "name": "Jeddah_Seaport",
+        "sitenumber": 3001,
+        "status": "offline",
+        "console": "",
+        "location": "21.4855,39.1968"
+    },
+    {
+        "id": 2,
+        "name": "King_Abdullah_Port",
+        "sitenumber": 3002,
+        "status": "offline",
+        "console": "",
+        "location": "21.6449,39.1528"
+    },
+    {
+        "id": 3,
+        "name": "Dhiba_Port",
+        "sitenumber": 3003,
+        "status": "online",
+        "console": "",
+        "location": "27.0390,34.7855"
+    },
+    {
+        "id": 4,
+        "name": "Riyadh_Container_Terminal",
+        "sitenumber": 3004,
+        "status": "offline",
+        "console": "",
+        "location": "24.7719,46.7380"
+    },
+    {
+        "id": 5,
+        "name": "King_Fahd_Port",
+        "sitenumber": 3005,
+        "status": "online",
+        "console": "",
+        "location": "26.5267,49.9842"
+    },
+    {
+        "id": 6,
+        "name": "Jubail_Port",
+        "sitenumber": 3006,
+        "status": "offline",
+        "console": "",
+        "location": "27.0351,49.9684"
+    },
+    {
+        "id": 7,
+        "name": "Shuaiba_Port",
+        "sitenumber": 3007,
+        "status": "offline",
+        "console": "",
+        "location": "21.2185,39.4732"
+    },
+    {
+        "id": 8,
+        "name": "Yanbu_Port",
+        "sitenumber": 3008,
+        "status": "online",
+        "console": "",
+        "location": "24.0895,38.0519"
+    },
+    {
+        "id": 9,
+        "name": "Ras_Az_Zawr",
+        "sitenumber": 3009,
+        "status": "offline",
+        "console": "",
+        "location": "26.5092,49.7049"
+    },
+    {
+        "id": 10,
+        "name": "Al_Khobar_Port",
+        "sitenumber": 3010,
+        "status": "online",
+        "console": "",
+        "location": "26.2235,50.1548"
+    },
+    {
+        "id": 11,
+        "name": "Al_Jubayl_Port",
+        "sitenumber": 3011,
+        "status": "offline",
+        "console": "",
+        "location": "27.0164,49.6845"
+    },
+    {
+        "id": 12,
+        "name": "Fahad_Port",
+        "sitenumber": 3012,
+        "status": "offline",
+        "console": "",
+        "location": "26.4702,50.0657"
+    },
+    {
+        "id": 13,
+        "name": "Dhahran_Port",
+        "sitenumber": 3013,
+        "status": "online",
+        "console": "",
+        "location": "26.2919,50.1862"
+    },
+    {
+        "id": 14,
+        "name": "Riyadh_Seaport",
+        "sitenumber": 3014,
+        "status": "offline",
+        "console": "",
+        "location": "24.7015,46.7238"
+    }
+]

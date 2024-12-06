@@ -138,6 +138,22 @@
     .double-row.on-mobile {
         grid-row: unset !important;
     }
+    // #sitesDetailsList {
+    //     grid-column: auto / span 3 !important;
+    // }
+    #sitesDataDetails {
+        // grid-column: auto / span 2 !important;
+        > .gts-grid > .gts-grid-item {
+            grid-column: auto / span 3 !important;
+            .gts-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                .gts-grid-item.triple-col {
+                    grid-column: auto / span 2 !important;
+                }
+            }
+
+        }
+    }
 }
 @media (max-width: 1280px) {
     main {

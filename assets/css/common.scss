@@ -479,6 +479,115 @@ body #toast-container {
     }
 }
 
+.drawer-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2147483647;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(22, 22, 22, 0.3);
+    cursor: pointer;
+    display: none;
+    animation: fadeIn 420ms ease forwards;
+    .drawer-body {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 540px;
+        height: 100%;
+        background-color: var(--gts-white-color);
+        transition-delay: 400ms;
+        padding: 40px;
+        cursor: auto !important;
+        .drawer-title {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            .icon-wrapper {
+                border-radius: var(--gts-sm-curve);
+                padding: 14px;
+                background-color: transparent;
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 0;
+                position: relative;
+                overflow: hidden;
+                &::before {
+                    content: '';
+                    pointer-events: none;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: var(--gts-gray-color);
+                    opacity: 0.1;
+                }
+                &.online{
+                    .mat-icon { color: var(--gts-green-color); }
+                    &:before {
+                        background-color: var(--gts-green-color);
+                    }
+                }
+                &.offline{
+                    .mat-icon { color: var(--gts-red-color); }
+                    &:before {
+                        background-color: var(--gts-red-color);
+                    }
+                }
+            }
+
+            .drawer-title-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+    &.slide-in {
+        display: block;
+        .drawer-body {
+            animation: showDrawer 210ms ease forwards;
+            animation-delay: 70ms;
+        }
+    }
+    &.slide-out {
+        display: none;
+        .drawer-body {
+            animation: hideDrawer 210ms ease forwards;
+        }
+    }
+    @keyframes showDrawer {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0%);
+        }
+    }
+    @keyframes hideDrawer {
+        from {
+            transform: translateX(0%);
+        }
+        to {
+            transform: translateX(100%);
+        }
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
 .tooltip {
     background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10);
@@ -487,9 +596,10 @@ body #toast-container {
     color: #fff;
     pointer-events: none;
     position: absolute;
-    z-index: 2147483646;
+    z-index: 2147483647;
     transform: translateY(-50%);
     font-size: var(--gts-small-fs);
+
     .gts-badge {
         position: relative;
         right: -4px;

@@ -55,8 +55,9 @@ const API_PATHS = {
     fillStatusMonth: '/api/fillStatus/fill_status_month.json',
 
     // DataTable
-    sitesList: '/api/inner/site_page.json',
-    sitesDT: '/api/inner/site_table.json',
+    siteDetails: '/api/inner/site_details.json',
+    sitesData: '/api/inner/site_page.json',
+    // sitesDT: '/api/inner/site_table.json',
 };
 
 // Shared function to fetch data from JSON files
@@ -113,8 +114,13 @@ const ChartBackgroundColor = () => {
 
             // Resolve with the background color
             const colors = {
-                backgroundColor: isDarkMode ? '#202029' : '#ffffff',
-                secondaryBgColor: isDarkMode ? '#171721' : '#f4f7fe',
+
+                // --gts-white-color: #1c1f27;//1b1e25
+                // --gts-light-color: #141420;
+
+
+                backgroundColor: isDarkMode ? '#1c1f29' : '#ffffff',
+                secondaryBgColor: isDarkMode ? '#141420' : '#f4f7fe',
                 secondaryAlphaColor: isDarkMode ? '#272731' : '#eceef2',
                 txtColor: isDarkMode ? '#d6cfcf' : '#4D4D4D'
             };

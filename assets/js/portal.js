@@ -1,6 +1,6 @@
-import { pageReady, PageLoader, Button, Popover, Modal } from './script.js';
+import { pageReady, PageLoader, Button, Popover, Modal, Drawer, Tab } from './script.js';
 import { ReloadCharts } from './dashboard.js';
-import { ReloadInnerCharts } from './inner.js';
+import { ReloadInnerCharts } from './sites.js';
 
 const MobileNav = {
     init: () => {
@@ -360,6 +360,8 @@ pageReady(() => {
     PageLoader.init();
     Button.init();
     Popover.init();
+    Drawer.init();
+    Tab.init();
     AppearanceToggle.init();
     MobileNav.init();
     NotificationSystem.init();

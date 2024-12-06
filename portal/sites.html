@@ -171,7 +171,7 @@
                             <div class="gts-grid-item triple-col">
                                 <div class="gts-grid grid-5">
 
-                                    <div class="gts-grid-item double-col">
+                                    <div class="gts-grid-item double-col"  id="sitesDetailsList">
                                         <div class="sites-list-wrapper" id="siteListWrapper">
                                             <div class="gts-filter">
                                                 <span class="mat-icon material-symbols-sharp">search</span>
@@ -200,62 +200,50 @@
                                         </div>
                                     </div>
 
-                                    <div class="gts-grid-item">
+                                    <div class="gts-grid-item triple-col" id="sitesDataDetails">
                                         <div class="gts-grid">
-                                            <!-- <div class="gts-grid-item triple-col">
-                                                <div class="gts-item-content">
-                                                    <div class="gts-value">
-                                                        <div class="icon-wrapper"><span
-                                                                class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                            <div class="gts-grid-item">
+                                                <div class="gts-grid">
+                                                    <div class="gts-grid-item triple-col">
+                                                        <div class="gts-item-content white-box no-padding">
+                                                            <div class="site-status-wrapper">
+                                                                <div id="onlineSitesChartInner" class="chart-area"></div>
+                                                                <h3 class="site-value-wrapper">
+                                                                    <span id="onlineSitesValueInner">0</span> Online
+                                                                </h3>
+                                                            </div>
                                                         </div>
-                                                        <h3><span id="totalSites">0</span> Sites in total</h3>
                                                     </div>
-                                                </div>
-                                            </div> -->
-                                            <div class="gts-grid-item triple-col">
-                                                <div class="gts-item-content no-padding">
-                                                    <div class="site-status-wrapper">
-                                                        <div id="onlineSitesChartInner" class="chart-area"></div>
-                                                        <h3 class="site-value-wrapper">
-                                                            <span id="onlineSitesValueInner">0</span> Online
-                                                        </h3>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="gts-grid-item triple-col">
-                                                <div class="gts-item-content no-padding">
-                                                    <div class="site-status-wrapper">
-                                                        <div id="offlineSitesChartInner" class="chart-area"></div>
-                                                        <h3 class="site-value-wrapper">
-                                                            <span id="offlineSitesValueInner">0</span> Offline
-                                                        </h3>
+                                                    <div class="gts-grid-item triple-col">
+                                                        <div class="gts-item-content white-box no-padding">
+                                                            <div class="site-status-wrapper">
+                                                                <div id="offlineSitesChartInner" class="chart-area"></div>
+                                                                <h3 class="site-value-wrapper">
+                                                                    <span id="offlineSitesValueInner">0</span> Offline
+                                                                </h3>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="gts-grid-item double-col">
+                                                <div class="gts-item-content no-padding">
+                                                    <div id="mapWrapper">
+                                                        <iframe
+                                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
+                                                            width="600" height="520" style="border:0;" allowfullscreen=""
+                                                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                                                            title=""></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+
                                         </div>
                                     </div>
 
                                     <!-- <div class="gts-grid-item double-col">
-                                        <div class="gts-item-content gts-charts white-box">
-                                            <div class="gts-card-title">
-                                                <div class="gts-card-title-wrapper">
-                                                    <span class="mat-icon material-symbols-sharp">pie_chart</span>
-                                                    <h3>Site status comparison</h3>
-                                                </div>
-        
-                                                <div class="chart-controls">
-                                                    <button class="btn btn-icon download-chart"
-                                                        data-popover-target="#download-chart">
-                                                        <span class="mat-icon material-symbols-sharp">download</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div id="siteStatusChart" class="chart-area"></div>
-                                            <div class="chart-legend"></div>
-                                        </div>
-                                    </div> -->
-
-                                    <div class="gts-grid-item double-col">
                                         <div class="gts-item-content no-padding">
                                             <div id="mapWrapper">
                                                 <iframe
@@ -265,7 +253,7 @@
                                                     title=""></iframe>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </div>
@@ -458,16 +446,55 @@
         </div>
     </div>
 
+    <!--- Drawer -->
+    <div class="drawer-wrapper" id="siteDetails">
+        <div class="drawer-body custom-scroll-bar">
+            <div class="drawer-title">
+                <div class="icon-wrapper">
+                    <span class="mat-icon material-symbols-sharp">location_on</span>
+                </div>
+                <div class="drawer-title-wrapper">
+                    <p>000000</p>
+                    <h2>Site name</h2>
+                </div>
+            </div>
+            <div class="tabs-wrapper">
+                <div class="site-details-tabs tabs-buttons">
+                    <button class="active" data-tab-target="#tankTabContainer">Tanks</button>
+                    <button  data-tab-target="#pumpsTabContainer">Pumps</button>
+                </div>
+
+                <!-- Tanks Tab Conatiner -->
+                <div class="tab-content" id="tankTabContainer">
+                    Tanks
+                </div>
+
+                <!-- Pumps Tab Conatiner -->
+                <div class="tab-content" id="pumpsTabContainer">
+                    Pumps
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>
     <script type="text/javascript" src="../vendor/js/html2canvas.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/jspdf.umd.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/dataTables.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/dataTables.responsive.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/dataTables.buttons.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/buttons.dataTables.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/jszip.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/pdfmake.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/vfs_fonts.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/buttons.html5.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/buttons.print.min.js" defer></script>
 
     <!-- GTS Scripts -->
     <script type="module" src="../assets/js/portal.js" defer></script>
-    <script type="module" src="../assets/js/inner.js" defer></script>
+    <script type="module" src="../assets/js/sites.js" defer></script>
 </body>
 
 </html>
