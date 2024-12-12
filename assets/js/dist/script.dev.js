@@ -195,7 +195,8 @@ var Popover = {
   },
   // Show the popover when clicking on the element with `data-target`
   openPopover: function openPopover() {
-    var popoverTriggers = document.querySelectorAll("[data-popover-target]");
+    var popoverTriggers = document.querySelectorAll("[data-popover-target]"); // console.log(popoverTriggers)
+
     popoverTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (e) {
         var targetSelector = trigger.getAttribute("data-popover-target");
