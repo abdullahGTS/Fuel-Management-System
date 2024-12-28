@@ -1,6 +1,9 @@
 #gts-header {
     width: 100%;
     padding: 0 30px;
+    position: sticky;
+    top: 0px;
+    z-index: 99;
     .gts-head {
         display: flex;
         align-items: center;
@@ -9,7 +12,9 @@
         padding: 0;
         border-bottom: 1px solid;
         border-color: rgba(var(--gts-brd-color), 0.14);
+        border-radius: var(--gts-sm-curve) 0 0 var(--gts-sm-curve);
         position: relative;
+        background-color: var(--gts-white-color);
         .gts-title {
             transition: transform 210ms ease;
             display: flex;

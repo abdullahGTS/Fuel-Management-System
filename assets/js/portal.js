@@ -1,6 +1,8 @@
+// portal.js
 import { pageReady, PageLoader, Button, Popover, Modal, Drawer, Tab } from './script.js';
 import { ReloadCharts } from './dashboard.js';
-import { ReloadInnerCharts } from './sites.js';
+import { ReloadSitesCharts } from './sites.js';
+import { ReloadAlarmsCharts } from './alarms.js';
 
 const MobileNav = {
     init: () => {
@@ -166,6 +168,16 @@ const CollapsedMenu = {
         } else if (!isCollapsed && CollapsedMenu.isTooltipActive) {
             CollapsedMenu.deactivateTooltips();
         }
+
+        const tablesArry = document.querySelectorAll('.gts-dt-wrapper table');
+        if (tablesArry.length) {
+            tablesArry.forEach(table => {
+                const tableApi = $(table).DataTable();
+                if (tableApi) {
+                    tableApi.responsive.recalc();
+                }
+            })
+        }
     },
 
     // Activate tooltips by adding mouse event listeners
@@ -323,7 +335,8 @@ const AppearanceToggle = {
         } 
 
         ReloadCharts.chartReload();
-        ReloadInnerCharts.chartReload();
+        ReloadSitesCharts.chartReload();
+        ReloadAlarmsCharts.chartReload();
     },    
 
     setCheckedMode: (mode) => {

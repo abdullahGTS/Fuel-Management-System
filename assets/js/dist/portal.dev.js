@@ -6,6 +6,9 @@ var _dashboard = require("./dashboard.js");
 
 var _sites = require("./sites.js");
 
+var _alarms = require("./alarms.js");
+
+// portal.js
 var MobileNav = {
   init: function init() {
     var navigation = document.querySelector("#side-bar");
@@ -156,6 +159,18 @@ var CollapsedMenu = {
     } else if (!isCollapsed && CollapsedMenu.isTooltipActive) {
       CollapsedMenu.deactivateTooltips();
     }
+
+    var tablesArry = document.querySelectorAll('.gts-dt-wrapper table');
+
+    if (tablesArry.length) {
+      tablesArry.forEach(function (table) {
+        var tableApi = $(table).DataTable();
+
+        if (tableApi) {
+          tableApi.responsive.recalc();
+        }
+      });
+    }
   },
   // Activate tooltips by adding mouse event listeners
   activateTooltips: function activateTooltips() {
@@ -298,7 +313,9 @@ var AppearanceToggle = {
 
     _dashboard.ReloadCharts.chartReload();
 
-    _sites.ReloadInnerCharts.chartReload();
+    _sites.ReloadSitesCharts.chartReload();
+
+    _alarms.ReloadAlarmsCharts.chartReload();
   },
   setCheckedMode: function setCheckedMode(mode) {
     // Uncheck all checkboxes first

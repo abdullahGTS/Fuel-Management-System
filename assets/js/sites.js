@@ -1,4 +1,4 @@
-//dashboard.js
+//sites.js
 import { pageReady, Button, Drawer, Tab, DataTable } from './script.js';
 import { API_PATHS, fetchData, SharedColors, ChartBackgroundColor } from './constant.js';
 
@@ -100,10 +100,14 @@ const SiteDT = {
             const sites = await SiteDT.fetchData();
             if (sites && sites.length > 0) {
                 const formattedData = SiteDT.transformData(sites);
+                const columnDefs = [
+                    { width: "0px", targets: 0 },  // Hide the first column (id)
+                    { width: "380px", targets: 6 },  // Set specific width for the 7th column (Time)
+                ];
                 DataTable.init(".gts-dt-wrapper", {
                     data: formattedData,
                     columns: [
-                        { title: `<span class="mat-icon material-symbols-sharp">numbers</span> Site ID`, data: "id" },
+                        { title: `<span class="mat-icon material-symbols-sharp">numbers</span>`, data: "id" },
                         { title: `<span class="mat-icon material-symbols-sharp">location_on</span> Site Number`, data: "sitenumber" },
                         { title: `<span class="mat-icon material-symbols-sharp">home</span> Site Name`, data: "name" },
                         { title: `<span class="mat-icon material-symbols-sharp">access_time</span> Last Connection`, data: "lastconnection" },
@@ -127,7 +131,9 @@ const SiteDT = {
                     render: (data, type, row) => {
                         return `<button class="btn btn-icon view-more" data-siteid="${row.sitenumber}" data-drawer-target="#siteDetails"><span class="mat-icon material-symbols-sharp">visibility</span></button>`;
                     },
-                }], "Sites data table");
+                },
+                { width: "80px", targets: 0 },  // Hide the first column (id)
+                { width: "80px", targets: 6 }], "Sites data table");
 
                 // Attach click event to dynamically generated "view-more" buttons
                 document.querySelector(".gts-dt-wrapper").addEventListener("click", (event) => {
@@ -178,7 +184,8 @@ const SiteDT = {
 
 const SiteList = {
     init: async () => {
-        const wrapper = document.querySelector("#siteListWrapper")
+        const wrapper = document.querySelector("#siteListWrapper");
+        if ( !wrapper ) return;
         const sites = await fetchData(API_PATHS.sitesData);
         if (!sites || Object.keys(sites).length === 0) {
             console.error("No sites data available");
@@ -1148,11 +1155,11 @@ const SiteDrawer = {
     }
 }
 
-export const ReloadInnerCharts = {
+export const ReloadSitesCharts = {
     // Initialize the menu toggle functionality
     init: () => {
         // Attach the click event listener to #toggle-menu
-        document.getElementById('toggle-menu').addEventListener('click', ReloadInnerCharts.chartReload);
+        document.getElementById('toggle-menu').addEventListener('click', ReloadSitesCharts.chartReload);
     },
 
     chartReload: () => {
@@ -1206,7 +1213,7 @@ export const ReloadInnerCharts = {
 const RunCharts = {
     init: () => {
         SiteStatus.init();
-        ReloadInnerCharts.init();
+        ReloadSitesCharts.init();
     }
 }
 

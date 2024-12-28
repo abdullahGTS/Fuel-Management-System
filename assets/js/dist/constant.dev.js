@@ -46,10 +46,12 @@ var API_PATHS = {
   fillStatusYesterday: '/api/fillStatus/fill_status_yesterday.json',
   fillStatusWeek: '/api/fillStatus/fill_status_week.json',
   fillStatusMonth: '/api/fillStatus/fill_status_month.json',
-  // DataTable
-  siteDetails: '/api/inner/site_details.json',
-  sitesData: '/api/inner/site_page.json' // sitesDT: '/api/inner/site_table.json',
-
+  // Inner Sites
+  siteDetails: '/api/inner/sites/site_details.json',
+  sitesData: '/api/inner/sites/site_page.json',
+  // Inner Alarms
+  alarmDetails: '/api/inner/alarms/alarm_page.json',
+  alarmData: '/api/inner/alarms/alarm_data.json'
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;

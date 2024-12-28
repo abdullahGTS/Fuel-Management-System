@@ -4,7 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.pageReady = pageReady;
-exports.DataTable = exports.Tab = exports.Drawer = exports.Modal = exports.Popover = exports.Button = exports.PageLoader = void 0;
+exports.DatatableFilter = exports.DatePicker = exports.Select = exports.DataTable = exports.Tab = exports.Drawer = exports.Modal = exports.Popover = exports.Button = exports.PageLoader = void 0;
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -289,8 +297,7 @@ var Drawer = {
     drawerTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (e) {
         var targetSelector = trigger.getAttribute("data-drawer-target");
-        var drawerWrapper = document.querySelector(targetSelector);
-        console.log('targetSelector', targetSelector); // Remove fade-out class if present and add fade-in class
+        var drawerWrapper = document.querySelector(targetSelector); // Remove fade-out class if present and add fade-in class
 
         drawerWrapper.classList.remove("slide-out");
         drawerWrapper.classList.add("slide-in"); // Display the modal
@@ -441,82 +448,12 @@ var DataTable = {
         extend: 'csvHtml5',
         text: 'Export CSV',
         filename: 'custom_filename',
-        title: 'Custom Table Export' // exportOptions: {
-        //   stripHtml: true,
-        //   format: {
-        //     header: function (data, row, column, node) {
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //       }
-        //       if (column.classList.contains('dt-orderable-none')) {
-        //         console.log('before column', column)
-        //         data = ''; // Clear the cell's content for export
-        //         column.remove();
-        //       }
-        //       return data;
-        //     },
-        //     body: function (data, row, column, node) {
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //         const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
-        //         if (statusMatch) {
-        //           data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
-        //         }
-        //       }
-        //       // Additional check: remove content for the last column if it contains "view-more"
-        //       if (node && $(node).find('button.view-more').length > 0) {
-        //         data = ''; // Clear the cell's content for export
-        //       }
-        //       return data; // Return the cleaned data
-        //     }
-        //   }
-        // },
-        // customize: function (doc) {
-        //   console.log('doc.pageSize', doc);
-        //   console.log('doc.pageMargins', doc.pageMargins);
-        // }
-
+        title: 'Custom Table Export'
       }, {
         extend: 'excelHtml5',
         text: 'Export Excel',
         filename: 'custom_filename',
-        title: 'Custom Table Export' // exportOptions: {
-        //   stripHtml: false,
-        //   format: {
-        //     header: function (data, row, column, node) {
-        //       console.log('Header Data', data);
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //       }
-        //       if (column.classList.contains('dt-orderable-none')) {
-        //         console.log('before column', column)
-        //         data = ''; // Clear the cell's content for export
-        //         column.remove();
-        //       }
-        //       return data;
-        //     },
-        //     body: function (data, row, column, node) {
-        //       console.log('Body Data', data);
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //         const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
-        //         if (statusMatch) {
-        //           data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
-        //         }
-        //       }
-        //       // Additional check: remove content for the last column if it contains "view-more"
-        //       if (node && $(node).find('button.view-more').length > 0) {
-        //         data = ''; // Clear the cell's content for export
-        //       }
-        //       return data; // Return the cleaned data
-        //     }
-        //   }
-        // },
-        // customize: function (doc) {
-        //   console.log('doc.pageSize', doc);
-        //   console.log('doc.pageMargins', doc.pageMargins);
-        // }
-
+        title: 'Custom Table Export'
       }, {
         extend: 'pdfHtml5',
         text: 'Export PDF',
@@ -526,14 +463,11 @@ var DataTable = {
           stripHtml: false,
           format: {
             header: function header(data, row, column, node) {
-              console.log('Header Data', data);
-
               if (typeof data === 'string') {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
               }
 
               if (column.classList.contains('dt-orderable-none')) {
-                console.log('before column', column);
                 data = ''; // Clear the cell's content for export
 
                 column.remove();
@@ -542,8 +476,6 @@ var DataTable = {
               return data;
             },
             body: function body(data, row, column, node) {
-              console.log('Body Data', data);
-
               if (typeof data === 'string') {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
                 var statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
@@ -562,9 +494,8 @@ var DataTable = {
             }
           }
         },
-        customize: function customize(doc) {
-          console.log('doc.pageSize', doc);
-          console.log('doc.pageMargins', doc.pageMargins);
+        customize: function customize(doc) {// console.log('doc.pageSize', doc);
+          // console.log('doc.pageMargins', doc.pageMargins);
         }
       }],
       columnDefs: columnDefs,
@@ -625,11 +556,13 @@ var DataTable = {
 
 
         var headers = table.querySelectorAll("th:not(.dt-orderable-none)");
-        headers.forEach(function (header) {
-          var icon = document.createElement("span");
-          icon.className = "mat-icon material-symbols-sharp sort-icon";
-          icon.textContent = "expand_all";
-          header.appendChild(icon);
+        headers.forEach(function (header, index) {
+          if (index !== 0) {
+            var icon = document.createElement("span");
+            icon.className = "mat-icon material-symbols-sharp sort-icon";
+            icon.textContent = "expand_all";
+            header.appendChild(icon);
+          }
         });
         this.api().on('responsive-resize', function (e, dt, columns) {
           // Apply the border-radius styles
@@ -666,6 +599,7 @@ var DataTable = {
             });
           }
         });
+        this.api().columns.adjust();
       }
     }));
     DataTable.exportDialog(tableApi);
@@ -735,35 +669,6 @@ var DataTable = {
       });
     }
   },
-  // exportToPDF: (tableApi, fileName, exportScope) => {  
-  //   const button = tableApi.button('.buttons-pdf');
-  //   // Override action function
-  //   button.action(function(e, dt, button, config) {
-  //     console.log('Inside action function');
-  //     console.log('FileName before setting:', config.title);
-  //     config.title = fileName;
-  //     console.log('FileName after setting:', fileName);
-  //     console.log('ExportScope before setting:', exportScope);
-  //     switch (exportScope) {
-  //       case 'currentPage':
-  //         config.exportOptions = { modifier: { page: 'current' } }; // Export current page
-  //         break;
-  //       case 'selectedRows':
-  //         config.exportOptions = { modifier: { selected: true } }; // Export selected rows
-  //         break;
-  //       case 'allData':
-  //         config.exportOptions = { modifier: { page: 'all' } }; // Export all data
-  //         break;
-  //       default:
-  //         console.error('Invalid export scope');
-  //         return;
-  //     }
-  //     console.log('Triggering export with updated config');
-  //     dt.button(button).trigger(); // Trigger export
-  //   });
-  //   // Trigger the action
-  //   button.trigger();
-  // },
   modifyExport: {
     columns: function columns(columnIdx, data, node) {
       // Exclude columns based on custom conditions
@@ -1061,3 +966,204 @@ var DataTable = {
   }
 };
 exports.DataTable = DataTable;
+var DatatableFilter = {
+  init: function init(wrapper, response, filterOptions, FilterFn, DTableFn) {
+    var resolver;
+    return regeneratorRuntime.async(function init$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            return _context2.abrupt("return", new Promise(function (resolve) {
+              resolver = resolve; // Set the resolver on the first call
+
+              var renderFilters = function renderFilters() {
+                // Create a wrapper div for all filter items
+                var filterItemsWrapper = document.createElement('div');
+                filterItemsWrapper.classList.add('datatable-filter-items'); // Loop through filter categories and create select dropdowns
+
+                Object.entries(filterOptions).forEach(function (_ref) {
+                  var _ref2 = _slicedToArray(_ref, 2),
+                      filterKey = _ref2[0],
+                      _ref2$ = _ref2[1],
+                      options = _ref2$.options,
+                      originalKey = _ref2$.originalKey;
+
+                  var filterDiv = document.createElement('div');
+                  filterDiv.classList.add('filter-item');
+                  var label = document.createElement('label');
+                  label.setAttribute('for', filterKey);
+                  label.textContent = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1');
+                  filterDiv.appendChild(label);
+                  var formItem = document.createElement('div');
+                  formItem.classList.add('form-item'); // Add dropdown or date pickers
+
+                  if (originalKey === 'time') {
+                    var dataPickerFrom = document.createElement('input');
+                    dataPickerFrom.id = 'filterDateFrom';
+                    dataPickerFrom.type = 'text';
+                    dataPickerFrom.name = 'filterDateFrom';
+                    dataPickerFrom.placeholder = 'From';
+                    var dataPickerTo = document.createElement('input');
+                    dataPickerTo.id = 'filterDateTo';
+                    dataPickerTo.type = 'text';
+                    dataPickerTo.name = 'filterDateTo';
+                    dataPickerTo.placeholder = 'To';
+                    filterDiv.classList.add('data-picker-wrapper');
+                    formItem.appendChild(dataPickerFrom);
+                    formItem.appendChild(dataPickerTo); // Initialize date pickers
+                  } else {
+                    var select = document.createElement('select');
+                    select.id = originalKey;
+                    select.name = originalKey;
+                    select.setAttribute('multiple', 'multiple');
+                    select.classList.add('custom-select', 'js-example-basic-multiple');
+                    options.forEach(function (option) {
+                      var optionElement = document.createElement('option');
+                      optionElement.value = option;
+                      optionElement.textContent = option;
+                      select.appendChild(optionElement);
+                    });
+                    formItem.appendChild(select);
+                  }
+
+                  filterDiv.appendChild(formItem);
+                  filterItemsWrapper.appendChild(filterDiv);
+                });
+
+                if (wrapper) {
+                  wrapper.innerHTML = '';
+                  wrapper.appendChild(filterItemsWrapper);
+                } else {
+                  console.error('No element with id #dtFilterWrapper found.');
+                } // Create and append the submit and clear buttons
+
+
+                var filterButtonDiv = document.createElement('div');
+                filterButtonDiv.classList.add('filter-button');
+                var filterButton = document.createElement('button');
+                filterButton.classList.add('btn');
+                filterButton.id = 'filterButton';
+                filterButton.textContent = 'Apply Filters';
+                var clearButton = document.createElement('button');
+                clearButton.classList.add('clear', 'btn');
+                clearButton.textContent = 'Clear';
+                clearButton.addEventListener('click', function () {
+                  wrapper.innerHTML = '';
+                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn);
+                  FilterFn.state.selectedFilters = response;
+                  DTableFn.init(response);
+                });
+                filterButtonDiv.appendChild(clearButton);
+                filterButtonDiv.appendChild(filterButton);
+                wrapper.appendChild(filterButtonDiv); // Click event to apply filters
+
+                filterButton.addEventListener('click', function () {
+                  var selectedFilters = {}; // Collect selected options for filters
+
+                  document.querySelectorAll('.datatable-filter-items select').forEach(function (select) {
+                    var selectedOptions = Array.from(select.selectedOptions).map(function (option) {
+                      return option.value;
+                    });
+
+                    if (selectedOptions.length > 0) {
+                      selectedFilters[select.name] = selectedOptions;
+                    }
+                  }); // Handle date filters
+
+                  var fromDate = document.querySelector('#filterDateFrom').value;
+                  var toDate = document.querySelector('#filterDateTo').value;
+
+                  if (fromDate || toDate) {
+                    selectedFilters['time'] = {
+                      from: fromDate,
+                      to: toDate
+                    };
+                  }
+
+                  FilterFn.state.selectedFilters = selectedFilters;
+                  FilterFn.filterSubmit(selectedFilters);
+                  resolver(selectedFilters); // Resolve the promise with the filters
+                });
+              };
+
+              renderFilters(); // Render filters for the first time
+
+              DatePicker.init();
+              Select.init();
+            }));
+
+          case 1:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
+  }
+};
+exports.DatatableFilter = DatatableFilter;
+var Select = {
+  init: function init() {
+    // const customelect = document.querySelector('.custom-select');
+    var customSelect = $('.custom-select');
+
+    if (customSelect) {
+      customSelect.select2({
+        placeholder: "Select a state"
+      });
+      console.log('True');
+    }
+  }
+};
+exports.Select = Select;
+var DatePicker = {
+  init: function init() {
+    var dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
+
+    var filterDateFrom = document.getElementById("filterDateFrom");
+    var filterDateTo = document.getElementById("filterDateTo");
+
+    if (filterDateFrom && filterDateTo) {
+      // Utility function to format the date in the desired format (if needed)
+      var formatDate = function formatDate(date) {
+        var parsedDate = new Date(date);
+        var month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+        var day = String(parsedDate.getDate()).padStart(2, "0");
+        var year = parsedDate.getFullYear();
+        var hours = String(parsedDate.getHours()).padStart(2, "0");
+        var minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+        return "".concat(month, "/").concat(day, "/").concat(year, " ").concat(hours, ":").concat(minutes);
+      }; // Optional: Add event listeners for additional actions on date changes
+
+
+      // Initialize Flatpickr for "From" date
+      var fromPicker = flatpickr(filterDateFrom, {
+        enableTime: true,
+        dateFormat: dateFormat,
+        onChange: function onChange(selectedDates, dateStr) {
+          if (selectedDates.length > 0) {
+            // Set the minimum date for the "To" date picker
+            toPicker.set("minDate", selectedDates[0]);
+          }
+        }
+      }); // Initialize Flatpickr for "To" date
+
+      var toPicker = flatpickr(filterDateTo, {
+        enableTime: true,
+        dateFormat: dateFormat,
+        onChange: function onChange(selectedDates, dateStr) {
+          if (selectedDates.length > 0) {
+            // Set the maximum date for the "From" date picker
+            fromPicker.set("maxDate", selectedDates[0]);
+          }
+        }
+      });
+      filterDateFrom.addEventListener("change", function () {
+        console.log("From Date Selected:", formatDate(this.value));
+      });
+      filterDateTo.addEventListener("change", function () {
+        console.log("To Date Selected:", formatDate(this.value));
+      });
+    }
+  }
+};
+exports.DatePicker = DatePicker;

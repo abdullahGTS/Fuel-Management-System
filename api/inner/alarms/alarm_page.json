@@ -1,0 +1,67 @@
+{
+    "alarm_filters": {
+        "siteNumbers": [
+            1001,
+            1002,
+            1003,
+            1004
+        ],
+        "types": [
+            "DISCONNECTED",
+            "LOW_FLOW_HOSE_2",
+            "PRODUCT_HIGH",
+            "WATER_HIGH",
+            "DELEVERY_reconciliation",
+            "OVERFLOW",
+            "LOW_FLOW_HOSE_1",
+            "PRODUCT_LOW",
+            "TANK_NO_LEVEL",
+            "SUCTION",
+            "SUDDEN_loss"
+        ],
+        "sources": [
+            "FC",
+            "OP",
+            "FHO"
+        ],
+        "isactives": [
+            "active",
+            "solved"
+        ],
+        "severities": [
+            "Warning",
+            "Alarm",
+            "Unknown",
+            "Info"
+        ],
+        "devices": [
+            "Probe 1",
+            "Probe 2",
+            "Probe 3",
+            "Probe 4",
+            "Probe 5",
+            "Probe 6",
+            "Pump 1",
+            "Pump 2",
+            "Pump 3",
+            "Pump 4",
+            "Pump 5",
+            "Pump 6",
+            "Pump 7",
+            "Pump 8",
+            "Tank 1",
+            "Tank 2",
+            "Tank 3",
+            "Tank 4",
+            "Tank 5",
+            "Tank 6",
+            "Unknown 1"
+        ],
+        "siteNames": [
+            "El Abasia",
+            "el dwahy bour saeed",
+            "hassan_roman_new_domyat",
+            "port_saeed"
+        ]
+    }
+}

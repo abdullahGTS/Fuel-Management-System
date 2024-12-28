@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ReloadInnerCharts = void 0;
+exports.ReloadSitesCharts = void 0;
 
 var _script = require("./script.js");
 
@@ -147,7 +147,7 @@ var SiteStatus = {
 var SiteDT = {
   // Initialize the Site DataTable
   init: function init() {
-    var siteDT, sites, formattedData;
+    var siteDT, sites, formattedData, columnDefs;
     return regeneratorRuntime.async(function init$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -167,11 +167,20 @@ var SiteDT = {
 
             if (sites && sites.length > 0) {
               formattedData = SiteDT.transformData(sites);
+              columnDefs = [{
+                width: "0px",
+                targets: 0
+              }, // Hide the first column (id)
+              {
+                width: "380px",
+                targets: 6
+              } // Set specific width for the 7th column (Time)
+              ];
 
               _script.DataTable.init(".gts-dt-wrapper", {
                 data: formattedData,
                 columns: [{
-                  title: "<span class=\"mat-icon material-symbols-sharp\">numbers</span> Site ID",
+                  title: "<span class=\"mat-icon material-symbols-sharp\">numbers</span>",
                   data: "id"
                 }, {
                   title: "<span class=\"mat-icon material-symbols-sharp\">location_on</span> Site Number",
@@ -209,6 +218,13 @@ var SiteDT = {
                 render: function render(data, type, row) {
                   return "<button class=\"btn btn-icon view-more\" data-siteid=\"".concat(row.sitenumber, "\" data-drawer-target=\"#siteDetails\"><span class=\"mat-icon material-symbols-sharp\">visibility</span></button>");
                 }
+              }, {
+                width: "80px",
+                targets: 0
+              }, // Hide the first column (id)
+              {
+                width: "80px",
+                targets: 6
               }], "Sites data table"); // Attach click event to dynamically generated "view-more" buttons
 
 
@@ -292,14 +308,23 @@ var SiteList = {
         switch (_context5.prev = _context5.next) {
           case 0:
             wrapper = document.querySelector("#siteListWrapper");
-            _context5.next = 3;
-            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.sitesData));
+
+            if (wrapper) {
+              _context5.next = 3;
+              break;
+            }
+
+            return _context5.abrupt("return");
 
           case 3:
+            _context5.next = 5;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.sitesData));
+
+          case 5:
             sites = _context5.sent;
 
             if (!(!sites || Object.keys(sites).length === 0)) {
-              _context5.next = 8;
+              _context5.next = 10;
               break;
             }
 
@@ -307,7 +332,7 @@ var SiteList = {
             SiteList.emptyState(wrapper);
             return _context5.abrupt("return");
 
-          case 8:
+          case 10:
             SiteList.removeEmptyState(wrapper); // Set total sites count
 
             totalSites = document.querySelector("#totalSites");
@@ -332,7 +357,7 @@ var SiteList = {
               });
             }
 
-          case 15:
+          case 17:
           case "end":
             return _context5.stop();
         }
@@ -1125,11 +1150,11 @@ var SiteDrawer = {
     });
   }
 };
-var ReloadInnerCharts = {
+var ReloadSitesCharts = {
   // Initialize the menu toggle functionality
   init: function init() {
     // Attach the click event listener to #toggle-menu
-    document.getElementById('toggle-menu').addEventListener('click', ReloadInnerCharts.chartReload);
+    document.getElementById('toggle-menu').addEventListener('click', ReloadSitesCharts.chartReload);
   },
   chartReload: function chartReload() {
     // Step 1: Check if the .gts-charts element exists
@@ -1184,11 +1209,11 @@ var ReloadInnerCharts = {
     }
   }
 };
-exports.ReloadInnerCharts = ReloadInnerCharts;
+exports.ReloadSitesCharts = ReloadSitesCharts;
 var RunCharts = {
   init: function init() {
     SiteStatus.init();
-    ReloadInnerCharts.init();
+    ReloadSitesCharts.init();
   }
 };
 (0, _script.pageReady)(function () {

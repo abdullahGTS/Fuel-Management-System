@@ -294,8 +294,6 @@ const Drawer = {
       trigger.addEventListener("click", (e) => {
         const targetSelector = trigger.getAttribute("data-drawer-target");
         const drawerWrapper = document.querySelector(targetSelector);
-        console.log('targetSelector', targetSelector);
-
         // Remove fade-out class if present and add fade-in class
         drawerWrapper.classList.remove("slide-out");
         drawerWrapper.classList.add("slide-in");
@@ -458,95 +456,13 @@ const DataTable = {
         extend: 'csvHtml5',
         text: 'Export CSV',
         filename: 'custom_filename',
-        title: 'Custom Table Export',
-        // exportOptions: {
-        //   stripHtml: true,
-        //   format: {
-        //     header: function (data, row, column, node) {
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //       }
-
-        //       if (column.classList.contains('dt-orderable-none')) {
-        //         console.log('before column', column)
-        //         data = ''; // Clear the cell's content for export
-        //         column.remove();
-        //       }
-
-        //       return data;
-        //     },
-        //     body: function (data, row, column, node) {
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //         const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
-        //         if (statusMatch) {
-        //           data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
-        //         }
-        //       }
-
-        //       // Additional check: remove content for the last column if it contains "view-more"
-        //       if (node && $(node).find('button.view-more').length > 0) {
-        //         data = ''; // Clear the cell's content for export
-        //       }
-
-        //       return data; // Return the cleaned data
-
-        //     }
-        //   }
-        // },
-        // customize: function (doc) {
-        //   console.log('doc.pageSize', doc);
-        //   console.log('doc.pageMargins', doc.pageMargins);
-        // }
+        title: 'Custom Table Export'
       },
       {
         extend: 'excelHtml5',
         text: 'Export Excel',
         filename: 'custom_filename',
-        title: 'Custom Table Export',
-        // exportOptions: {
-        //   stripHtml: false,
-        //   format: {
-        //     header: function (data, row, column, node) {
-        //       console.log('Header Data', data);
-
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //       }
-
-        //       if (column.classList.contains('dt-orderable-none')) {
-        //         console.log('before column', column)
-        //         data = ''; // Clear the cell's content for export
-        //         column.remove();
-        //       }
-
-        //       return data;
-        //     },
-        //     body: function (data, row, column, node) {
-        //       console.log('Body Data', data);
-
-        //       if (typeof data === 'string') {
-        //         data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
-        //         const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
-        //         if (statusMatch) {
-        //           data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
-        //         }
-        //       }
-
-        //       // Additional check: remove content for the last column if it contains "view-more"
-        //       if (node && $(node).find('button.view-more').length > 0) {
-        //         data = ''; // Clear the cell's content for export
-        //       }
-
-        //       return data; // Return the cleaned data
-
-        //     }
-        //   }
-        // },
-        // customize: function (doc) {
-        //   console.log('doc.pageSize', doc);
-        //   console.log('doc.pageMargins', doc.pageMargins);
-        // }
+        title: 'Custom Table Export'
       },
       {
         extend: 'pdfHtml5',
@@ -557,14 +473,11 @@ const DataTable = {
           stripHtml: false,
           format: {
             header: function (data, row, column, node) {
-              console.log('Header Data', data);
-
               if (typeof data === 'string') {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
               }
 
               if (column.classList.contains('dt-orderable-none')) {
-                console.log('before column', column)
                 data = ''; // Clear the cell's content for export
                 column.remove();
               }
@@ -572,8 +485,6 @@ const DataTable = {
               return data;
             },
             body: function (data, row, column, node) {
-              console.log('Body Data', data);
-
               if (typeof data === 'string') {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
                 const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
@@ -593,8 +504,8 @@ const DataTable = {
           }
         },
         customize: function (doc) {
-          console.log('doc.pageSize', doc);
-          console.log('doc.pageMargins', doc.pageMargins);
+          // console.log('doc.pageSize', doc);
+          // console.log('doc.pageMargins', doc.pageMargins);
         }
       }],
       columnDefs,
@@ -658,11 +569,13 @@ const DataTable = {
 
         // Replace sorting icons with Material Icons
         const headers = table.querySelectorAll("th:not(.dt-orderable-none)");
-        headers.forEach((header) => {
-          const icon = document.createElement("span");
-          icon.className = "mat-icon material-symbols-sharp sort-icon";
-          icon.textContent = "expand_all";
-          header.appendChild(icon);
+        headers.forEach((header, index) => {
+          if (index !== 0) {
+            const icon = document.createElement("span");
+            icon.className = "mat-icon material-symbols-sharp sort-icon";
+            icon.textContent = "expand_all";
+            header.appendChild(icon);
+          }
         });
 
         this.api().on('responsive-resize', (e, dt, columns) => {
@@ -703,8 +616,8 @@ const DataTable = {
             });
           }
         });
+        this.api().columns.adjust();
       },
-
     });
     DataTable.exportDialog(tableApi);
     Popover.init();
@@ -823,41 +736,6 @@ const DataTable = {
     }
   },
 
-  // exportToPDF: (tableApi, fileName, exportScope) => {  
-  //   const button = tableApi.button('.buttons-pdf');
-
-  //   // Override action function
-  //   button.action(function(e, dt, button, config) {
-  //     console.log('Inside action function');
-  //     console.log('FileName before setting:', config.title);
-  //     config.title = fileName;
-
-  //     console.log('FileName after setting:', fileName);
-  //     console.log('ExportScope before setting:', exportScope);
-
-  //     switch (exportScope) {
-  //       case 'currentPage':
-  //         config.exportOptions = { modifier: { page: 'current' } }; // Export current page
-  //         break;
-  //       case 'selectedRows':
-  //         config.exportOptions = { modifier: { selected: true } }; // Export selected rows
-  //         break;
-  //       case 'allData':
-  //         config.exportOptions = { modifier: { page: 'all' } }; // Export all data
-  //         break;
-  //       default:
-  //         console.error('Invalid export scope');
-  //         return;
-  //     }
-
-  //     console.log('Triggering export with updated config');
-  //     dt.button(button).trigger(); // Trigger export
-  //   });
-
-  //   // Trigger the action
-  //   button.trigger();
-  // },
-
   modifyExport: {
     columns: function (columnIdx, data, node) {
       // Exclude columns based on custom conditions
@@ -958,37 +836,37 @@ const DataTable = {
     // Override action function
     button.action(function (e, dt, button, config) {
       try {
-      // Update file name
-      config.title = fileName;
-      config.filename = fileName;
+        // Update file name
+        config.title = fileName;
+        config.filename = fileName;
 
-      // Set export options based on the export scope
-      switch (exportScope) {
-        case 'currentPage':
-          config.exportOptions = { modifier: { page: 'current' } }; // Export current page
-          break;
-        case 'selectedRows':
-          config.exportOptions = { modifier: { selected: true } }; // Export selected rows
-          break;
-        case 'allData':
-          config.exportOptions = { modifier: { page: 'all' } }; // Export all data
-          break;
-        default:
-          console.error('Invalid export scope');
-          return;
-      }
+        // Set export options based on the export scope
+        switch (exportScope) {
+          case 'currentPage':
+            config.exportOptions = { modifier: { page: 'current' } }; // Export current page
+            break;
+          case 'selectedRows':
+            config.exportOptions = { modifier: { selected: true } }; // Export selected rows
+            break;
+          case 'allData':
+            config.exportOptions = { modifier: { page: 'all' } }; // Export all data
+            break;
+          default:
+            console.error('Invalid export scope');
+            return;
+        }
 
-      config.exportOptions = {
-        ...config.exportOptions, // Preserve existing options
-        columns: DataTable.modifyExport.columns,
-        format: {
-          header: DataTable.modifyExport.header,
-          body: DataTable.modifyExport.body,
-        },
-      };
+        config.exportOptions = {
+          ...config.exportOptions, // Preserve existing options
+          columns: DataTable.modifyExport.columns,
+          format: {
+            header: DataTable.modifyExport.header,
+            body: DataTable.modifyExport.body,
+          },
+        };
 
-      // Use the built-in export function
-      $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+        // Use the built-in export function
+        $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
       } catch (err) {
         console.error('Export action error:', err);
       }
@@ -1045,7 +923,6 @@ const DataTable = {
     button.trigger();
   },
 
-
   // Fetch Data for the DataTable
   fetchData: async (url) => {
     try {
@@ -1095,5 +972,196 @@ const DataTable = {
   },
 };
 
+const DatatableFilter = {
+  init: async (wrapper, response, filterOptions, FilterFn, DTableFn) => {
+      let resolver; // Keep resolver accessible across clicks
+      return new Promise((resolve) => {
+          resolver = resolve; // Set the resolver on the first call
 
-export { pageReady, PageLoader, Button, Popover, Modal, Drawer, Tab, DataTable };
+          const renderFilters = () => {
+              // Create a wrapper div for all filter items
+              const filterItemsWrapper = document.createElement('div');
+              filterItemsWrapper.classList.add('datatable-filter-items');
+
+              // Loop through filter categories and create select dropdowns
+              Object.entries(filterOptions).forEach(([filterKey, { options, originalKey }]) => {
+                  const filterDiv = document.createElement('div');
+                  filterDiv.classList.add('filter-item');
+
+                  const label = document.createElement('label');
+                  label.setAttribute('for', filterKey);
+                  label.textContent = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1');
+                  filterDiv.appendChild(label);
+
+                  const formItem = document.createElement('div');
+                  formItem.classList.add('form-item');
+
+                  // Add dropdown or date pickers
+                  if (originalKey === 'time') {
+                      const dataPickerFrom = document.createElement('input');
+                      dataPickerFrom.id = 'filterDateFrom';
+                      dataPickerFrom.type = 'text';
+                      dataPickerFrom.name = 'filterDateFrom';
+                      dataPickerFrom.placeholder = 'From';
+
+                      const dataPickerTo = document.createElement('input');
+                      dataPickerTo.id = 'filterDateTo';
+                      dataPickerTo.type = 'text';
+                      dataPickerTo.name = 'filterDateTo';
+                      dataPickerTo.placeholder = 'To';
+
+                      filterDiv.classList.add('data-picker-wrapper');
+                      formItem.appendChild(dataPickerFrom);
+                      formItem.appendChild(dataPickerTo);
+
+                      // Initialize date pickers
+                  } else {
+                      const select = document.createElement('select');
+                      select.id = originalKey;
+                      select.name = originalKey;
+                      select.setAttribute('multiple', 'multiple');
+                      select.classList.add('custom-select', 'js-example-basic-multiple');
+
+                      options.forEach(option => {
+                          const optionElement = document.createElement('option');
+                          optionElement.value = option;
+                          optionElement.textContent = option;
+                          select.appendChild(optionElement);
+                      });
+
+                      formItem.appendChild(select);
+                  }
+
+                  filterDiv.appendChild(formItem);
+                  filterItemsWrapper.appendChild(filterDiv);
+              });
+
+              if (wrapper) {
+                  wrapper.innerHTML = '';
+                  wrapper.appendChild(filterItemsWrapper);
+              } else {
+                  console.error('No element with id #dtFilterWrapper found.');
+              }
+
+              // Create and append the submit and clear buttons
+              const filterButtonDiv = document.createElement('div');
+              filterButtonDiv.classList.add('filter-button');
+              const filterButton = document.createElement('button');
+              filterButton.classList.add('btn');
+              filterButton.id = 'filterButton';
+              filterButton.textContent = 'Apply Filters';
+
+              const clearButton = document.createElement('button');
+              clearButton.classList.add('clear', 'btn');
+              clearButton.textContent = 'Clear';
+              clearButton.addEventListener('click', () => {
+                  wrapper.innerHTML = '';
+                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn);
+                  FilterFn.state.selectedFilters = response;
+                  DTableFn.init(response);
+              });
+
+              filterButtonDiv.appendChild(clearButton);
+              filterButtonDiv.appendChild(filterButton);
+              wrapper.appendChild(filterButtonDiv);
+
+              // Click event to apply filters
+              filterButton.addEventListener('click', () => {
+                  const selectedFilters = {};
+
+                  // Collect selected options for filters
+                  document.querySelectorAll('.datatable-filter-items select').forEach(select => {
+                      const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
+                      if (selectedOptions.length > 0) {
+                          selectedFilters[select.name] = selectedOptions;
+                      }
+                  });
+
+                  // Handle date filters
+                  const fromDate = document.querySelector('#filterDateFrom').value;
+                  const toDate = document.querySelector('#filterDateTo').value;
+                  if (fromDate || toDate) {
+                      selectedFilters['time'] = { from: fromDate, to: toDate };
+                  }
+                  FilterFn.state.selectedFilters = selectedFilters;
+                  FilterFn.filterSubmit(selectedFilters);
+                  resolver(selectedFilters); // Resolve the promise with the filters
+              });
+          };
+
+          renderFilters(); // Render filters for the first time
+
+          DatePicker.init();
+          Select.init();
+      });
+  }
+};
+
+const Select = {
+  init: () => {
+    // const customelect = document.querySelector('.custom-select');
+    const customSelect = $('.custom-select');
+    if (customSelect) {
+      customSelect.select2({
+        placeholder: "Select a state"
+      });
+      console.log('True')
+    }
+  }
+}
+
+const DatePicker = {
+  init: () => {
+    const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
+    const filterDateFrom = document.getElementById("filterDateFrom");
+    const filterDateTo = document.getElementById("filterDateTo");
+
+    if (filterDateFrom && filterDateTo) {
+      // Initialize Flatpickr for "From" date
+      const fromPicker = flatpickr(filterDateFrom, {
+        enableTime: true,
+        dateFormat: dateFormat,
+        onChange: function (selectedDates, dateStr) {
+          if (selectedDates.length > 0) {
+            // Set the minimum date for the "To" date picker
+            toPicker.set("minDate", selectedDates[0]);
+          }
+        }
+      });
+
+      // Initialize Flatpickr for "To" date
+      const toPicker = flatpickr(filterDateTo, {
+        enableTime: true,
+        dateFormat: dateFormat,
+        onChange: function (selectedDates, dateStr) {
+          if (selectedDates.length > 0) {
+            // Set the maximum date for the "From" date picker
+            fromPicker.set("maxDate", selectedDates[0]);
+          }
+        }
+      });
+
+      // Utility function to format the date in the desired format (if needed)
+      function formatDate(date) {
+        const parsedDate = new Date(date);
+        const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+        const day = String(parsedDate.getDate()).padStart(2, "0");
+        const year = parsedDate.getFullYear();
+        const hours = String(parsedDate.getHours()).padStart(2, "0");
+        const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+        return `${month}/${day}/${year} ${hours}:${minutes}`;
+      }
+
+      // Optional: Add event listeners for additional actions on date changes
+      filterDateFrom.addEventListener("change", function () {
+        console.log("From Date Selected:", formatDate(this.value));
+      });
+
+      filterDateTo.addEventListener("change", function () {
+        console.log("To Date Selected:", formatDate(this.value));
+      });
+    }
+  }
+};
+
+export { pageReady, PageLoader, Button, Popover, Modal, Drawer, Tab, DataTable, Select, DatePicker, DatatableFilter };

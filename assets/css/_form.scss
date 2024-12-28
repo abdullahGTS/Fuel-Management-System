@@ -1,7 +1,7 @@
 input:not([type=radio]):not([type=checkbox]),
 button,
 .btn,
-select,
+select:not(.custom-select),
 textarea {
     appearance: none;
     border-radius: var(--gts-sm-curve);
