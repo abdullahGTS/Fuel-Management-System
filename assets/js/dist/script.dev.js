@@ -156,7 +156,7 @@ var Popover = {
       var targetY;
 
       if (position === 'bottom') {
-        targetY = targetRect.bottom + window.scrollY + 10; // Bottom position with offset
+        targetY = targetRect.bottom + 10; // Bottom position with offset
         // If the popover overflows the bottom of the viewport, switch to top
 
         if (targetY + popoverRect.height > viewportHeight) {
@@ -166,8 +166,10 @@ var Popover = {
       }
 
       if (position === 'top') {
-        targetY = targetRect.top - popoverRect.height + window.scrollY - 10; // Top position with offset
-        // If the popover overflows the top of the viewport, switch to bottom
+        console.log('targetRect', targetRect);
+        targetY = targetRect.top - 10; // Top position with offset
+
+        console.log('targetY', targetY); // If the popover overflows the top of the viewport, switch to bottom
 
         if (targetY < window.scrollY) {
           position = 'bottom';
@@ -176,9 +178,10 @@ var Popover = {
       } // Adjust final Y position based on the resolved position
 
 
-      targetY = position === 'bottom' ? targetRect.bottom + window.scrollY + 10 : targetRect.top - popoverRect.height + window.scrollY - 10; // Set the position
+      targetY = position === 'bottom' ? targetRect.bottom + 10 : targetRect.top - 10; // Set the position
 
       popoverBody.style.position = "absolute";
+      console.log('top', targetY);
       popoverBody.style.top = "".concat(targetY, "px");
       popoverBody.style.left = "".concat(targetX, "px"); // Check and adjust for right edge overflow
 
@@ -211,6 +214,7 @@ var Popover = {
         var popoverBody = popoverWrapper.querySelector(".popover-body"); // Make the popover visible
 
         popoverWrapper.style.display = "block";
+        document.body.classList.add('popover-on');
         Popover.setWidth(trigger, popoverBody);
         Popover.setPosition(trigger, popoverBody);
       });
@@ -232,6 +236,7 @@ var Popover = {
   },
   handleClose: function handleClose(popoverWrapper) {
     popoverWrapper.style.display = "none";
+    document.body.classList.remove('popover-on');
 
     if (popoverWrapper.hasAttribute('data-download-target')) {
       popoverWrapper.removeAttribute('data-download-target'); // Remove the attribute
