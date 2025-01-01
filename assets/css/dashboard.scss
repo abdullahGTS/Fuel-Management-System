@@ -28,7 +28,7 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    border-radius: var(--gts-sm-curve);
+                    border-radius: calc( var(--gts-sm-curve) - 3px);
                     background-color: var(--gts-light-color);
                     z-index: -1;
                 }

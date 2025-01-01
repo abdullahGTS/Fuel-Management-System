@@ -1,13 +1,10 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ReloadCharts = void 0;
-
 var _script = require("./script.js");
 
 var _constant = require("./constant.js");
+
+var _portal = require("./portal.js");
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -2624,7 +2621,11 @@ var ReloadCharts = {
     }
   }
 };
-exports.ReloadCharts = ReloadCharts;
+
+_portal.AppearanceToggle.registerCallback(function (mode) {
+  ReloadCharts.chartReload();
+});
+
 (0, _script.pageReady)(function () {
   DownloadChart.init();
   Products.init();

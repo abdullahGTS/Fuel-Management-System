@@ -57,11 +57,7 @@ var PageLoader = {
             document.body.classList.add('loaded');
           }, 1400); // 1400ms delay before hiding
         }
-      }; // Track full page load (assets like images are loaded)
-      // window.addEventListener('load', () => {
-      //    // Final increase to 100% when fully loaded
-      // });
-
+      };
     }
   },
   // Function to update progress bar width
@@ -898,37 +894,26 @@ var DataTable = {
     button.trigger();
   },
   // Fetch Data for the DataTable
-  fetchData: function fetchData(url) {
-    var response, data;
+  fetchData: function fetchData(response) {
     return regeneratorRuntime.async(function fetchData$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
-            return regeneratorRuntime.awrap(fetch(url));
+            return _context.abrupt("return", response);
 
-          case 3:
-            response = _context.sent;
-            _context.next = 6;
-            return regeneratorRuntime.awrap(response.json());
-
-          case 6:
-            data = _context.sent;
-            return _context.abrupt("return", data);
-
-          case 10:
-            _context.prev = 10;
+          case 4:
+            _context.prev = 4;
             _context.t0 = _context["catch"](0);
             console.error("Error fetching data for DataTable:", _context.t0);
             return _context.abrupt("return", []);
 
-          case 14:
+          case 8:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[0, 10]]);
+    }, null, null, [[0, 4]]);
   },
   // Apply Border Radius to Specific Cells
   applyBorderRadius: function applyBorderRadius(table) {
@@ -972,7 +957,7 @@ var DataTable = {
 };
 exports.DataTable = DataTable;
 var DatatableFilter = {
-  init: function init(wrapper, response, filterOptions, FilterFn, DTableFn) {
+  init: function init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys) {
     var resolver;
     return regeneratorRuntime.async(function init$(_context2) {
       while (1) {
@@ -1002,21 +987,29 @@ var DatatableFilter = {
                   var formItem = document.createElement('div');
                   formItem.classList.add('form-item'); // Add dropdown or date pickers
 
-                  if (originalKey === 'time') {
-                    var dataPickerFrom = document.createElement('input');
-                    dataPickerFrom.id = 'filterDateFrom';
-                    dataPickerFrom.type = 'text';
-                    dataPickerFrom.name = 'filterDateFrom';
-                    dataPickerFrom.placeholder = 'From';
-                    var dataPickerTo = document.createElement('input');
-                    dataPickerTo.id = 'filterDateTo';
-                    dataPickerTo.type = 'text';
-                    dataPickerTo.name = 'filterDateTo';
-                    dataPickerTo.placeholder = 'To';
-                    filterDiv.classList.add('data-picker-wrapper');
-                    formItem.appendChild(dataPickerFrom);
-                    formItem.appendChild(dataPickerTo); // Initialize date pickers
-                  } else {
+                  if (dateKeys.length) {
+                    dateKeys.forEach(function (key, index) {
+                      if (originalKey === key) {
+                        // Get the current number of date pickers already added
+                        // const index = document.querySelectorAll('.data-picker-wrapper').length + 1;
+                        var dataPickerFrom = document.createElement('input');
+                        dataPickerFrom.id = "filterDateFrom-".concat(index);
+                        dataPickerFrom.type = 'text';
+                        dataPickerFrom.name = "filterDateFrom-".concat(index);
+                        dataPickerFrom.placeholder = 'From';
+                        var dataPickerTo = document.createElement('input');
+                        dataPickerTo.id = "filterDateTo-".concat(index);
+                        dataPickerTo.type = 'text';
+                        dataPickerTo.name = "filterDateTo-".concat(index);
+                        dataPickerTo.placeholder = 'To';
+                        filterDiv.classList.add('data-picker-wrapper');
+                        formItem.appendChild(dataPickerFrom);
+                        formItem.appendChild(dataPickerTo);
+                      }
+                    });
+                  }
+
+                  if (!dateKeys.length || !dateKeys.includes(originalKey)) {
                     var select = document.createElement('select');
                     select.id = originalKey;
                     select.name = originalKey;
@@ -1054,7 +1047,7 @@ var DatatableFilter = {
                 clearButton.textContent = 'Clear';
                 clearButton.addEventListener('click', function () {
                   wrapper.innerHTML = '';
-                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn);
+                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys);
                   FilterFn.state.selectedFilters = response;
                   DTableFn.init(response);
                 });
@@ -1075,16 +1068,24 @@ var DatatableFilter = {
                     }
                   }); // Handle date filters
 
-                  var fromDate = document.querySelector('#filterDateFrom').value;
-                  var toDate = document.querySelector('#filterDateTo').value;
+                  var filterDateFromInputs = document.querySelectorAll("[id^='filterDateFrom-']");
+                  var filterDateToInputs = document.querySelectorAll("[id^='filterDateTo-']"); // Iterate over "From" inputs and bind them with their corresponding "To" inputs
 
-                  if (fromDate || toDate) {
-                    selectedFilters['time'] = {
-                      from: fromDate,
-                      to: toDate
-                    };
-                  }
+                  filterDateFromInputs.forEach(function (filterDateFrom, index) {
+                    var filterDateTo = document.querySelector("#filterDateTo-".concat(index));
+                    var fromDate = filterDateFrom.value;
+                    var toDate = filterDateTo.value; // const fromDate = document.querySelector('#filterDateFrom').value;
+                    // const toDate = document.querySelector('#filterDateTo').value;
 
+                    if (fromDate || toDate) {
+                      dateKeys.forEach(function (key) {
+                        selectedFilters[key] = {
+                          from: fromDate,
+                          to: toDate
+                        };
+                      });
+                    }
+                  });
                   FilterFn.state.selectedFilters = selectedFilters;
                   FilterFn.filterSubmit(selectedFilters);
                   resolver(selectedFilters); // Resolve the promise with the filters
@@ -1115,60 +1116,112 @@ var Select = {
       customSelect.select2({
         placeholder: "Select a state"
       });
-      console.log('True');
     }
   }
-};
+}; // const DatePicker = {
+//   init: () => {
+//     const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
+//     const filterDateFrom = document.getElementById("filterDateFrom");
+//     const filterDateTo = document.getElementById("filterDateTo");
+//     if (filterDateFrom && filterDateTo) {
+//       // Initialize Flatpickr for "From" date
+//       const fromPicker = flatpickr(filterDateFrom, {
+//         enableTime: true,
+//         dateFormat: dateFormat,
+//         onChange: function (selectedDates, dateStr) {
+//           if (selectedDates.length > 0) {
+//             // Set the minimum date for the "To" date picker
+//             toPicker.set("minDate", selectedDates[0]);
+//           }
+//         }
+//       });
+//       // Initialize Flatpickr for "To" date
+//       const toPicker = flatpickr(filterDateTo, {
+//         enableTime: true,
+//         dateFormat: dateFormat,
+//         onChange: function (selectedDates, dateStr) {
+//           if (selectedDates.length > 0) {
+//             // Set the maximum date for the "From" date picker
+//             fromPicker.set("maxDate", selectedDates[0]);
+//           }
+//         }
+//       });
+//       // Utility function to format the date in the desired format (if needed)
+//       function formatDate(date) {
+//         const parsedDate = new Date(date);
+//         const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+//         const day = String(parsedDate.getDate()).padStart(2, "0");
+//         const year = parsedDate.getFullYear();
+//         const hours = String(parsedDate.getHours()).padStart(2, "0");
+//         const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+//         return `${month}/${day}/${year} ${hours}:${minutes}`;
+//       }
+//       // Optional: Add event listeners for additional actions on date changes
+//       filterDateFrom.addEventListener("change", function () {
+//         console.log("From Date Selected:", formatDate(this.value));
+//       });
+//       filterDateTo.addEventListener("change", function () {
+//         console.log("To Date Selected:", formatDate(this.value));
+//       });
+//     }
+//   }
+// };
+
 exports.Select = Select;
 var DatePicker = {
   init: function init() {
     var dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
+    // Select all "From" and "To" inputs dynamically
 
-    var filterDateFrom = document.getElementById("filterDateFrom");
-    var filterDateTo = document.getElementById("filterDateTo");
+    var filterDateFromInputs = document.querySelectorAll("[id^='filterDateFrom-']");
+    var filterDateToInputs = document.querySelectorAll("[id^='filterDateTo-']"); // Iterate over "From" inputs and bind them with their corresponding "To" inputs
 
-    if (filterDateFrom && filterDateTo) {
-      // Utility function to format the date in the desired format (if needed)
-      var formatDate = function formatDate(date) {
-        var parsedDate = new Date(date);
-        var month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-        var day = String(parsedDate.getDate()).padStart(2, "0");
-        var year = parsedDate.getFullYear();
-        var hours = String(parsedDate.getHours()).padStart(2, "0");
-        var minutes = String(parsedDate.getMinutes()).padStart(2, "0");
-        return "".concat(month, "/").concat(day, "/").concat(year, " ").concat(hours, ":").concat(minutes);
-      }; // Optional: Add event listeners for additional actions on date changes
+    filterDateFromInputs.forEach(function (filterDateFrom, index) {
+      var filterDateTo = document.querySelector("#filterDateTo-".concat(index));
+
+      if (filterDateFrom && filterDateTo) {
+        // Utility function to format the date in the desired format (if needed)
+        var formatDate = function formatDate(date) {
+          var parsedDate = new Date(date);
+          var month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+          var day = String(parsedDate.getDate()).padStart(2, "0");
+          var year = parsedDate.getFullYear();
+          var hours = String(parsedDate.getHours()).padStart(2, "0");
+          var minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+          return "".concat(month, "/").concat(day, "/").concat(year, " ").concat(hours, ":").concat(minutes);
+        }; // Optional: Add event listeners for additional actions on date changes
 
 
-      // Initialize Flatpickr for "From" date
-      var fromPicker = flatpickr(filterDateFrom, {
-        enableTime: true,
-        dateFormat: dateFormat,
-        onChange: function onChange(selectedDates, dateStr) {
-          if (selectedDates.length > 0) {
-            // Set the minimum date for the "To" date picker
-            toPicker.set("minDate", selectedDates[0]);
+        // Initialize Flatpickr for "From" date
+        var fromPicker = flatpickr(filterDateFrom, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function onChange(selectedDates) {
+            if (selectedDates.length > 0) {
+              // Set the minimum date for the "To" date picker
+              toPicker.set("minDate", selectedDates[0]);
+            }
           }
-        }
-      }); // Initialize Flatpickr for "To" date
+        }); // Initialize Flatpickr for "To" date
 
-      var toPicker = flatpickr(filterDateTo, {
-        enableTime: true,
-        dateFormat: dateFormat,
-        onChange: function onChange(selectedDates, dateStr) {
-          if (selectedDates.length > 0) {
-            // Set the maximum date for the "From" date picker
-            fromPicker.set("maxDate", selectedDates[0]);
+        var toPicker = flatpickr(filterDateTo, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function onChange(selectedDates) {
+            if (selectedDates.length > 0) {
+              // Set the maximum date for the "From" date picker
+              fromPicker.set("maxDate", selectedDates[0]);
+            }
           }
-        }
-      });
-      filterDateFrom.addEventListener("change", function () {
-        console.log("From Date Selected:", formatDate(this.value));
-      });
-      filterDateTo.addEventListener("change", function () {
-        console.log("To Date Selected:", formatDate(this.value));
-      });
-    }
+        });
+        filterDateFrom.addEventListener("change", function () {
+          console.log("From Date Selected [Index ".concat(index + 1, "]:"), formatDate(this.value));
+        });
+        filterDateTo.addEventListener("change", function () {
+          console.log("To Date Selected [Index ".concat(index + 1, "]:"), formatDate(this.value));
+        });
+      }
+    });
   }
 };
 exports.DatePicker = DatePicker;

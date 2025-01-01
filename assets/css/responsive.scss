@@ -265,7 +265,23 @@
             grid-row: unset !important;
         }
     }
+    #delivery-hero {
+        grid-template-columns: repeat(4, 1fr) !important;
 
+        > .gts-grid-item {
+            grid-column: auto / span 4 !important;
+        }
+        #totalDelivery {
+            padding: 60px !important;
+        }
+    }
+    #delivery-hero > :first-child {
+        order: 2; /* Move the first element to the last */
+    }
+    
+    #delivery-hero > :last-child {
+        order: 1; /* Move the last element to the first */
+    }
     #alarms-hero {
         grid-template-columns: repeat(4, 1fr) !important;
         .gts-grid-item.triple-col {
@@ -368,14 +384,19 @@
         }
     }
 
+    #side-bar nav li {
+        width: 50px !important;
+        height: 50px !important;
+    }
     body.gts-menu-collapsed #gts-wrapper {
         flex-direction: column-reverse;
         padding-bottom: 80px !important;
+        padding-bottom: 64px!important;
         #side-bar {
             width: 100% !important;
             height: auto;
             flex-direction: row;
-            padding: 7px 14px 14px;
+            padding: 7px 14px;
 
             position: fixed;
             z-index: 2147483647;
@@ -512,11 +533,24 @@
     }
 
     #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper {
+        #delivery-hero {
+            grid-template-columns: repeat(4, 1fr) !important;
+            > .gts-grid-item {
+                grid-column: auto / span 4 !important;
+            }
+        }
         #alarms-hero {
             grid-template-columns: repeat(4, 1fr) !important;
             .gts-grid-item {
                 grid-column: auto / span 4 !important;
             }
+        }
+        #alarms-hero > :first-child {
+            order: 2; /* Move the first element to the last */
+        }
+        
+        #alarms-hero > :last-child {
+            order: 1; /* Move the last element to the first */
         }
     }
     #toggle-menu {
@@ -692,6 +726,7 @@
                             ul {
                                 li {
                                     width: 100%;
+                                    height: 60px !important;
                                     a {
                                         padding: 21px 14px;
                                         .nav-item {

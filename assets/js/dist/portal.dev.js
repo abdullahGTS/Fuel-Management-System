@@ -1,12 +1,11 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AppearanceToggle = void 0;
+
 var _script = require("./script.js");
-
-var _dashboard = require("./dashboard.js");
-
-var _sites = require("./sites.js");
-
-var _alarms = require("./alarms.js");
 
 // portal.js
 var MobileNav = {
@@ -202,10 +201,11 @@ var CollapsedMenu = {
 
     var rect = link.getBoundingClientRect();
     tooltip.style.position = 'absolute';
-    tooltip.style.left = "".concat(rect.right, "px");
+    tooltip.style.left = "".concat(rect.right - 5, "px");
     tooltip.style.top = "".concat(rect.top + rect.height / 2, "px"); // Attach tooltip to document and reference it in the element for removal
 
-    document.body.appendChild(tooltip);
+    var navWrapper = document.querySelector('#nav-wrapper');
+    navWrapper.appendChild(tooltip);
     link._tooltip = tooltip;
   },
   // Hide tooltip on mouse leave
@@ -239,6 +239,7 @@ var ForceResponsive = {
   }
 };
 var AppearanceToggle = {
+  callbacks: [],
   init: function init() {
     var savedAppearance = localStorage.getItem('gts-appearance'); // If no saved appearance, set default to light mode
 
@@ -309,13 +310,12 @@ var AppearanceToggle = {
             }
           }
         });
-      }
+      } // Execute all registered callbacks
 
-    _dashboard.ReloadCharts.chartReload();
 
-    _sites.ReloadSitesCharts.chartReload();
-
-    _alarms.ReloadAlarmsCharts.chartReload();
+    AppearanceToggle.callbacks.forEach(function (callback) {
+      return callback(mode);
+    });
   },
   setCheckedMode: function setCheckedMode(mode) {
     // Uncheck all checkboxes first
@@ -341,8 +341,14 @@ var AppearanceToggle = {
         AppearanceToggle.applyMode(e.matches ? 'dark' : 'light');
       }
     });
+  },
+  registerCallback: function registerCallback(callback) {
+    if (typeof callback === 'function') {
+      AppearanceToggle.callbacks.push(callback);
+    }
   }
 };
+exports.AppearanceToggle = AppearanceToggle;
 (0, _script.pageReady)(function () {
   _script.Modal.init();
 

@@ -1,6 +1,7 @@
 //dashboard.js
 import { pageReady, Popover } from './script.js';
 import { API_PATHS, fetchData, SharedColors, ChartBackgroundColor } from './constant.js';
+import { AppearanceToggle } from './portal.js';
 
 const ProductLabels = {
     "gas95": "Gasoline 95",
@@ -1948,7 +1949,7 @@ const RunCharts = {
 }
 
 // We will Reload Charts on Menu Collapsed And Apperacnce Toggle
-export const ReloadCharts = {
+const ReloadCharts = {
     // Initialize the menu toggle functionality
     init: () => {
         // Attach the click event listener to #toggle-menu
@@ -2005,6 +2006,10 @@ export const ReloadCharts = {
         }
     }
 };
+
+AppearanceToggle.registerCallback((mode) => {
+    ReloadCharts.chartReload();
+});
 
 pageReady(() => {
     DownloadChart.init();

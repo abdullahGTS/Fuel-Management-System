@@ -1,8 +1,5 @@
 // portal.js
 import { pageReady, PageLoader, Button, Popover, Modal, Drawer, Tab } from './script.js';
-import { ReloadCharts } from './dashboard.js';
-import { ReloadSitesCharts } from './sites.js';
-import { ReloadAlarmsCharts } from './alarms.js';
 
 const MobileNav = {
     init: () => {
@@ -216,11 +213,12 @@ const CollapsedMenu = {
         // Position tooltip
         const rect = link.getBoundingClientRect();
         tooltip.style.position = 'absolute';
-        tooltip.style.left = `${rect.right}px`;
+        tooltip.style.left = `${rect.right - 5}px`;
         tooltip.style.top = `${rect.top + rect.height / 2}px`;
 
         // Attach tooltip to document and reference it in the element for removal
-        document.body.appendChild(tooltip);
+        const navWrapper = document.querySelector('#nav-wrapper');
+        navWrapper.appendChild(tooltip);
         link._tooltip = tooltip;
     },
 
@@ -253,7 +251,9 @@ const ForceResponsive = {
     }
 };
 
-const AppearanceToggle = {
+export const AppearanceToggle = {
+    callbacks: [],
+
     init: () => {
         const savedAppearance = localStorage.getItem('gts-appearance');
 
@@ -312,7 +312,7 @@ const AppearanceToggle = {
     applyMode: (mode) => {
         const body = document.body;
         const logoImages = document.querySelectorAll('.gts-logo a img');
-    
+
         // Apply light mode
         if (mode === 'light') {
             body.classList.remove('dark-mode');
@@ -320,7 +320,7 @@ const AppearanceToggle = {
                 img.src = img.src.replace('-light', ''); // Remove -light from image filenames
             });
         }
-    
+
         // Apply dark mode
         else if (mode === 'dark') {
             body.classList.add('dark-mode');
@@ -332,12 +332,11 @@ const AppearanceToggle = {
                     }
                 }
             });
-        } 
+        }
 
-        ReloadCharts.chartReload();
-        ReloadSitesCharts.chartReload();
-        ReloadAlarmsCharts.chartReload();
-    },    
+        // Execute all registered callbacks
+        AppearanceToggle.callbacks.forEach(callback => callback(mode));
+    },
 
     setCheckedMode: (mode) => {
         // Uncheck all checkboxes first
@@ -365,8 +364,15 @@ const AppearanceToggle = {
                 AppearanceToggle.applyMode(e.matches ? 'dark' : 'light');
             }
         });
+    },
+
+    registerCallback: (callback) => {
+        if (typeof callback === 'function') {
+            AppearanceToggle.callbacks.push(callback);
+        }
     }
-}
+};
+
 
 pageReady(() => {
     Modal.init();

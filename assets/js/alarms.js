@@ -1,11 +1,24 @@
 //alarms.js
 import { pageReady, Button, Drawer, Tab, DataTable, Select, DatePicker, DatatableFilter } from './script.js';
 import { API_PATHS, fetchData, SharedColors, ChartBackgroundColor } from './constant.js';
+import { AppearanceToggle } from './portal.js';
+
+
+const FetchData = {
+    init: async() => {
+        const response = await fetchData(API_PATHS.alarmData);
+        if (!response || Object.keys(response).length === 0) {
+            console.error("No response data available");
+            return;
+        }
+        return response;
+    }
+}
 
 // Usage
 const AlarmFilter = {
     state: {
-        alarms: [],
+        response: [],
         filterOptions: {},
         selectedFilters: {},
     },
@@ -14,57 +27,52 @@ const AlarmFilter = {
         const dtFilterWrapper = document.querySelector('#dtFilterWrapper');
         if (dtFilterWrapper) {
             // Fetch alarm data from API
-            const alarms = await fetchData(API_PATHS.alarmData);
-            if (!alarms || Object.keys(alarms).length === 0) {
-                console.error("No alarms data available");
-                return;
-            }
+            const response = await FetchData.init();
 
             // Update state with alarms
-            AlarmFilter.state.alarms = alarms;
+            AlarmFilter.state.response = response;
 
             // Get all unique filter categories from the response
             const filterOptions = {
                 'Site Numbers': {
-                    options: [...new Set(alarms.map(item => item.sitenumber))],
+                    options: [...new Set(response.map(item => item.sitenumber))],
                     originalKey: 'sitenumber'
                 },
                 'Sources': {
-                    options: [...new Set(alarms.map(item => item.source))],
+                    options: [...new Set(response.map(item => item.source))],
                     originalKey: 'source'
                 },
                 'Alarm Type': {
-                    options: [...new Set(alarms.map(item => item.type))],
+                    options: [...new Set(response.map(item => item.type))],
                     originalKey: 'type'
                 },
                 'Is Active': {
-                    options: [...new Set(alarms.map(item => item.isactive))],
+                    options: [...new Set(response.map(item => item.isactive))],
                     originalKey: 'isactive'
                 },
                 'Severities': {
-                    options: [...new Set(alarms.map(item => item.severity))],
+                    options: [...new Set(response.map(item => item.severity))],
                     originalKey: 'severity'
                 },
                 'Devices': {
-                    options: [...new Set(alarms.map(item => item.device))],
+                    options: [...new Set(response.map(item => item.device))],
                     originalKey: 'device'
                 },
                 'Date': {
-                    options: [...new Set(alarms.map(item => item.time))],
+                    options: [...new Set(response.map(item => item.time))],
                     originalKey: 'time'
                 }
             };
 
             // Update state with filter options
             AlarmFilter.state.filterOptions = filterOptions;
-
+            const dateKeys = ['time'];
             // Initialize filters with the fetched alarm data
-            const selectedFilters = await DatatableFilter.init(dtFilterWrapper, alarms, filterOptions, AlarmFilter, AlarmDT);
+            const selectedFilters = await DatatableFilter.init(dtFilterWrapper, response, filterOptions, AlarmFilter, AlarmDT, dateKeys);
 
             // Update state with selected filters
             AlarmFilter.state.selectedFilters = selectedFilters;
 
-            console.log('Selected Filters', selectedFilters);
             if (selectedFilters) {
                 AlarmFilter.filterSubmit(selectedFilters);  // Apply filters on load
             }
@@ -72,29 +80,29 @@ const AlarmFilter = {
     },
 
     filterSubmit: async (filters) => {
-        const { alarms } = AlarmFilter.state;
-        const filteredAlarms = await AlarmFilter.applyFilters(filters, alarms);
+        const { response } = AlarmFilter.state;
+        const filteredAlarms = await AlarmFilter.applyFilters(filters, response);
 
         // Update DataTable with filtered alarms
         AlarmDT.init(filteredAlarms);
     },
 
-    applyFilters: (filters, alarms) => {
-        let filteredAlarms = alarms; // Start with the full alarm list
+    applyFilters: (filters, response) => {
+        let filteredAlarms = response; // Start with the full alarm list
 
         Object.entries(filters).forEach(([key, values]) => {
             if (key === 'time' && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
-                filteredAlarms = filteredAlarms.filter(alarm => {
-                    const alarmDate = new Date(alarm[key]);
-                    return alarmDate >= from && alarmDate <= to;
+                filteredAlarms = filteredAlarms.filter(res => {
+                    const responseDate = new Date(res[key]);
+                    return responseDate >= from && alarmDate <= to;
                 });
             } else {
                 // Other filters (multi-select)
-                filteredAlarms = filteredAlarms.filter(alarm => {
-                    return values.some(value => String(alarm[key]) === String(value));
+                filteredAlarms = filteredAlarms.filter(res => {
+                    return values.some(value => String(res[key]) === String(value));
                 });
             }
         });
@@ -128,8 +136,8 @@ const AlarmDT = {
                     data: formattedData,
                     columns: [
                         { title: `<span class="mat-icon material-symbols-sharp">numbers</span>`, data: "id" },
-                        { title: `<span class="mat-icon material-symbols-sharp">verified</span> Site Name`, data: "sitename" },
                         { title: `<span class="mat-icon material-symbols-sharp">location_on</span> Site Number`, data: "sitenumber" },
+                        { title: `<span class="mat-icon material-symbols-sharp">verified</span> Site Name`, data: "sitename" },
                         { title: `<span class="mat-icon material-symbols-sharp">notifications_active</span> Type`, data: "type" },
                         { title: `<span class="mat-icon material-symbols-sharp">personal_bag_question</span> Is Active`, data: "isactive" },
                         { title: `<span class="mat-icon material-symbols-sharp">cloud</span> Source`, data: "source" },
@@ -159,7 +167,8 @@ const AlarmDT = {
     // Fetch data from the API
     fetchData: async () => {
         try {
-            const alarms = await DataTable.fetchData(API_PATHS.alarmData);
+            const response = await FetchData.init();
+            const alarms = await DataTable.fetchData(response);
             return alarms;
         } catch (error) {
             console.error("Error fetching AlarmDT data:", error);
@@ -281,7 +290,7 @@ const AlarmSeverity = {
     }
 }
 
-export const ReloadAlarmsCharts = {
+const ReloadAlarmsCharts = {
     // Initialize the menu toggle functionality
     init: () => {
         // Attach the click event listener to #toggle-menu
@@ -325,6 +334,9 @@ const RunCharts = {
     }
 }
 
+AppearanceToggle.registerCallback((mode) => {
+    ReloadAlarmsCharts.chartReload();
+});
 
 pageReady(() => {
     AlarmDT.init();

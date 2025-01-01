@@ -50,8 +50,9 @@ var API_PATHS = {
   siteDetails: '/api/inner/sites/site_details.json',
   sitesData: '/api/inner/sites/site_page.json',
   // Inner Alarms
-  alarmDetails: '/api/inner/alarms/alarm_page.json',
-  alarmData: '/api/inner/alarms/alarm_data.json'
+  alarmData: '/api/inner/alarms/alarm_data.json',
+  // Inner Delivery
+  deliveryData: '/api/inner/delivery/delivery_data.json'
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;

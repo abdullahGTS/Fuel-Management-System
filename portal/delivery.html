@@ -8,7 +8,7 @@
         content="Manage all your fuel stations and analyze reports from your personalized dashboard.">
     <meta name="keywords" content="Fuel Management, GTS, Dashboard, Station Reports">
     <meta name="author" content="GTS - Global Technology Services">
-    <title>Sites - GTS Fuel Management</title>
+    <title>Delivery - GTS Fuel Management</title>
 
     <!-- Icons  -->
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
@@ -27,6 +27,8 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="../vendor/css/toastr.min.css">
     <link rel="stylesheet" href="../vendor/css/dataTables.min.css">
+    <link rel="stylesheet" href="../vendor/css/select2.min.css">
+    <link rel="stylesheet" href="../vendor/css/flatpickr.min.css">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,7 +73,7 @@
                                         <span class="mat-icon material-symbols-sharp">dashboard</span>
                                         <span class="nav-item">Dashboard</span>
                                     </a></li>
-                                <li class="active"><a href="./sites.html">
+                                <li><a href="./sites.html">
                                         <span class="mat-icon material-symbols-sharp">local_gas_station</span>
                                         <span class="nav-item">Sites</span>
                                     </a></li>
@@ -89,7 +91,7 @@
                                         <span class="mat-icon material-symbols-sharp">storage</span>
                                         <span class="nav-item">Tanks</span>
                                     </a></li>
-                                <li><a href="./delivery.html">
+                                <li class="active"><a href="./delivery.html">
                                         <span class="mat-icon material-symbols-sharp">local_shipping</span>
                                         <span class="nav-item">Delivery</span>
                                     </a></li>
@@ -126,20 +128,16 @@
 
         <div id="gts-stage">
             <div class="gts-container">
+
                 <header id="gts-header">
                     <div class="gts-head">
                         <div class="gts-title">
                             <button class="btn btn-icon" id="toggle-menu">
                                 <span class="mat-icon material-symbols-sharp">menu_open</span>
                             </button>
-                            <h1>Sites</h1>
+                            <h1>Delivery</h1>
                         </div>
                         <div class="gts-head-right">
-                            <!-- <div class="gts-search">
-                                <span class="mat-icon material-symbols-sharp">manage_search</span>
-                                <input type="search" placeholder="Search ..." />
-                            </div> -->
-
                             <div class="gts-notification">
                                 <button class="btn btn-icon" data-popover-target="#notification-panel">
                                     <span class="mat-icon material-symbols-sharp">notifications</span>
@@ -165,106 +163,63 @@
                     </div>
                 </header>
 
-                <div class="gts-content">
+                <!-- <div class="gts-content custom-scroll-bar"> -->
+                    <div class="gts-content">
                     <div class="gts-grid-wrapper">
                         <div class="gts-grid">
                             <div class="gts-grid-item triple-col">
-                                <div class="gts-grid grid-5">
+                                <div class="gts-grid grid-5" id="delivery-hero">
 
-                                    <div class="gts-grid-item double-col"  id="sitesDetailsList">
-                                        <div class="sites-list-wrapper" id="siteListWrapper">
-                                            <div class="gts-filter">
-                                                <span class="mat-icon material-symbols-sharp">search</span>
-                                                <input type="text" placeholder="Find site by name or number..." />
+                                    <div class="gts-grid-item double-col">
+                                        <div class="gts-item-content gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">tune</span>
+                                                    <h3>Filter Options</h3>
+                                                </div>
                                             </div>
-                                            <div class="sites-list custom-scroll-bar">
-                                                <ul>
-                                                    <!-- <li>
-                                                        <div class="site-wrapper">
-                                                            <div class="icon-wrapper">
-                                                                <span class="mat-icon material-symbols-sharp">map</span>
-                                                            </div>
-                                                            <div class="site-details">
-                                                                <p>{siteNumber}</p>
-                                                                <h3>{siteName}</h3>
-                                                            </div>
-                                                            <div class="site-control">
-                                                                <button class="btn">
-                                                                    Direction
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li> -->
-                                                </ul>
-                                            </div>
+                                            <div id="dtFilterWrapper"></div>
                                         </div>
                                     </div>
 
-                                    <div class="gts-grid-item triple-col" id="sitesDataDetails">
+                                    <div class="gts-grid-item triple-col">
                                         <div class="gts-grid">
-                                            <div class="gts-grid-item">
-                                                <div class="gts-grid">
-                                                    <div class="gts-grid-item triple-col">
-                                                        <div class="gts-item-content white-box no-padding">
-                                                            <div class="site-status-wrapper">
-                                                                <div id="onlineSitesChartInner" class="chart-area"></div>
-                                                                <h3 class="site-value-wrapper">
-                                                                    <span id="onlineSitesValueInner">0</span> Online
-                                                                </h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="gts-grid-item triple-col">
-                                                        <div class="gts-item-content white-box no-padding">
-                                                            <div class="site-status-wrapper">
-                                                                <div id="offlineSitesChartInner" class="chart-area"></div>
-                                                                <h3 class="site-value-wrapper">
-                                                                    <span id="offlineSitesValueInner">0</span> Offline
-                                                                </h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="gts-grid-item double-col">
-                                                <div class="gts-item-content no-padding">
-                                                    <div id="mapWrapper">
-                                                        <iframe
-                                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
-                                                            width="600" height="520" style="border:0;" allowfullscreen=""
-                                                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                                                            title=""></iframe>
+                                                <div class="gts-grid-item triple-col double-row">
+                                                    <div class="gts-item-content white-box" id="totalDelivery">
+                                                        <div class="total-delivery-title">
+                                                            <span class="mat-icon material-symbols-sharp">delivery_truck_speed</span>
+                                                            <p>Total Delivery Overtime</p>
+                                                        </div>
+                                                        <div class="total-delivery-wrapper">
+                                                            <h2>00.00</h2><span>lts</span>
+                                                        </div>
+                                                        <div id="deliveryDateRange"></div>
                                                     </div>
                                                 </div>
-                                            </div>
-        
+
+                                                <div class="gts-grid-item triple-col">
+                                                    <div class="gts-grid" id="productsDelivery">
+                                                        <div class="gts-grid-item"></div>
+                                                        <div class="gts-grid-item"></div>
+                                                        <div class="gts-grid-item"></div>
+                                                    </div>
+                                                </div>
 
                                         </div>
                                     </div>
-
-                                    <!-- <div class="gts-grid-item double-col">
-                                        <div class="gts-item-content no-padding">
-                                            <div id="mapWrapper">
-                                                <iframe
-                                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7457112.066271738!2d39.783144325068605!3d24.13073749503241!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15e7b33fe7952a41%3A0x5960504bc21ab69b!2sSaudi%20Arabia!5e0!3m2!1sen!2sjo!4v1731089500807!5m2!1sen!2sjo"
-                                                    width="600" height="520" style="border:0;" allowfullscreen=""
-                                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                                                    title=""></iframe>
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                 </div>
                             </div>
 
                             <div class="gts-grid-item triple-col gap-top">
                                 <div class="gts-item-content dt-box">
-                                    <div class="gts-dt-wrapper" id="siteDT"></div>
+                                    <div class="gts-dt-wrapper" id="deliveryDT"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -497,10 +452,12 @@
     <script type="text/javascript" src="../vendor/js/vfs_fonts.js" defer></script>
     <script type="text/javascript" src="../vendor/js/buttons.html5.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/buttons.print.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/select2.min.js" defer></script>
+    <script type="text/javascript" src="../vendor/js/flatpickr.min.js" defer></script>
 
     <!-- GTS Scripts -->
     <script type="module" src="../assets/js/portal.js" defer></script>
-    <script type="module" src="../assets/js/sites.js" defer></script>
+    <script type="module" src="../assets/js/delivery.js" defer></script>
 </body>
 
 </html>

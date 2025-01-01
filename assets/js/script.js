@@ -36,11 +36,6 @@ const PageLoader = {
           }, 1400); // 1400ms delay before hiding
         }
       };
-
-      // Track full page load (assets like images are loaded)
-      // window.addEventListener('load', () => {
-      //    // Final increase to 100% when fully loaded
-      // });
     }
   },
 
@@ -931,11 +926,11 @@ const DataTable = {
   },
 
   // Fetch Data for the DataTable
-  fetchData: async (url) => {
+  fetchData: async (response) => {
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+      // const response = await fetch(url);
+      // const data = await response.json();
+      return response;
     } catch (error) {
       console.error("Error fetching data for DataTable:", error);
       return [];
@@ -980,7 +975,7 @@ const DataTable = {
 };
 
 const DatatableFilter = {
-  init: async (wrapper, response, filterOptions, FilterFn, DTableFn) => {
+  init: async (wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys) => {
       let resolver; // Keep resolver accessible across clicks
       return new Promise((resolve) => {
           resolver = resolve; // Set the resolver on the first call
@@ -1004,26 +999,35 @@ const DatatableFilter = {
                   formItem.classList.add('form-item');
 
                   // Add dropdown or date pickers
-                  if (originalKey === 'time') {
-                      const dataPickerFrom = document.createElement('input');
-                      dataPickerFrom.id = 'filterDateFrom';
-                      dataPickerFrom.type = 'text';
-                      dataPickerFrom.name = 'filterDateFrom';
-                      dataPickerFrom.placeholder = 'From';
+                  
+                  if (dateKeys.length) {
+                    dateKeys.forEach((key, index) => {
+                        if (originalKey === key) {
+                          // Get the current number of date pickers already added
+                          // const index = document.querySelectorAll('.data-picker-wrapper').length + 1;
+                      
+                          const dataPickerFrom = document.createElement('input');
+                          dataPickerFrom.id = `filterDateFrom-${index}`;
+                          dataPickerFrom.type = 'text';
+                          dataPickerFrom.name = `filterDateFrom-${index}`;
+                          dataPickerFrom.placeholder = 'From';
+                      
+                          const dataPickerTo = document.createElement('input');
+                          dataPickerTo.id = `filterDateTo-${index}`;
+                          dataPickerTo.type = 'text';
+                          dataPickerTo.name = `filterDateTo-${index}`;
+                          dataPickerTo.placeholder = 'To';
+                      
+                          filterDiv.classList.add('data-picker-wrapper');
+                          formItem.appendChild(dataPickerFrom);
+                          formItem.appendChild(dataPickerTo);
+                        }
+                    })
 
-                      const dataPickerTo = document.createElement('input');
-                      dataPickerTo.id = 'filterDateTo';
-                      dataPickerTo.type = 'text';
-                      dataPickerTo.name = 'filterDateTo';
-                      dataPickerTo.placeholder = 'To';
-
-                      filterDiv.classList.add('data-picker-wrapper');
-                      formItem.appendChild(dataPickerFrom);
-                      formItem.appendChild(dataPickerTo);
-
-                      // Initialize date pickers
-                  } else {
-                      const select = document.createElement('select');
+                  } 
+                  
+                  if (!dateKeys.length || !dateKeys.includes(originalKey)) {
+                    const select = document.createElement('select');
                       select.id = originalKey;
                       select.name = originalKey;
                       select.setAttribute('multiple', 'multiple');
@@ -1063,7 +1067,7 @@ const DatatableFilter = {
               clearButton.textContent = 'Clear';
               clearButton.addEventListener('click', () => {
                   wrapper.innerHTML = '';
-                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn);
+                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys);
                   FilterFn.state.selectedFilters = response;
                   DTableFn.init(response);
               });
@@ -1085,11 +1089,25 @@ const DatatableFilter = {
                   });
 
                   // Handle date filters
-                  const fromDate = document.querySelector('#filterDateFrom').value;
-                  const toDate = document.querySelector('#filterDateTo').value;
-                  if (fromDate || toDate) {
-                      selectedFilters['time'] = { from: fromDate, to: toDate };
-                  }
+                  const filterDateFromInputs = document.querySelectorAll("[id^='filterDateFrom-']");
+                  const filterDateToInputs = document.querySelectorAll("[id^='filterDateTo-']");
+              
+                  // Iterate over "From" inputs and bind them with their corresponding "To" inputs
+                  filterDateFromInputs.forEach((filterDateFrom, index) => {
+                    const filterDateTo = document.querySelector(`#filterDateTo-${index}`);
+                    const fromDate = filterDateFrom.value;
+                    const toDate = filterDateTo.value;
+
+                    // const fromDate = document.querySelector('#filterDateFrom').value;
+                    // const toDate = document.querySelector('#filterDateTo').value;
+                    if (fromDate || toDate) {
+                        dateKeys.forEach((key) => {
+                          selectedFilters[key] = { from: fromDate, to: toDate };
+                        })
+                    }
+  
+                  });
+
                   FilterFn.state.selectedFilters = selectedFilters;
                   FilterFn.filterSubmit(selectedFilters);
                   resolver(selectedFilters); // Resolve the promise with the filters
@@ -1112,62 +1130,121 @@ const Select = {
       customSelect.select2({
         placeholder: "Select a state"
       });
-      console.log('True')
     }
   }
 }
 
+// const DatePicker = {
+//   init: () => {
+//     const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
+//     const filterDateFrom = document.getElementById("filterDateFrom");
+//     const filterDateTo = document.getElementById("filterDateTo");
+
+//     if (filterDateFrom && filterDateTo) {
+//       // Initialize Flatpickr for "From" date
+//       const fromPicker = flatpickr(filterDateFrom, {
+//         enableTime: true,
+//         dateFormat: dateFormat,
+//         onChange: function (selectedDates, dateStr) {
+//           if (selectedDates.length > 0) {
+//             // Set the minimum date for the "To" date picker
+//             toPicker.set("minDate", selectedDates[0]);
+//           }
+//         }
+//       });
+
+//       // Initialize Flatpickr for "To" date
+//       const toPicker = flatpickr(filterDateTo, {
+//         enableTime: true,
+//         dateFormat: dateFormat,
+//         onChange: function (selectedDates, dateStr) {
+//           if (selectedDates.length > 0) {
+//             // Set the maximum date for the "From" date picker
+//             fromPicker.set("maxDate", selectedDates[0]);
+//           }
+//         }
+//       });
+
+//       // Utility function to format the date in the desired format (if needed)
+//       function formatDate(date) {
+//         const parsedDate = new Date(date);
+//         const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+//         const day = String(parsedDate.getDate()).padStart(2, "0");
+//         const year = parsedDate.getFullYear();
+//         const hours = String(parsedDate.getHours()).padStart(2, "0");
+//         const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+//         return `${month}/${day}/${year} ${hours}:${minutes}`;
+//       }
+
+//       // Optional: Add event listeners for additional actions on date changes
+//       filterDateFrom.addEventListener("change", function () {
+//         console.log("From Date Selected:", formatDate(this.value));
+//       });
+
+//       filterDateTo.addEventListener("change", function () {
+//         console.log("To Date Selected:", formatDate(this.value));
+//       });
+//     }
+//   }
+// };
+
 const DatePicker = {
   init: () => {
     const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
-    const filterDateFrom = document.getElementById("filterDateFrom");
-    const filterDateTo = document.getElementById("filterDateTo");
 
-    if (filterDateFrom && filterDateTo) {
-      // Initialize Flatpickr for "From" date
-      const fromPicker = flatpickr(filterDateFrom, {
-        enableTime: true,
-        dateFormat: dateFormat,
-        onChange: function (selectedDates, dateStr) {
-          if (selectedDates.length > 0) {
-            // Set the minimum date for the "To" date picker
-            toPicker.set("minDate", selectedDates[0]);
+    // Select all "From" and "To" inputs dynamically
+    const filterDateFromInputs = document.querySelectorAll("[id^='filterDateFrom-']");
+    const filterDateToInputs = document.querySelectorAll("[id^='filterDateTo-']");
+
+    // Iterate over "From" inputs and bind them with their corresponding "To" inputs
+    filterDateFromInputs.forEach((filterDateFrom, index) => {
+      const filterDateTo = document.querySelector(`#filterDateTo-${index}`);
+      if (filterDateFrom && filterDateTo) {
+        // Initialize Flatpickr for "From" date
+        const fromPicker = flatpickr(filterDateFrom, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+              // Set the minimum date for the "To" date picker
+              toPicker.set("minDate", selectedDates[0]);
+            }
           }
-        }
-      });
+        });
 
-      // Initialize Flatpickr for "To" date
-      const toPicker = flatpickr(filterDateTo, {
-        enableTime: true,
-        dateFormat: dateFormat,
-        onChange: function (selectedDates, dateStr) {
-          if (selectedDates.length > 0) {
-            // Set the maximum date for the "From" date picker
-            fromPicker.set("maxDate", selectedDates[0]);
+        // Initialize Flatpickr for "To" date
+        const toPicker = flatpickr(filterDateTo, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+              // Set the maximum date for the "From" date picker
+              fromPicker.set("maxDate", selectedDates[0]);
+            }
           }
-        }
-      });
+        });
 
-      // Utility function to format the date in the desired format (if needed)
-      function formatDate(date) {
-        const parsedDate = new Date(date);
-        const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-        const day = String(parsedDate.getDate()).padStart(2, "0");
-        const year = parsedDate.getFullYear();
-        const hours = String(parsedDate.getHours()).padStart(2, "0");
-        const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
-        return `${month}/${day}/${year} ${hours}:${minutes}`;
+        // Utility function to format the date in the desired format (if needed)
+        function formatDate(date) {
+          const parsedDate = new Date(date);
+          const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+          const day = String(parsedDate.getDate()).padStart(2, "0");
+          const year = parsedDate.getFullYear();
+          const hours = String(parsedDate.getHours()).padStart(2, "0");
+          const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+          return `${month}/${day}/${year} ${hours}:${minutes}`;
+        }
+
+        // Optional: Add event listeners for additional actions on date changes
+        filterDateFrom.addEventListener("change", function () {
+          console.log(`From Date Selected [Index ${index + 1}]:`, formatDate(this.value));
+        });
+
+        filterDateTo.addEventListener("change", function () {
+          console.log(`To Date Selected [Index ${index + 1}]:`, formatDate(this.value));
+        });
       }
-
-      // Optional: Add event listeners for additional actions on date changes
-      filterDateFrom.addEventListener("change", function () {
-        console.log("From Date Selected:", formatDate(this.value));
-      });
-
-      filterDateTo.addEventListener("change", function () {
-        console.log("To Date Selected:", formatDate(this.value));
-      });
-    }
+    });
   }
 };
 

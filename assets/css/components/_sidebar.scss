@@ -1,14 +1,15 @@
 #gts-wrapper {
     #side-bar {
         --menu-gap: 160px;
-        width: 290px;
-        min-width: 290px;
+        width: 260px;
+        min-width: 260px;
         display: flex;
         flex-direction: column;
         position: sticky;
         top: 0;
+        z-index: 991;
         .gts-logo {
-            padding: 0 90px 0 37px;
+            padding: 0 70px 0 27px;
             display: flex;
             align-items: center;
             min-height: var(--menu-gap);
@@ -56,7 +57,7 @@
                         ul {
                             li {
                                 position: relative;
-                                padding: 14px 38px;
+                                padding: 14px 28px;
 
                                 a {
                                     display: flex;
@@ -240,7 +241,6 @@ body {
                                         padding: 5px;
                                         width: 60px;
                                         height: 60px;
-
                                         a {
                                             justify-content: center;
                                             position: relative;

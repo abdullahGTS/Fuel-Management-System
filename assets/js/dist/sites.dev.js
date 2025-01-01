@@ -1,13 +1,10 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ReloadSitesCharts = void 0;
-
 var _script = require("./script.js");
 
 var _constant = require("./constant.js");
+
+var _portal = require("./portal.js");
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
@@ -186,7 +183,7 @@ var SiteDT = {
                   title: "<span class=\"mat-icon material-symbols-sharp\">location_on</span> Site Number",
                   data: "sitenumber"
                 }, {
-                  title: "<span class=\"mat-icon material-symbols-sharp\">home</span> Site Name",
+                  title: "<span class=\"mat-icon material-symbols-sharp\">verified</span> Site Name",
                   data: "name"
                 }, {
                   title: "<span class=\"mat-icon material-symbols-sharp\">access_time</span> Last Connection",
@@ -259,31 +256,36 @@ var SiteDT = {
   },
   // Fetch data from the API
   fetchData: function fetchData() {
-    var sites;
+    var response, sites;
     return regeneratorRuntime.async(function fetchData$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             _context4.prev = 0;
             _context4.next = 3;
-            return regeneratorRuntime.awrap(_script.DataTable.fetchData(_constant.API_PATHS.sitesData));
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.sitesData));
 
           case 3:
+            response = _context4.sent;
+            _context4.next = 6;
+            return regeneratorRuntime.awrap(_script.DataTable.fetchData(response));
+
+          case 6:
             sites = _context4.sent;
             return _context4.abrupt("return", sites);
 
-          case 7:
-            _context4.prev = 7;
+          case 10:
+            _context4.prev = 10;
             _context4.t0 = _context4["catch"](0);
             console.error("Error fetching SiteDT data:", _context4.t0);
             return _context4.abrupt("return", []);
 
-          case 11:
+          case 14:
           case "end":
             return _context4.stop();
         }
       }
-    }, null, null, [[0, 7]]);
+    }, null, null, [[0, 10]]);
   },
   // Transform the raw API data for the DataTable
   transformData: function transformData(data) {
@@ -712,172 +714,6 @@ var SiteDrawer = {
             if (pumps && pumps.length > 0) {
               pumpsTabContainer = document.querySelector("#pumpsTabContainer");
               pumpsTabContainer.innerHTML = ''; // Clear previous content if any
-              // pumps.forEach((pump) => {
-              //     // Group pumps by fusionid to calculate nozzle count
-              //     const relatedNozzles = pumps.filter(p => p.fusionid === pump.fusionid);
-              //     const nozzleCount = relatedNozzles.length;
-              //     // Create pump card
-              //     const pumpCard = document.createElement("div");
-              //     pumpCard.classList.add("pump-card");
-              //     // Pump header (with same style as tank headers)
-              //     const labelWrapper = document.createElement('div');
-              //     labelWrapper.classList.add('label-wrapper');
-              //     const labelIcon = document.createElement('div');
-              //     labelIcon.classList.add('icon-wrapper');
-              //     const pumpIcon = document.createElement('span');
-              //     pumpIcon.classList.add('mat-icon', 'material-symbols-sharp');
-              //     pumpIcon.textContent = 'local_gas_station'; // Pump icon
-              //     labelIcon.appendChild(pumpIcon);
-              //     labelWrapper.appendChild(labelIcon);
-              //     const label = document.createElement('p');
-              //     label.textContent = pump.brand;
-              //     label.classList.add('pump-label');
-              //     labelWrapper.appendChild(label);
-              //     const pumpName = document.createElement('h3');
-              //     pumpName.textContent = `Pump ${pump.fusionid}`;
-              //     pumpName.classList.add('pump-name');
-              //     labelWrapper.appendChild(pumpName);
-              //     pumpCard.appendChild(labelWrapper);
-              //     // Progress bar for nozzle count (if applicable)
-              //     const progressContainer = document.createElement('div');
-              //     progressContainer.classList.add('progress-container');
-              //     const progress = document.createElement('div');
-              //     progress.classList.add('progress-bar');
-              //     progress.style.width = `${(nozzleCount / 10) * 100}%`; // Example: Max 10 nozzles
-              //     progressContainer.appendChild(progress);
-              //     pumpCard.appendChild(progressContainer);
-              //     // Nozzles and their sales data
-              //     const nozzlesContainer = document.createElement("div");
-              //     nozzlesContainer.classList.add("nozzles");
-              //     relatedNozzles.forEach((nozzle) => {
-              //         const nozzleDiv = document.createElement("div");
-              //         nozzleDiv.classList.add("nozzle");
-              //         const nozzleHeader = document.createElement("h4");
-              //         nozzleHeader.textContent = `Nozzle ${nozzle.hose__logicalid}: ${nozzle.hose__gradeid__name}`;
-              //         nozzleDiv.appendChild(nozzleHeader);
-              //         const saleInfo = document.createElement("p");
-              //         saleInfo.textContent = `Last Sale: ${nozzle.last_sale_volume} Ltr for ${nozzle.last_sale_money} SAR`;
-              //         nozzleDiv.appendChild(saleInfo);
-              //         const saleTime = document.createElement("p");
-              //         saleTime.textContent = `Sale Period: ${nozzle.last_sale_startdate} - ${nozzle.last_sale_enddate}`;
-              //         nozzleDiv.appendChild(saleTime);
-              //         nozzlesContainer.appendChild(nozzleDiv);
-              //     });
-              //     pumpCard.appendChild(nozzlesContainer);
-              //     // Add alarms related to this tank
-              //     const tankAlarms = alarms.filter(alarm => alarm.device === `Pump ${pump.fusionid}`);
-              //     const alarmList = document.createElement('ul');
-              //     alarmList.classList.add('alarm-list');
-              //     if (tankAlarms.length > 0) {
-              //         tankAlarms.forEach(alarm => {
-              //             const alarmItem = document.createElement('li');
-              //             // Create alarm div with specific severity styling
-              //             const alarmDiv = document.createElement('div');
-              //             alarmDiv.classList.add('alarm-item', alarm.severity.toLowerCase());
-              //             // Determine icon based on severity
-              //             const severityDiv = document.createElement('div');
-              //             severityDiv.classList.add('severity');
-              //             severityDiv.textContent = alarm.severity;
-              //             const icon = document.createElement('span');
-              //             icon.classList.add('mat-icon', 'material-symbols-sharp');
-              //             icon.textContent = alarm.severity === 'Warning' 
-              //                 ? 'warning' 
-              //                 : alarm.severity === 'Info' 
-              //                 ? 'error' 
-              //                 : 'cancel';
-              //             // Add text content for alarm details
-              //             severityDiv.prepend(icon);
-              //             alarmDiv.appendChild(severityDiv);
-              //             const alarmTypeSpan = document.createElement('span');
-              //             alarmTypeSpan.classList.add('alarm-type');
-              //             alarmTypeSpan.textContent = alarm.type;
-              //             alarmDiv.appendChild(alarmTypeSpan);
-              //             // Create the alarm-status div
-              //             const alarmStatusDiv = document.createElement('div');
-              //             alarmStatusDiv.classList.add('alarm-status');
-              //             // Add the first icon (check or close) with appropriate class based on `isactive`
-              //             const statusIcon = document.createElement('span');
-              //             statusIcon.classList.add('mat-icon', 'material-symbols-sharp', alarm.isactive === 'solved' ? 'is-active' : 'not-active');
-              //             statusIcon.textContent = alarm.isactive === 'solved' ? 'check_circle' : 'circle_notifications';
-              //             alarmStatusDiv.appendChild(statusIcon);
-              //             // Add hover events for the tooltip
-              //             statusIcon.addEventListener('mouseenter', () => {
-              //                 // Create the tooltip
-              //                 const tooltip = document.createElement('div');
-              //                 tooltip.classList.add('tooltip');
-              //                 tooltip.textContent = alarm.isactive;
-              //                 document.body.appendChild(tooltip);
-              //                 // Position the tooltip near the icon
-              //                 const rect = statusIcon.getBoundingClientRect();
-              //                 const tooltipRect = tooltip.getBoundingClientRect();
-              //                 tooltip.style.position = 'absolute';
-              //                 tooltip.style.left = `${rect.left - tooltipRect.width + rect.width}px`;
-              //                 tooltip.style.top = `${rect.bottom + 5}px`;
-              //                 tooltip.setAttribute('id', 'alarm-tooltip');
-              //             });
-              //             statusIcon.addEventListener('mouseleave', () => {
-              //                 // Remove the tooltip
-              //                 const tooltip = document.getElementById('alarm-tooltip');
-              //                 if (tooltip) {
-              //                     tooltip.remove();
-              //                 }
-              //             });
-              //             // Add the time icon with tooltip functionality
-              //             const timeIcon = document.createElement('span');
-              //             timeIcon.classList.add('mat-icon', 'material-symbols-sharp');
-              //             timeIcon.setAttribute('id', 'alarmTime');
-              //             timeIcon.textContent = 'schedule';
-              //             // Add hover events for the tooltip
-              //             timeIcon.addEventListener('mouseenter', () => {
-              //                 // Create the tooltip
-              //                 const tooltip = document.createElement('div');
-              //                 tooltip.classList.add('tooltip');
-              //                 tooltip.textContent = alarm.time;
-              //                 document.body.appendChild(tooltip);
-              //                 // Position the tooltip near the icon
-              //                 const rect = timeIcon.getBoundingClientRect();
-              //                 const tooltipRect = tooltip.getBoundingClientRect();
-              //                 tooltip.style.position = 'absolute';
-              //                 tooltip.style.left = `${rect.left - tooltipRect.width + rect.width}px`;
-              //                 tooltip.style.top = `${rect.bottom + 5}px`;
-              //                 tooltip.setAttribute('id', 'alarm-tooltip');
-              //             });
-              //             timeIcon.addEventListener('mouseleave', () => {
-              //                 // Remove the tooltip
-              //                 const tooltip = document.getElementById('alarm-tooltip');
-              //                 if (tooltip) {
-              //                     tooltip.remove();
-              //                 }
-              //             });
-              //             alarmStatusDiv.appendChild(timeIcon);
-              //             // Append the alarm-status div to the alarmDiv
-              //             alarmDiv.appendChild(alarmStatusDiv);
-              //             // Append alarmDiv to alarmItem
-              //             alarmItem.appendChild(alarmDiv);
-              //             alarmList.appendChild(alarmItem);
-              //         });
-              //     } else {
-              //         const noAlarmItem = document.createElement('li');
-              //         // Create "No Alarms" div
-              //         const noAlarmDiv = document.createElement('div');
-              //         noAlarmDiv.classList.add('no-alarms');
-              //         // Add icon and text
-              //         const noAlarmIcon = document.createElement('span');
-              //         noAlarmIcon.classList.add('mat-icon', 'material-symbols-sharp');
-              //         noAlarmIcon.textContent = 'notifications_off';
-              //         const noAlarmText = document.createTextNode('No Alarms');
-              //         // Append icon and text to the div
-              //         noAlarmDiv.appendChild(noAlarmIcon);
-              //         noAlarmDiv.appendChild(noAlarmText);
-              //         // Append div to list item
-              //         noAlarmItem.appendChild(noAlarmDiv);
-              //         tankCard.appendChild(noAlarmItem);
-              //         alarmList.appendChild(noAlarmItem);
-              //     }
-              //     pumpCard.appendChild(alarmList);
-              //     pumpsTabContainer.appendChild(pumpCard);
-              // });
-              // Group pumps by fusionid
 
               pumpsGroupedByFusionId = pumps.reduce(function (acc, pump) {
                 if (!acc[pump.fusionid]) {
@@ -1209,13 +1045,17 @@ var ReloadSitesCharts = {
     }
   }
 };
-exports.ReloadSitesCharts = ReloadSitesCharts;
 var RunCharts = {
   init: function init() {
     SiteStatus.init();
     ReloadSitesCharts.init();
   }
 };
+
+_portal.AppearanceToggle.registerCallback(function (mode) {
+  ReloadSitesCharts.chartReload();
+});
+
 (0, _script.pageReady)(function () {
   RunCharts.init();
   SiteList.init();

@@ -331,25 +331,22 @@ body.popover-on {
                     align-items: center;
                     overflow: hidden;
                     margin: 0 auto;
-
+                    gap: 7px;
                     label {
-                        flex-basis: 33.33%;
-                        max-width: 33.33%;
-                        position: relative;
+                        cursor: pointer;
                         padding: 10px;
+                    }   
+                    div:not(.download-item), label {
+                        flex-basis: 40px;
+                        max-width: 40px;
+                        min-width: 40px;
+                        height: 40px;
+                        position: relative;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background-color: rgba(var(--gts-brd-color), 0.2);
-                        &:first-of-type {
-                            border-radius: var(--gts-sm-curve) 0 0 var(--gts-sm-curve);
-                            border-right: 1px rgba(var(--gts-brd-color), 0.2) solid;
-                        }
-                        &:last-of-type {
-                            border-radius: 0 var(--gts-sm-curve) var(--gts-sm-curve) 0;
-                            border-left: 1px rgba(var(--gts-brd-color), 0.2) solid;
-                        }                        
-                        cursor: pointer;
+                        border-radius: 50%; 
+                   
                         .mat-icon {
                             color: var(--gts-gray-color);
                             font-size: var(--gts-heading-fs);
@@ -363,9 +360,16 @@ body.popover-on {
                             width: 0;
                             height: 0;
                             padding: 0;
-                            &:checked + .mat-icon {
-                                color: var(--gts-primary-color);
+                            &:checked {
+                                + label {
+                                    background-color: rgba(var(--gts-brd-color), 0.1);
+                                    .mat-icon {
+                                        color: var(--gts-primary-color);
+                                    }
+                                }
                             }
+
+
                         }
                         &:hover {
                             .mat-icon {
@@ -602,15 +606,16 @@ body.popover-on {
     z-index: 2147483647;
     transform: translateY(-50%);
     font-size: var(--gts-small-fs);
-
+    display: flex;
+    align-items: center;
     .gts-badge {
         position: relative;
         right: -4px;
-        top: -1px;
+        top: 0px;
         min-width: 10px;
         min-height: 10px;
         line-height: 10px;
-        padding: 2px 5px;
+        padding: 3px 5px;
         color: var(--gts-white-color);
         background-color: var(--gts-red-color);
         font-size: var(--gts-xsmall-fs);
