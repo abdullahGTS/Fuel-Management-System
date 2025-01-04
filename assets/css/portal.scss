@@ -103,6 +103,7 @@ body.loaded {
     transition: opacity 420ms ease;
     position: relative;
     align-items: flex-start;
+    min-height: 100%;
     #gts-stage {
         flex: 1;
         display: flex;

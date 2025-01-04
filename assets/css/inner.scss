@@ -1630,3 +1630,20 @@ li.select2-selection__choice + li.select2-search.select2-search--inline input {
         }
     }
 }
+
+div#tankTabContainer.tanks-list {
+    display: flex !important;
+    flex-direction: column;
+    // gap: 30px;
+    margin-top: 30px !important;
+    // .tank-item {
+    //     padding: 30px;
+    //     border-radius: var(--gts-sm-curve);
+    //     background-color: var(--gts-light-color);
+    //     .tank-products {
+    //         display: flex;
+    //         flex-direction: column;
+    //         gap: 10px;
+    //     }
+    // }
+}

@@ -62,7 +62,10 @@ const API_PATHS = {
     alarmData: '/api/inner/alarms/alarm_data.json',
 
     // Inner Delivery
-    deliveryData: '/api/inner/delivery/delivery_data.json'
+    deliveryData: '/api/inner/delivery/delivery_data.json',
+
+    // Inner Tanks
+    tanksData: '/api/inner/tanks/tank_data.json'
 };
 
 // Shared function to fetch data from JSON files

@@ -292,7 +292,10 @@ const Drawer = {
   },
   openDrawer: () => {
     const drawerTriggers = document.querySelectorAll("[data-drawer-target]");
+    console.log('drawerTriggers', drawerTriggers)
+
     drawerTriggers.forEach(trigger => {
+
       trigger.addEventListener("click", (e) => {
         const targetSelector = trigger.getAttribute("data-drawer-target");
         const drawerWrapper = document.querySelector(targetSelector);
