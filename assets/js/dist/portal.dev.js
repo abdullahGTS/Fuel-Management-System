@@ -367,4 +367,15 @@ exports.AppearanceToggle = AppearanceToggle;
   NotificationSystem.init();
   CollapsedMenu.init();
   ForceResponsive.init();
+  var tablesArry = document.querySelectorAll('.gts-dt-wrapper table');
+
+  if (tablesArry.length) {
+    tablesArry.forEach(function (table) {
+      var tableApi = $(table).DataTable();
+
+      if (tableApi) {
+        tableApi.responsive.recalc();
+      }
+    });
+  }
 });

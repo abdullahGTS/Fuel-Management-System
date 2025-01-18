@@ -386,5 +386,14 @@ pageReady(() => {
     NotificationSystem.init();
     CollapsedMenu.init();
     ForceResponsive.init();
+    const tablesArry = document.querySelectorAll('.gts-dt-wrapper table');
+    if (tablesArry.length) {
+        tablesArry.forEach(table => {
+            const tableApi = $(table).DataTable();
+            if (tableApi) {
+                tableApi.responsive.recalc();
+            }
+        })
+    }
 });
 

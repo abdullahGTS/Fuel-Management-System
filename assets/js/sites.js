@@ -134,7 +134,8 @@ const SiteDT = {
                     },
                 },
                 { width: "80px", targets: 0 },  // Hide the first column (id)
-                { width: "80px", targets: 6 }], "Sites data table");
+                { width: "80px", targets: 6 }], 
+                "Sites data table");
 
                 // Attach click event to dynamically generated "view-more" buttons
                 document.querySelector(".gts-dt-wrapper").addEventListener("click", (event) => {

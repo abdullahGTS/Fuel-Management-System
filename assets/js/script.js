@@ -292,8 +292,6 @@ const Drawer = {
   },
   openDrawer: () => {
     const drawerTriggers = document.querySelectorAll("[data-drawer-target]");
-    console.log('drawerTriggers', drawerTriggers)
-
     drawerTriggers.forEach(trigger => {
 
       trigger.addEventListener("click", (e) => {
@@ -621,6 +619,7 @@ const DataTable = {
             });
           }
         });
+        
         this.api().columns.adjust();
       },
     });

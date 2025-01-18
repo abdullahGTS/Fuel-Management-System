@@ -6,12 +6,6 @@ var _constant = require("./constant.js");
 
 var _portal = require("./portal.js");
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -200,16 +194,7 @@ var TanksFilter = {
           });
         });
       }
-    }); //     else if (key === 'dateend' && values.from && values.to) {
-    //         // Filter by date range
-    //         const from = new Date(values.from);
-    //         const to = new Date(values.to);
-    //         filteredTanks = filteredTanks.filter(res => {
-    //             const responsesDate = new Date(res[key]);
-    //             return responsesDate >= from && alarmDate <= to;
-    //         });
-    // }
-
+    });
     return filteredTanks; // Return filtered response
   }
 };
@@ -283,17 +268,50 @@ var TanksDT = {
                 }, {
                   title: "<span class=\"mat-icon material-symbols-sharp\">schedule</span> Time",
                   data: "timestamp"
+                }, {
+                  title: "",
+                  data: "details"
                 }],
                 responsive: true,
                 paging: formattedData.length > 10,
                 pageLength: 10
               }, [{
+                targets: -1,
+                // Target the last column
+                orderable: false,
+                // Disable sorting
+                responsivePriority: 1,
+                // Ensure it's always visible
+                render: function render(data, type, row) {
+                  return "<button class=\"btn btn-icon view-more\" data-tank=\"".concat(row.Tank, "\" data-drawer-target=\"#tankDetails\"><span class=\"mat-icon material-symbols-sharp\">visibility</span></button>");
+                }
+              }, {
                 width: "0px",
                 targets: 0
-              } // Hide the first column (id)
-              // { width: "280px", targets: 1 },
-              // { width: "280px", targets: 3 },
-              ], "Tanks data table");
+              }, {
+                width: "80px",
+                targets: 9
+              }], "Tanks data table"); // Attach click event to dynamically generated "view-more" buttons
+
+
+              document.querySelector(".gts-dt-wrapper").addEventListener("click", function (event) {
+                var button = event.target.closest(".view-more");
+
+                if (button) {
+                  var tankId = button.getAttribute("data-tank");
+                  var tank = tanks.find(function (tank) {
+                    return tank.Tank.toString() === tankId;
+                  });
+
+                  if (tank) {
+                    TankDrawer.init(tank);
+                  } else {
+                    console.error("Site with ID ".concat(tankId, " not found."));
+                  }
+                }
+              });
+
+              _script.Drawer.init();
             } else {
               console.error("No tanks data available");
             }
@@ -350,7 +368,8 @@ var TanksDT = {
         capacity: tanks.capacity,
         productvolume: tanks.productvolume,
         watervolume: tanks.watervolume,
-        timestamp: tanks.timestamp
+        timestamp: tanks.timestamp,
+        details: ''
       };
     });
   },
@@ -372,110 +391,10 @@ var TanksDT = {
       wrapper.appendChild(emptyStateDiv);
     }
   }
-}; // const DeepView = {
-//     init: async () => {
-//         const siteListTanksWrapper = document.querySelector('#siteListTanksWrapper');
-//         if ( siteListTanksWrapper ) {
-//             const response = await FetchData.init();
-//             DeepView.groupSites(response, siteListTanksWrapper);
-//         }
-//     },
-//     groupSites: (response, siteListTanksWrapper) => {
-//         const groupedSites = [];
-//         // Extract unique sites
-//         response.forEach((site) => {
-//             if (!groupedSites.some(s => s.sitenumber === site.sitenumber)) {
-//                 groupedSites.push({
-//                     sitenumber: site.sitenumber,
-//                     sitename: site.sitename
-//                 });
-//             }
-//         });
-//         DeepView.createList(response, groupedSites, siteListTanksWrapper);
-//     },
-//     createList: (response, groupedSites, siteListTanksWrapper) => {
-//         const siteListContainer = siteListTanksWrapper.querySelector(".sites-list ul");
-//         if (!siteListContainer) return;
-//         siteListContainer.innerHTML = ""; // Clear existing content
-//         groupedSites.forEach((site) => {
-//             const siteItem = document.createElement("li");
-//             siteItem.classList.add("site-item");
-//             siteItem.innerHTML = `
-//                 <div class="site-wrapper" data-drawer-target="#siteDetails">
-//                     <div class="site-body">
-//                         <div class="icon-wrapper">
-//                             <span class="mat-icon material-symbols-sharp">location_on</span>
-//                         </div>
-//                         <div class="site-details">
-//                             <p>${site.sitenumber}</p>
-//                             <h3>${site.sitename}</h3>
-//                         </div>
-//                     </div>
-//                     <div class="site-control">
-//                         <button role="button" class="btn">
-//                             Details
-//                         </button>
-//                     </div>
-//                 </div>
-//             `;
-//             siteItem.querySelector(".site-wrapper").addEventListener("click", () => {
-//                 DeepView.siteDetails(response, site.sitenumber);
-//             });
-//             siteListContainer.appendChild(siteItem);
-//             Drawer.init();
-//             Button.init();
-//         });
-//     },
-//     siteDetails: (response, sitenumber) => {
-//         const siteData = response.filter(site => site.sitenumber === sitenumber);
-//         // Use a drawer component to display details
-//         const drawerContent = `
-//             <h2>Details for Site ${siteData[0].sitename} (${sitenumber})</h2>
-//             <ul>
-//                 ${siteData.map(tank => `
-//                     <li>
-//                         <div>
-//                             <strong>Tank:</strong> ${tank.Tank}
-//                         </div>
-//                         <div>
-//                             <strong>Product:</strong> ${tank.product}
-//                         </div>
-//                         <div>
-//                             <strong>Capacity:</strong> ${tank.capacity} L
-//                         </div>
-//                         <div>
-//                             <strong>Volume:</strong> ${tank.productvolume} L
-//                         </div>
-//                     </li>
-//                 `).join('')}
-//             </ul>
-//         `;
-//         SiteDrawer.init(siteData); // Assuming SiteDrawer accepts HTML content
-//     },
-// }
-// const SiteDrawer = {
-//     // Clone and insert the drawer inside the clicked siteItem
-//     init: async (response) => {
-//         console.log('response', response)
-//         const sharedDrawer = document.querySelector("#siteDetails");
-//         if (!sharedDrawer) {
-//             console.error("Shared drawer element not found.");
-//             return;
-//         }
-//         await SiteDrawer.siteDetails(sharedDrawer, response);
-//     },
-//     siteDetails: async (drawer, site) => {
-//         const sitestatus = drawer.querySelector('.drawer-title .icon-wrapper');
-//         const sitenumber = drawer.querySelector('.drawer-title .drawer-title-wrapper p');
-//         if (sitenumber) sitenumber.textContent = site.sitenumber;
-//         const sitename = drawer.querySelector('.drawer-title .drawer-title-wrapper h2');
-//         if (sitename) sitename.textContent = site.sitename;
-//     }
-// }
-
+};
 var DeepView = {
   init: function init() {
-    var siteListTanksWrapper, response, filterInput;
+    var siteListTanksWrapper, response, filterInput, siteListWrapper, sites;
     return regeneratorRuntime.async(function init$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
@@ -483,7 +402,7 @@ var DeepView = {
             siteListTanksWrapper = document.querySelector('#siteListTanksWrapper');
 
             if (!siteListTanksWrapper) {
-              _context7.next = 13;
+              _context7.next = 23;
               break;
             }
 
@@ -521,9 +440,8 @@ var DeepView = {
 
                       case 3:
                         filteredSites = _context6.sent;
-                        DeepView.createList(response, filteredSites, siteListTanksWrapper);
 
-                      case 5:
+                      case 4:
                       case "end":
                         return _context6.stop();
                     }
@@ -532,7 +450,34 @@ var DeepView = {
               });
             }
 
-          case 13:
+            siteListWrapper = document.querySelector("#siteListTanksWrapper");
+
+            if (!siteListWrapper) {
+              _context7.next = 23;
+              break;
+            }
+
+            _context7.next = 17;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.sitesData));
+
+          case 17:
+            sites = _context7.sent;
+
+            if (!(!sites || Object.keys(sites).length === 0)) {
+              _context7.next = 22;
+              break;
+            }
+
+            console.error("No sites data available");
+            DeepView.emptyState(wrapper);
+            return _context7.abrupt("return");
+
+          case 22:
+            // Store the original list of sites
+            // DeepView.sites = sites;
+            DeepView.siteList(siteListWrapper, sites);
+
+          case 23:
           case "end":
             return _context7.stop();
         }
@@ -566,6 +511,30 @@ var DeepView = {
 
       siteItem.querySelector(".site-wrapper").addEventListener("click", function () {
         DeepView.siteDetails(response, site);
+      });
+      siteListContainer.appendChild(siteItem);
+    });
+
+    _script.Drawer.init();
+
+    _script.Button.init();
+  },
+  // Render the site list
+  siteList: function siteList(wrapper, sites) {
+    var siteListContainer = wrapper.querySelector(".sites-list ul");
+    if (!siteListContainer) return; // Clear any existing site list content
+
+    siteListContainer.innerHTML = ""; // Generate site list items
+
+    sites.forEach(function (site) {
+      var siteItem = document.createElement("li");
+      siteItem.classList.add("site-item");
+      var location = site.longitud + ',' + site.latitud; // Get the location from the site data
+
+      siteItem.innerHTML = "\n                <div class=\"site-wrapper\">\n                    <div class=\"site-body\" data-drawer-target=\"#siteDetails\">\n                        <div class=\"icon-wrapper ".concat(site.status.toLowerCase(), "\">\n                            <span class=\"mat-icon material-symbols-sharp\">location_on</span>\n                        </div>\n                        <div class=\"site-details\">\n                            <p>").concat(site.sitenumber, "</p>\n                            <h3>").concat(site.name, "</h3>\n                        </div>\n                    </div>\n                    <div class=\"site-control\">\n                        <a role=\"button\" href=\"https://www.google.com/maps?q=").concat(location, "\" target=\"_blank\" class=\"btn\">\n                            Direction\n                        </a>\n                    </div>\n                </div>\n            "); // Add click event listener to clone and insert the drawer
+
+      siteItem.querySelector(".site-body").addEventListener("click", function () {
+        SiteDrawer.init(site);
       });
       siteListContainer.appendChild(siteItem);
     });
@@ -651,163 +620,735 @@ var DeepView = {
   }
 };
 var SiteDrawer = {
-  init: function init(site, tanks) {
+  // Clone and insert the drawer inside the clicked siteItem
+  init: function init(site) {
     var sharedDrawer = document.querySelector("#siteDetails");
 
     if (!sharedDrawer) {
       console.error("Shared drawer element not found.");
       return;
-    }
+    } // sharedDrawer.innerHTML = '';
 
-    SiteDrawer.siteDetails(sharedDrawer, site, tanks);
+
+    SiteDrawer.siteDetails(sharedDrawer, site);
   },
-  siteDetails: function siteDetails(drawer, site, tanks) {
-    // Update drawer header with site details
-    var sitestatus = drawer.querySelector('.drawer-title .icon-wrapper');
-    var sitenumber = drawer.querySelector('.drawer-title .drawer-title-wrapper p');
-    var sitename = drawer.querySelector('.drawer-title .drawer-title-wrapper h2');
-    if (sitenumber) sitenumber.textContent = site.sitenumber;
-    if (sitename) sitename.textContent = site.sitename; // Populate tanks details
+  siteDetails: function siteDetails(drawer, site) {
+    var sitestatus, sitenumber, sitename, siteData, tanks, alarms, pumps, _tankTabContainer, _tankTabContainer2, emptyStateDiv, heading, brief, pumpsTabContainer, pumpsGroupedByFusionId, _pumpsTabContainer, _emptyStateDiv, _heading, _brief;
 
-    var tankTabContainer = drawer.querySelector('#tankTabContainer');
+    return regeneratorRuntime.async(function siteDetails$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            sitestatus = drawer.querySelector('.drawer-title .icon-wrapper');
 
-    if (!tanks || tanks.length === 0) {
-      tankTabContainer.innerHTML = ''; // Clear previous content if any
+            if (sitestatus) {
+              sitestatus.classList.toggle('online', site.status === 'online');
+              sitestatus.classList.toggle('offline', site.status === 'offline');
+            }
 
-      if (!tankTabContainer.querySelector(".emptyState")) {
-        var emptyStateDiv = document.createElement("div");
-        emptyStateDiv.className = "emptyState"; // Create the heading (h3)
+            sitenumber = drawer.querySelector('.drawer-title .drawer-title-wrapper p');
+            if (sitenumber) sitenumber.textContent = site.sitenumber;
+            sitename = drawer.querySelector('.drawer-title .drawer-title-wrapper h2');
+            if (sitename) sitename.textContent = site.name;
+            _context9.next = 8;
+            return regeneratorRuntime.awrap((0, _constant.fetchData)(_constant.API_PATHS.siteDetails));
 
-        var heading = document.createElement("h3");
-        heading.textContent = "No Tanks Found"; // Create the brief (p)
+          case 8:
+            siteData = _context9.sent;
 
-        var brief = document.createElement("p");
-        brief.textContent = "We couldn't find any tanks for this site, try again later."; // Append heading and brief to the empty state div
+            if (!(!siteData || Object.keys(siteData).length === 0)) {
+              _context9.next = 12;
+              break;
+            }
 
-        emptyStateDiv.appendChild(heading);
-        emptyStateDiv.appendChild(brief); // Insert the empty state div after the site list container
+            console.error("No site data available");
+            return _context9.abrupt("return");
 
-        tankTabContainer.appendChild(emptyStateDiv);
+          case 12:
+            // Fetch the tanks and alarms
+            tanks = siteData.tanks;
+            alarms = siteData.alarms;
+            pumps = siteData.pumps; // Check if tanks data exists
+
+            if (tanks && tanks.length > 0) {
+              _tankTabContainer = document.getElementById('tankTabContainer');
+              _tankTabContainer.innerHTML = ''; // Clear previous content if any
+
+              tanks.forEach(function (tank) {
+                // Create the tank card
+                var tankCard = document.createElement('div');
+                tankCard.classList.add('tank-card');
+                tankCard.classList.add(tank.productid__name.toLowerCase()); // Tank label (Product Name)
+
+                var labelWrapper = document.createElement('div');
+                labelWrapper.classList.add('label-wrapper');
+                tankCard.appendChild(labelWrapper);
+                var labelIcon = document.createElement('div');
+                labelIcon.classList.add('icon-wrapper');
+                var gasIcon = document.createElement('span');
+                gasIcon.classList.add('mat-icon');
+                gasIcon.classList.add('material-symbols-sharp');
+                gasIcon.textContent = 'gas_meter';
+                labelIcon.appendChild(gasIcon);
+                labelWrapper.appendChild(labelIcon);
+                var label = document.createElement('p');
+                label.textContent = tank.productid__name;
+                label.classList.add('tank-label');
+                labelWrapper.appendChild(label);
+                var tankName = document.createElement('h3');
+                tankName.textContent = 'Tank ' + tank.fusiontankid;
+                tankName.classList.add('tank-name');
+                labelWrapper.appendChild(tankName); // Tank progress bar for capacity
+
+                var progressContainer = document.createElement('div');
+                progressContainer.classList.add('progress-container');
+                var progress = document.createElement('div');
+                progress.classList.add('progress-bar'); // Calculate and set width based on capacity percentage
+
+                var capacityPercentage = tank.tanklastinfoid__prodvol / tank.capacity * 100;
+                progress.style.width = "".concat(capacityPercentage, "%");
+
+                if (capacityPercentage <= 20) {
+                  progress.classList.add('red');
+                }
+
+                if (capacityPercentage > 20 && capacityPercentage <= 80) {
+                  progress.classList.add('orange');
+                }
+
+                if (capacityPercentage > 80 && capacityPercentage <= 100) {
+                  progress.classList.add('green');
+                } // Create and append dashes
+
+
+                [20, 80].forEach(function (percent) {
+                  var dash = document.createElement('span');
+                  dash.classList.add('dash');
+                  dash.style.left = "".concat(percent, "%"); // Positioning the dash
+
+                  progressContainer.appendChild(dash);
+                }); // Append progress bar to container
+
+                progressContainer.appendChild(progress);
+                tankCard.appendChild(progressContainer); // Create a wrapper div for the capacity information
+
+                var capacityWrapper = document.createElement('div');
+                capacityWrapper.classList.add('capacity-wrapper'); // Create div for `tanklastinfoid__prodvol`
+
+                var currentVolumeDiv = document.createElement('div');
+                currentVolumeDiv.classList.add('current-volume');
+                currentVolumeDiv.textContent = tank.tanklastinfoid__prodvol; // Create div for `icon`
+
+                var capacityIcon = document.createElement('span');
+                capacityIcon.classList.add('mat-icon', 'material-symbols-sharp');
+                capacityIcon.textContent = 'oil_barrel';
+                currentVolumeDiv.prepend(capacityIcon); // Add span for "Ltr" inside `currentVolumeDiv`
+
+                var currentVolumeSpan = document.createElement('span');
+                currentVolumeSpan.textContent = 'Ltr';
+                currentVolumeDiv.appendChild(currentVolumeSpan); // Create div for `capacity`
+
+                var capacityDiv = document.createElement('div');
+                capacityDiv.classList.add('tank-capacity');
+                capacityDiv.textContent = tank.capacity; // Add span for "Ltr" inside `capacityDiv`
+
+                var capacitySpan = document.createElement('span');
+                capacitySpan.textContent = 'Ltr';
+                capacityDiv.appendChild(capacitySpan); // Append the two divs to the wrapper
+
+                capacityWrapper.appendChild(currentVolumeDiv);
+                capacityWrapper.appendChild(capacityDiv); // // Add the wrapper to the tank card
+
+                tankCard.appendChild(capacityWrapper); // Add alarms related to this tank
+
+                var tankAlarms = alarms.filter(function (alarm) {
+                  return alarm.device === "Tank ".concat(tank.fusiontankid);
+                });
+                var alarmList = document.createElement('ul');
+                alarmList.classList.add('alarm-list');
+
+                if (tankAlarms.length > 0) {
+                  tankAlarms.forEach(function (alarm) {
+                    var alarmItem = document.createElement('li'); // Create alarm div with specific severity styling
+
+                    var alarmDiv = document.createElement('div');
+                    alarmDiv.classList.add('alarm-item', alarm.severity.toLowerCase()); // Determine icon based on severity
+
+                    var severityDiv = document.createElement('div');
+                    severityDiv.classList.add('severity');
+                    severityDiv.textContent = alarm.severity;
+                    var icon = document.createElement('span');
+                    icon.classList.add('mat-icon', 'material-symbols-sharp');
+                    icon.textContent = alarm.severity === 'Warning' ? 'warning' : alarm.severity === 'Info' ? 'error' : 'cancel'; // Add text content for alarm details
+
+                    severityDiv.prepend(icon);
+                    alarmDiv.appendChild(severityDiv);
+                    var alarmTypeSpan = document.createElement('span');
+                    alarmTypeSpan.classList.add('alarm-type');
+                    alarmTypeSpan.textContent = alarm.type;
+                    alarmDiv.appendChild(alarmTypeSpan); // Create the alarm-status div
+
+                    var alarmStatusDiv = document.createElement('div');
+                    alarmStatusDiv.classList.add('alarm-status'); // Add the first icon (check or close) with appropriate class based on `isactive`
+
+                    var statusIcon = document.createElement('span');
+                    statusIcon.classList.add('mat-icon', 'material-symbols-sharp', alarm.isactive === 'solved' ? 'is-active' : 'not-active');
+                    statusIcon.textContent = alarm.isactive === 'solved' ? 'check_circle' : 'circle_notifications';
+                    alarmStatusDiv.appendChild(statusIcon); // Add hover events for the tooltip
+
+                    statusIcon.addEventListener('mouseenter', function () {
+                      // Create the tooltip
+                      var tooltip = document.createElement('div');
+                      tooltip.classList.add('tooltip');
+                      tooltip.textContent = alarm.isactive;
+                      document.body.appendChild(tooltip); // Position the tooltip near the icon
+
+                      var rect = statusIcon.getBoundingClientRect();
+                      var tooltipRect = tooltip.getBoundingClientRect();
+                      tooltip.style.position = 'absolute';
+                      tooltip.style.left = "".concat(rect.left - tooltipRect.width + rect.width, "px");
+                      tooltip.style.top = "".concat(rect.bottom + 5, "px");
+                      tooltip.setAttribute('id', 'alarm-tooltip');
+                    });
+                    statusIcon.addEventListener('mouseleave', function () {
+                      // Remove the tooltip
+                      var tooltip = document.getElementById('alarm-tooltip');
+
+                      if (tooltip) {
+                        tooltip.remove();
+                      }
+                    }); // Add the time icon with tooltip functionality
+
+                    var timeIcon = document.createElement('span');
+                    timeIcon.classList.add('mat-icon', 'material-symbols-sharp');
+                    timeIcon.setAttribute('id', 'alarmTime');
+                    timeIcon.textContent = 'schedule'; // Add hover events for the tooltip
+
+                    timeIcon.addEventListener('mouseenter', function () {
+                      // Create the tooltip
+                      var tooltip = document.createElement('div');
+                      tooltip.classList.add('tooltip');
+                      tooltip.textContent = alarm.time;
+                      document.body.appendChild(tooltip); // Position the tooltip near the icon
+
+                      var rect = timeIcon.getBoundingClientRect();
+                      var tooltipRect = tooltip.getBoundingClientRect();
+                      tooltip.style.position = 'absolute';
+                      tooltip.style.left = "".concat(rect.left - tooltipRect.width + rect.width, "px");
+                      tooltip.style.top = "".concat(rect.bottom + 5, "px");
+                      tooltip.setAttribute('id', 'alarm-tooltip');
+                    });
+                    timeIcon.addEventListener('mouseleave', function () {
+                      // Remove the tooltip
+                      var tooltip = document.getElementById('alarm-tooltip');
+
+                      if (tooltip) {
+                        tooltip.remove();
+                      }
+                    });
+                    alarmStatusDiv.appendChild(timeIcon); // Append the alarm-status div to the alarmDiv
+
+                    alarmDiv.appendChild(alarmStatusDiv); // Append alarmDiv to alarmItem
+
+                    alarmItem.appendChild(alarmDiv);
+                    alarmList.appendChild(alarmItem);
+                  });
+                } else {
+                  var noAlarmItem = document.createElement('li'); // Create "No Alarms" div
+
+                  var noAlarmDiv = document.createElement('div');
+                  noAlarmDiv.classList.add('no-alarms'); // Add icon and text
+
+                  var noAlarmIcon = document.createElement('span');
+                  noAlarmIcon.classList.add('mat-icon', 'material-symbols-sharp');
+                  noAlarmIcon.textContent = 'notifications_off';
+                  var noAlarmText = document.createTextNode('No Alarms'); // Append icon and text to the div
+
+                  noAlarmDiv.appendChild(noAlarmIcon);
+                  noAlarmDiv.appendChild(noAlarmText); // Append div to list item
+
+                  noAlarmItem.appendChild(noAlarmDiv);
+                  tankCard.appendChild(noAlarmItem);
+                  alarmList.appendChild(noAlarmItem);
+                }
+
+                tankCard.appendChild(alarmList); // Append the tank card to the container
+
+                _tankTabContainer.appendChild(tankCard);
+              });
+            } else {
+              // Check if the empty state message already exists
+              _tankTabContainer2 = document.getElementById('tankTabContainer');
+              _tankTabContainer2.innerHTML = ''; // Clear previous content if any
+
+              if (!_tankTabContainer2.querySelector(".emptyState")) {
+                emptyStateDiv = document.createElement("div");
+                emptyStateDiv.className = "emptyState"; // Create the heading (h3)
+
+                heading = document.createElement("h3");
+                heading.textContent = "No Tanks Found"; // Create the brief (p)
+
+                brief = document.createElement("p");
+                brief.textContent = "We couldn't find any tanks for this site, try again later."; // Append heading and brief to the empty state div
+
+                emptyStateDiv.appendChild(heading);
+                emptyStateDiv.appendChild(brief); // Insert the empty state div after the site list container
+
+                _tankTabContainer2.appendChild(emptyStateDiv);
+              }
+            }
+
+            if (pumps && pumps.length > 0) {
+              pumpsTabContainer = document.querySelector("#pumpsTabContainer");
+              pumpsTabContainer.innerHTML = ''; // Clear previous content if any
+
+              pumpsGroupedByFusionId = pumps.reduce(function (acc, pump) {
+                if (!acc[pump.fusionid]) {
+                  acc[pump.fusionid] = {
+                    fusionid: pump.fusionid,
+                    brand: pump.brand,
+                    nozzles: []
+                  };
+                }
+
+                acc[pump.fusionid].nozzles.push(pump);
+                return acc;
+              }, {}); // Create cards for each pump (grouped by fusionid)
+
+              Object.values(pumpsGroupedByFusionId).forEach(function (group) {
+                var pumpCard = document.createElement("div");
+                pumpCard.classList.add("pump-card"); // Pump header (with same style as tank headers)
+
+                var labelWrapper = document.createElement("div");
+                labelWrapper.classList.add("label-wrapper");
+                var labelIcon = document.createElement("div");
+                labelIcon.classList.add("icon-wrapper");
+                var pumpIcon = document.createElement("span");
+                pumpIcon.classList.add("mat-icon", "material-symbols-sharp");
+                pumpIcon.textContent = "local_gas_station"; // Pump icon
+
+                labelIcon.appendChild(pumpIcon);
+                labelWrapper.appendChild(labelIcon);
+                var label = document.createElement("p");
+                label.textContent = group.brand;
+                label.classList.add("pump-label");
+                labelWrapper.appendChild(label);
+                var pumpName = document.createElement("h3");
+                pumpName.textContent = "Pump ".concat(group.fusionid);
+                pumpName.classList.add("pump-name");
+                labelWrapper.appendChild(pumpName);
+                pumpCard.appendChild(labelWrapper); // Nozzles and their sales data
+
+                var nozzlesWrapper = document.createElement("div");
+                nozzlesWrapper.classList.add("nozzles-wrapper");
+                group.nozzles.forEach(function (nozzle) {
+                  var nozzleItem = document.createElement("div");
+                  nozzleItem.classList.add("nozzle-item");
+                  nozzleItem.classList.add(nozzle.hose__gradeid__name.toLowerCase());
+                  var nozzleHeader = document.createElement("div");
+                  nozzleHeader.classList.add("nozzle-header"); // Create the nozzle icon container
+
+                  var nozzleIcon = document.createElement("div");
+                  nozzleIcon.classList.add("nozzle-icon"); // Add the material icon span
+
+                  var nozzleIconSpan = document.createElement("span");
+                  nozzleIconSpan.classList.add("mat-icon");
+                  nozzleIconSpan.innerHTML = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" version=\"1.1\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 100\" width=\"400px\" height=\"400px\"><path d=\"M25,30C25,27.239,20,20,20,20S15,27.239,15,30S17.239,35,20,35S25,32.761,25,30Z\" stroke=\"none\"></path><path d=\"M20,50C20,52.761,22.239,55,25,55S30,52.761,30,50S25,40,25,40S20,47.239,20,50Z\" stroke=\"none\"></path><path d=\"M75,30L65,30L55,20L51.768,23.232L42.197,13.661C39.835,11.3,36.697,10,33.358,10L20,10L20,15L33.358,15C35.361,15,37.245,15.78,38.661,17.196L48.232,26.767L45,30L55,40L45,50L45,80C45,85.523,49.477,90,55,90L80,90L80,65L85,60L85,40C85,34.477,80.523,30,75,30ZM70,85L55,85C52.239,85,50,82.761,50,80L50,55L60,55C60,59.094,60,69.41,55.264,78.882L59.736,81.118C65,70.59,65,59.447,65,55C67.761,55,70,57.239,70,60L70,85Z\" stroke=\"none\"></path></svg>"; // Nozzle icon
+
+                  nozzleIcon.appendChild(nozzleIconSpan); // Append the icon container to the header
+
+                  nozzleHeader.appendChild(nozzleIcon); // Create the nozzle label container
+
+                  var nozzleLabel = document.createElement("div");
+                  nozzleLabel.classList.add("nozzle-label"); // Add the nozzle number paragraph
+
+                  var nozzleNumber = document.createElement("p");
+                  nozzleNumber.textContent = "Nozzle #: ".concat(nozzle.hose__logicalid);
+                  nozzleLabel.appendChild(nozzleNumber); // Add the nozzle grade name header
+
+                  var nozzleLabelHeader = document.createElement("h4");
+                  nozzleLabelHeader.textContent = "".concat(nozzle.hose__gradeid__name);
+                  nozzleLabel.appendChild(nozzleLabelHeader); // Append the label container to the header
+
+                  nozzleHeader.appendChild(nozzleLabel); // Append the header to the nozzle item
+
+                  nozzleItem.appendChild(nozzleHeader);
+                  var nozzleSale = document.createElement("div");
+                  nozzleSale.classList.add("nozzle-sale");
+                  var saleMoney = document.createElement("p");
+                  saleMoney.classList.add('sale-money'); // saleMoney.innerHTML = `${nozzle.last_sale_money} <span>SAR</span>`;
+
+                  var _nozzle$last_sale_mon = nozzle.last_sale_money.split('.'),
+                      _nozzle$last_sale_mon2 = _slicedToArray(_nozzle$last_sale_mon, 2),
+                      integerPart = _nozzle$last_sale_mon2[0],
+                      decimalPart = _nozzle$last_sale_mon2[1]; // Create the formatted HTML structure
+
+
+                  saleMoney.innerHTML = "\n                    <span>SAR</span> ".concat(integerPart, "<span class=\"decimal\">.").concat(decimalPart, "</span>\n                    ");
+                  var saleVolume = document.createElement("p");
+                  saleVolume.classList.add('sale-volume');
+                  saleVolume.innerHTML = "".concat(nozzle.last_sale_volume, " <span>Ltr</span>");
+                  nozzleSale.appendChild(saleMoney);
+                  nozzleSale.appendChild(saleVolume);
+                  nozzleItem.appendChild(nozzleSale);
+                  var nozzleTime = document.createElement("div");
+                  nozzleTime.classList.add("nozzle-time");
+                  var saleStartDate = document.createElement("p"); // saleStartDate.textContent = `${nozzle.last_sale_startdate}`;
+
+                  var startDate = new Date(nozzle.last_sale_startdate);
+                  saleStartDate.innerHTML = "<span>Start at:</span> ".concat(startDate.toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true // Optional: Change to `false` for 24-hour format
+
+                  }));
+                  var saleEndDate = document.createElement("p"); // saleEndDate.textContent = `${nozzle.last_sale_enddate}`;
+
+                  var endDate = new Date(nozzle.last_sale_enddate);
+                  saleEndDate.innerHTML = "<span>End at:</span> ".concat(endDate.toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true // Optional: Change to `false` for 24-hour format
+
+                  }));
+                  nozzleTime.appendChild(saleStartDate);
+                  nozzleTime.appendChild(saleEndDate);
+                  nozzleItem.prepend(nozzleTime);
+                  nozzlesWrapper.appendChild(nozzleItem);
+                }); // Add alarms related to this tank
+
+                var pumpsAlarms = alarms.filter(function (alarm) {
+                  return alarm.device === "Pump ".concat(group.fusionid);
+                });
+                var alarmList = document.createElement('ul');
+                alarmList.classList.add('alarm-list');
+
+                if (pumpsAlarms.length > 0) {
+                  pumpsAlarms.forEach(function (alarm) {
+                    var alarmItem = document.createElement('li'); // Create alarm div with specific severity styling
+
+                    var alarmDiv = document.createElement('div');
+                    alarmDiv.classList.add('alarm-item', alarm.severity.toLowerCase()); // Determine icon based on severity
+
+                    var severityDiv = document.createElement('div');
+                    severityDiv.classList.add('severity');
+                    severityDiv.textContent = alarm.severity;
+                    var icon = document.createElement('span');
+                    icon.classList.add('mat-icon', 'material-symbols-sharp');
+                    icon.textContent = alarm.severity === 'Warning' ? 'warning' : alarm.severity === 'Info' ? 'error' : 'cancel'; // Add text content for alarm details
+
+                    severityDiv.prepend(icon);
+                    alarmDiv.appendChild(severityDiv);
+                    var alarmTypeSpan = document.createElement('span');
+                    alarmTypeSpan.classList.add('alarm-type');
+                    alarmTypeSpan.textContent = alarm.type;
+                    alarmDiv.appendChild(alarmTypeSpan); // Create the alarm-status div
+
+                    var alarmStatusDiv = document.createElement('div');
+                    alarmStatusDiv.classList.add('alarm-status'); // Add the first icon (check or close) with appropriate class based on `isactive`
+
+                    var statusIcon = document.createElement('span');
+                    statusIcon.classList.add('mat-icon', 'material-symbols-sharp', alarm.isactive === 'solved' ? 'is-active' : 'not-active');
+                    statusIcon.textContent = alarm.isactive === 'solved' ? 'check_circle' : 'circle_notifications';
+                    alarmStatusDiv.appendChild(statusIcon); // Add hover events for the tooltip
+
+                    statusIcon.addEventListener('mouseenter', function () {
+                      // Create the tooltip
+                      var tooltip = document.createElement('div');
+                      tooltip.classList.add('tooltip');
+                      tooltip.textContent = alarm.isactive;
+                      document.body.appendChild(tooltip); // Position the tooltip near the icon
+
+                      var rect = statusIcon.getBoundingClientRect();
+                      var tooltipRect = tooltip.getBoundingClientRect();
+                      tooltip.style.position = 'absolute';
+                      tooltip.style.left = "".concat(rect.left - tooltipRect.width + rect.width, "px");
+                      tooltip.style.top = "".concat(rect.bottom + 5, "px");
+                      tooltip.setAttribute('id', 'alarm-tooltip');
+                    });
+                    statusIcon.addEventListener('mouseleave', function () {
+                      // Remove the tooltip
+                      var tooltip = document.getElementById('alarm-tooltip');
+
+                      if (tooltip) {
+                        tooltip.remove();
+                      }
+                    }); // Add the time icon with tooltip functionality
+
+                    var timeIcon = document.createElement('span');
+                    timeIcon.classList.add('mat-icon', 'material-symbols-sharp');
+                    timeIcon.setAttribute('id', 'alarmTime');
+                    timeIcon.textContent = 'schedule'; // Add hover events for the tooltip
+
+                    timeIcon.addEventListener('mouseenter', function () {
+                      // Create the tooltip
+                      var tooltip = document.createElement('div');
+                      tooltip.classList.add('tooltip');
+                      tooltip.textContent = alarm.time;
+                      document.body.appendChild(tooltip); // Position the tooltip near the icon
+
+                      var rect = timeIcon.getBoundingClientRect();
+                      var tooltipRect = tooltip.getBoundingClientRect();
+                      tooltip.style.position = 'absolute';
+                      tooltip.style.left = "".concat(rect.left - tooltipRect.width + rect.width, "px");
+                      tooltip.style.top = "".concat(rect.bottom + 5, "px");
+                      tooltip.setAttribute('id', 'alarm-tooltip');
+                    });
+                    timeIcon.addEventListener('mouseleave', function () {
+                      // Remove the tooltip
+                      var tooltip = document.getElementById('alarm-tooltip');
+
+                      if (tooltip) {
+                        tooltip.remove();
+                      }
+                    });
+                    alarmStatusDiv.appendChild(timeIcon); // Append the alarm-status div to the alarmDiv
+
+                    alarmDiv.appendChild(alarmStatusDiv); // Append alarmDiv to alarmItem
+
+                    alarmItem.appendChild(alarmDiv);
+                    alarmList.appendChild(alarmItem);
+                  });
+                } else {
+                  var noAlarmItem = document.createElement('li'); // Create "No Alarms" div
+
+                  var noAlarmDiv = document.createElement('div');
+                  noAlarmDiv.classList.add('no-alarms'); // Add icon and text
+
+                  var noAlarmIcon = document.createElement('span');
+                  noAlarmIcon.classList.add('mat-icon', 'material-symbols-sharp');
+                  noAlarmIcon.textContent = 'notifications_off';
+                  var noAlarmText = document.createTextNode('No Alarms'); // Append icon and text to the div
+
+                  noAlarmDiv.appendChild(noAlarmIcon);
+                  noAlarmDiv.appendChild(noAlarmText); // Append div to list item
+
+                  noAlarmItem.appendChild(noAlarmDiv);
+                  pumpCard.appendChild(noAlarmItem);
+                  alarmList.appendChild(noAlarmItem);
+                }
+
+                pumpCard.appendChild(nozzlesWrapper);
+                pumpCard.appendChild(alarmList); // Add the pump card to the container
+
+                pumpsTabContainer.appendChild(pumpCard);
+              });
+            } else {
+              // Check if the empty state message already exists
+              _pumpsTabContainer = document.querySelector("#pumpsTabContainer");
+              _pumpsTabContainer.innerHTML = ''; // Clear previous content if any
+
+              if (!_pumpsTabContainer.querySelector(".emptyState")) {
+                _emptyStateDiv = document.createElement("div");
+                _emptyStateDiv.className = "emptyState"; // Create the heading (h3)
+
+                _heading = document.createElement("h3");
+                _heading.textContent = "No Tanks Found"; // Create the brief (p)
+
+                _brief = document.createElement("p");
+                _brief.textContent = "We couldn't find any tanks for this site, try again later."; // Append heading and brief to the empty state div
+
+                _emptyStateDiv.appendChild(_heading);
+
+                _emptyStateDiv.appendChild(_brief); // Insert the empty state div after the site list container
+
+
+                tankTabContainer.appendChild(_emptyStateDiv);
+              }
+            }
+
+          case 17:
+          case "end":
+            return _context9.stop();
+        }
       }
+    });
+  }
+};
+var TankDrawer = {
+  // Clone and insert the drawer inside the clicked siteItem
+  init: function init(tank) {
+    var sharedDrawer;
+    return regeneratorRuntime.async(function init$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            sharedDrawer = document.querySelector("#tankDetails");
 
-      return;
-    }
+            if (sharedDrawer) {
+              _context10.next = 4;
+              break;
+            }
 
-    tankTabContainer.innerHTML = ''; // Clear previous content if any
-    // Group tanks by product and select the one with the closest timestamp
+            console.error("Shared drawer element not found.");
+            return _context10.abrupt("return");
 
-    var groupedTanks = tanks.reduce(function (acc, tank) {
-      console.log('tank', tank);
-      var productName = tank.Tank || "Unknown Product";
-      var timestamp = new Date(tank.timestamp);
-      console.log('timestamp', timestamp); // If the timestamp is invalid, assign a default fallback
+          case 4:
+            _context10.next = 6;
+            return regeneratorRuntime.awrap(TankDrawer.siteDetails(sharedDrawer, tank));
 
-      if (isNaN(timestamp.getTime())) {
-        timestamp = new Date(0); // Fallback if the timestamp is invalid
-      } // If this product hasn't been added or this timestamp is closer to the current date, update it
-
-
-      if (!acc[productName] || Math.abs(new Date() - timestamp) < Math.abs(new Date() - acc[productName].timestamp)) {
-        acc[productName] = _objectSpread({}, tank, {
-          timestamp: timestamp
-        });
+          case 6:
+          case "end":
+            return _context10.stop();
+        }
       }
+    });
+  },
+  siteDetails: function siteDetails(drawer, tank) {
+    var body, tankDetailsHTML;
+    return regeneratorRuntime.async(function siteDetails$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            body = drawer.querySelector('.drawer-body');
+            if (body) body.innerHTML = ''; // Clear existing content
+            // Create tank details dynamically
 
-      return acc;
-    }, {}); // Iterate over the grouped tanks and display their details
+            tankDetailsHTML = "\n            <div class=\"drawer-title\">\n                <div class=\"icon-wrapper ".concat(tank.online ? 'online' : 'offline', "\">\n                    <span class=\"mat-icon material-symbols-sharp\">location_on</span>\n                </div>\n                <div class=\"drawer-title-wrapper\">\n                    <p>").concat(tank.sitenumber, "</p>\n                    <h2>").concat(tank.sitename, "</h2>\n                </div>\n            </div>\n\n            <div class=\"tank-card\">\n                <div class=\"label-wrapper\">\n                    <p class=\"tank-label\">").concat(tank.product, "</p>\n                    <h3 class=\"tank-name\">").concat(tank.Tank, "</h3>\n                </div>\n            </div>\n\n            <div class=\"tank-visualization\">\n                <div class=\"product-visualization\"></div>\n                <div class=\"water-visualization\"></div>\n            </div>\n\n            <div class=\"tank-capacity\">\n                <p class=\"tank-capacity-label\"><strong>Tank Capacity</strong>: ").concat(tank.capacity, " L</p>\n                <p><strong>On Date</strong>: ").concat(new Date(tank.timestamp).toLocaleString(), "</p>\n            </div>\n\n        "); // Append tank details to the body
 
-    Object.entries(groupedTanks).forEach(function (_ref3) {
-      var _ref4 = _slicedToArray(_ref3, 2),
-          productName = _ref4[0],
-          tank = _ref4[1];
+            body.innerHTML = tankDetailsHTML;
+            _context11.next = 6;
+            return regeneratorRuntime.awrap(TankDrawer.tankFill(body, tank));
 
-      var tankCard = document.createElement('div');
-      tankCard.classList.add('tank-card');
-      tankCard.classList.add(tank.product.toLowerCase()); // Tank label (Product Name)
+          case 6:
+            _context11.next = 8;
+            return regeneratorRuntime.awrap(TankDrawer.waterFill(body, tank));
 
-      var labelWrapper = document.createElement('div');
-      labelWrapper.classList.add('label-wrapper');
-      tankCard.appendChild(labelWrapper);
-      var labelIcon = document.createElement('div');
-      labelIcon.classList.add('icon-wrapper');
-      var gasIcon = document.createElement('span');
-      gasIcon.classList.add('mat-icon');
-      gasIcon.classList.add('material-symbols-sharp');
-      gasIcon.textContent = 'gas_meter';
-      labelIcon.appendChild(gasIcon);
-      labelWrapper.appendChild(labelIcon);
-      var label = document.createElement('p');
-      label.textContent = tank.product;
-      label.classList.add('tank-label');
-      labelWrapper.appendChild(label);
-      var tankName = document.createElement('h3');
-      tankName.textContent = tank.Tank;
-      tankName.classList.add('tank-name');
-      labelWrapper.appendChild(tankName); // Tank progress bar for capacity
-
-      var progressContainer = document.createElement('div');
-      progressContainer.classList.add('progress-container');
-      var progress = document.createElement('div');
-      progress.classList.add('progress-bar'); // Calculate and set width based on capacity percentage
-
-      var capacityPercentage = tank.productvolume / tank.capacity * 100;
-      console.log('capacityPercentage', capacityPercentage);
-      progress.style.width = "".concat(capacityPercentage, "%");
-
-      if (capacityPercentage <= 20) {
-        progress.classList.add('red');
+          case 8:
+          case "end":
+            return _context11.stop();
+        }
       }
+    });
+  },
+  tankFill: function tankFill(body, tank) {
+    var productsTank, productsTankLabel, liquid, svgNamespace, svg, path, productsLevel, label, currentValue, tankVisualizationContainer;
+    return regeneratorRuntime.async(function tankFill$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
+            productsTank = document.createElement('div');
+            productsTank.classList.add('products-tank');
+            productsTankLabel = document.createElement('p');
+            productsTankLabel.classList.add('products-tank-label');
+            productsTankLabel.textContent = 'Product Volume';
+            liquid = document.createElement('div');
+            liquid.classList.add('liquid'); // Add SVG for products
 
-      if (capacityPercentage > 20 && capacityPercentage <= 80) {
-        progress.classList.add('orange');
+            svgNamespace = "http://www.w3.org/2000/svg";
+            svg = document.createElementNS(svgNamespace, 'svg');
+            svg.classList.add('products');
+            svg.setAttribute('viewBox', '0 0 200 100');
+            path = document.createElementNS(svgNamespace, 'path');
+            path.setAttribute('fill', _constant.SharedColors[tank.product]);
+            path.setAttribute('d', "\n                M 0,0 v 100 h 200 v -100 \n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n            ");
+            svg.appendChild(path);
+            liquid.appendChild(svg); // Calculate products level
+
+            productsLevel = tank.productvolume / tank.capacity * 100;
+            svg.style.top = "calc(97.5% - ".concat(productsLevel, "%)"); // Add liquid container to the tank
+
+            productsTank.appendChild(liquid); // Add indicators
+
+            [25, 50, 75].forEach(function (value) {
+              var indicator = document.createElement('div');
+              indicator.classList.add('indicator');
+              indicator.setAttribute('data-value', value);
+              indicator.style.bottom = "".concat(value, "%");
+              productsTank.appendChild(indicator);
+            }); // Add label
+
+            label = document.createElement('div');
+            label.classList.add('label');
+            label.style.bottom = "".concat(productsLevel, "%"); // label.textContent = `${Math.round(productsLevel)}%`;
+
+            currentValue = parseFloat(tank.productvolume).toFixed(2);
+            label.innerHTML = "".concat(currentValue, "<span>lts</span>");
+            productsTank.appendChild(label); // Append the products tank to the body
+            // body.appendChild(productsTank);
+
+            tankVisualizationContainer = body.querySelector('.tank-visualization .product-visualization');
+
+            if (tankVisualizationContainer) {
+              tankVisualizationContainer.appendChild(productsTank); // Insert returned HTML
+
+              tankVisualizationContainer.appendChild(productsTankLabel); // Insert returned HTML
+            }
+
+          case 28:
+          case "end":
+            return _context12.stop();
+        }
       }
+    });
+  },
+  waterFill: function waterFill(body, tank) {
+    var productsTank, productsTankLabel, liquid, svgNamespace, svg, path, productsLevel, label, currentValue, tankVisualizationContainer;
+    return regeneratorRuntime.async(function waterFill$(_context13) {
+      while (1) {
+        switch (_context13.prev = _context13.next) {
+          case 0:
+            productsTank = document.createElement('div');
+            productsTank.classList.add('products-tank');
+            productsTankLabel = document.createElement('p');
+            productsTankLabel.classList.add('products-tank-label');
+            productsTankLabel.textContent = 'Water Volume';
+            liquid = document.createElement('div');
+            liquid.classList.add('liquid'); // Add SVG for products
 
-      if (capacityPercentage > 80 && capacityPercentage <= 100) {
-        progress.classList.add('green');
-      } // Create and append dashes
+            svgNamespace = "http://www.w3.org/2000/svg";
+            svg = document.createElementNS(svgNamespace, 'svg');
+            svg.classList.add('products');
+            svg.setAttribute('viewBox', '0 0 200 100');
+            path = document.createElementNS(svgNamespace, 'path');
+            path.setAttribute('fill', _constant.SharedColors.WaterColor);
+            path.setAttribute('d', "\n                M 0,0 v 100 h 200 v -100 \n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n        ");
+            svg.appendChild(path);
+            liquid.appendChild(svg); // Calculate products level
 
+            productsLevel = tank.watervolume / tank.capacity * 100;
+            svg.style.top = "calc(97.5% - ".concat(productsLevel, "%)"); // Add liquid container to the tank
 
-      [20, 80].forEach(function (percent) {
-        var dash = document.createElement('span');
-        dash.classList.add('dash');
-        dash.style.left = "".concat(percent, "%"); // Positioning the dash
+            productsTank.appendChild(liquid); // Add indicators
 
-        progressContainer.appendChild(dash);
-      }); // Append progress bar to container
+            [25, 50, 75].forEach(function (value) {
+              var indicator = document.createElement('div');
+              indicator.classList.add('indicator');
+              indicator.setAttribute('data-value', value);
+              indicator.style.bottom = "".concat(value, "%");
+              productsTank.appendChild(indicator);
+            }); // Add label
 
-      progressContainer.appendChild(progress);
-      tankCard.appendChild(progressContainer); // Create a wrapper div for the capacity information
+            label = document.createElement('div');
+            label.classList.add('label');
+            label.style.bottom = "".concat(productsLevel, "%"); // label.textContent = `${Math.round(productsLevel)}%`;
 
-      var capacityWrapper = document.createElement('div');
-      capacityWrapper.classList.add('capacity-wrapper'); // Create div for `tanklastinfoid__prodvol`
+            currentValue = parseFloat(tank.watervolume).toFixed(2);
+            label.innerHTML = "".concat(currentValue, "<span>lts</span>");
+            productsTank.appendChild(label); // Append the products tank to the body
+            // body.appendChild(productsTank);
 
-      var currentVolumeDiv = document.createElement('div');
-      currentVolumeDiv.classList.add('current-volume');
-      currentVolumeDiv.textContent = tank.productvolume; // Create div for `icon`
+            tankVisualizationContainer = body.querySelector('.tank-visualization .water-visualization');
 
-      var capacityIcon = document.createElement('span');
-      capacityIcon.classList.add('mat-icon', 'material-symbols-sharp');
-      capacityIcon.textContent = 'oil_barrel';
-      currentVolumeDiv.prepend(capacityIcon); // Add span for "Ltr" inside `currentVolumeDiv`
+            if (tankVisualizationContainer) {
+              tankVisualizationContainer.appendChild(productsTank); // Insert returned HTML
 
-      var currentVolumeSpan = document.createElement('span');
-      currentVolumeSpan.textContent = 'Ltr';
-      currentVolumeDiv.appendChild(currentVolumeSpan); // Create div for `capacity`
+              tankVisualizationContainer.appendChild(productsTankLabel); // Insert returned HTML
+            }
 
-      var capacityDiv = document.createElement('div');
-      capacityDiv.classList.add('tank-capacity');
-      capacityDiv.textContent = tank.capacity; // Add span for "Ltr" inside `capacityDiv`
-
-      var capacitySpan = document.createElement('span');
-      capacitySpan.textContent = 'Ltr';
-      capacityDiv.appendChild(capacitySpan); // Append the two divs to the wrapper
-
-      capacityWrapper.appendChild(currentVolumeDiv);
-      capacityWrapper.appendChild(capacityDiv); // Add the wrapper to the tank card
-
-      tankCard.appendChild(capacityWrapper); // Append the tank card to the container
-
-      tankTabContainer.appendChild(tankCard);
+          case 28:
+          case "end":
+            return _context13.stop();
+        }
+      }
     });
   }
 };

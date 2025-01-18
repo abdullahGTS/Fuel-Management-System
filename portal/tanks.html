@@ -432,16 +432,32 @@
                 </div>
             </div>
             <div class="tabs-wrapper">
+                <div class="site-details-tabs tabs-buttons">
+                    <button class="active" data-tab-target="#tankTabContainer">Tanks</button>
+                    <button  data-tab-target="#pumpsTabContainer">Pumps</button>
+                </div>
 
                 <!-- Tanks Tab Conatiner -->
-                <div class="tab-content active tanks-list" id="tankTabContainer">
+                <div class="tab-content" id="tankTabContainer">
                     Tanks
                 </div>
 
+                <!-- Pumps Tab Conatiner -->
+                <div class="tab-content" id="pumpsTabContainer">
+                    Pumps
+                </div>
             </div>
         </div>
     </div>
 
+    <!--- Tanks Drawer -->
+    <div class="drawer-wrapper" id="tankDetails">
+        <div class="drawer-body custom-scroll-bar">
+
+        </div>
+    </div>
+
+        
     <script src="../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../vendor/js/toastr.min.js" defer></script>
     <script type="text/javascript" src="../vendor/js/googleCharts.js" defer></script>

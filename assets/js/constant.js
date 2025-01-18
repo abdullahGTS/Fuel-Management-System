@@ -102,6 +102,7 @@ const SharedColors = {
     SystemAlarm: '#6B6ED2',
     TanksVolume: '#156E41',
     DeliveryAmount: '#156E41',
+    WaterColor: '#6B6ED2',
     TopFiveSites: {
         First: '#156E41',
         Second: '#6B6ED2',
