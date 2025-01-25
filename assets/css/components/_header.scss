@@ -28,6 +28,12 @@
                 font-size: var(--gts-heading-fs);
                 color: var(--gts-dark-color);
                 font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                .mat-icon {
+                    font-size: var(--gts-heading-fs);
+                }
             }
         }
         .gts-head-right {

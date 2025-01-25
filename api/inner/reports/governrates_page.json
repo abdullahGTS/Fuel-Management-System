@@ -1,0 +1,33 @@
+{
+    "governrates": [
+        {
+            "gov_name": "GENERIC",
+            "Gasoline95": "111038.997",
+            "Gasoline92": "209528.547",
+            "Diesel": "142660.820"
+        },
+        {
+            "gov_name": "GENERIC",
+            "Gasoline95": "111038.997",
+            "Gasoline92": "209528.547",
+            "Diesel": "142660.820"
+        },
+        {
+            "gov_name": "RIYADH",
+            "Gasoline95": "111038.997",
+            "Gasoline92": "209528.547",
+            "Diesel": "142660.820"
+        },
+        {
+            "gov_name": "MECCA",
+            "Gasoline95": "111038.997",
+            "Gasoline92": "209528.547",
+            "Diesel": "142660.820"
+        }
+    ],
+    "gas95": "111038.997",
+    "gas92": "209528.547",
+    "gas80": "44142.437",
+    "diesel": "142660.820",
+    "cng": 0
+}

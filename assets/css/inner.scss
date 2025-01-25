@@ -336,7 +336,7 @@
             td,
             th {
                 padding: 21px;
-                text-align: left !important;
+                text-align: left;
                 font-weight: 500;
                 border: 1px solid !important;
                 border-color: rgba(var(--gts-brd-color), 0.1) !important;
@@ -421,12 +421,13 @@
                 }
             }
 
-            th:first-of-type,
+            th:first-of-type:not(.not-id),
             tr td:first-of-type {
-                text-align: center !important;
+                text-align: center;
             }
 
-            th:first-of-type {
+            th:not(.not-id):first-of-type {
+                padding: 21px;
                 .dt-column-title {
                     margin: 0 auto !important;
                 }
@@ -530,11 +531,11 @@
             }
 
             /* First row */
-            .gts-dt-table tr:first-child th:not(.dtr-hidden):first-of-type {
+            .gts-dt-table thead tr:first-child th:not(.dtr-hidden):first-of-type {
                 border-top-left-radius: var(--gts-sm-curve);
             }
 
-            .gts-dt-table tr:first-child th:not(.dtr-hidden):last-of-type {
+            .gts-dt-table thead tr:first-child th:not(.dtr-hidden):last-of-type {
                 border-top-right-radius: var(--gts-sm-curve);
             }
 
@@ -544,6 +545,15 @@
             }
 
             .gts-dt-table tr:last-child td:not(.dtr-hidden):last-of-type {
+                border-bottom-right-radius: var(--gts-sm-curve);
+            }
+
+            /* First footer row */
+            .gts-dt-table tfoot tr:first-child th:not(.dtr-hidden):first-of-type {
+                border-bottom-left-radius: var(--gts-sm-curve);
+            }
+
+            .gts-dt-table tfoot tr:first-child th:not(.dtr-hidden):last-of-type {
                 border-bottom-right-radius: var(--gts-sm-curve);
             }
 
@@ -652,6 +662,17 @@
             }
         }
 
+    }
+
+    #governorateReportsDT {
+        /* Last row */
+        .gts-dt-table tr:last-child td:not(.dtr-hidden):first-of-type {
+            border-bottom-left-radius: 0 !important;
+        }
+
+        .gts-dt-table tr:last-child td:not(.dtr-hidden):last-of-type {
+            border-bottom-right-radius: 0 !important;
+        }
     }
 }
 
@@ -898,49 +919,6 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-
-        // &.gasoline95 {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --gasoline-95 ); }
-        //         &::before {background-color: var( --gasoline-95 );}
-        //     }
-        //     .tank-label {color: var( --gasoline-95 );}
-        // }
-        // &.gasoline92 {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --gasoline-92 ); }
-        //         &::before {background-color: var( --gasoline-92 );}
-        //     }
-        //     .tank-label {color: var( --gasoline-92 );}
-        // }
-        // &.gasoline91 {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --gasoline-91 ); }
-        //         &::before {background-color: var( --gasoline-91 );}
-        //     }
-        //     .tank-label {color: var( --gasoline-91 );}
-        // }
-        // &.gasoline80 {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --gasoline-80 ); }
-        //         &::before {background-color: var( --gasoline-80 );}
-        //     }
-        //     .tank-label {color: var( --gasoline-80 );}
-        // }
-        // &.diesel {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --diesel ); }
-        //         &::before {background-color: var( --diesel );}
-        //     }
-        //     .tank-label {color: var( --diesel );}
-        // }
-        // &.cng {
-        //     .icon-wrapper {
-        //         .mat-icon { color: var( --cng ); }
-        //         &::before {background-color: var( --cng );}
-        //     }
-        //     .tank-label {color: var( --cng );}
-        // }
     }
 
     .progress-container {
@@ -1723,7 +1701,7 @@ li.select2-selection__choice+li.select2-search.select2-search--inline input {
     }
 }
 
-#productsDelivery {
+#productsDelivery, #productsReportsCards {
     .gts-grid-item {
         min-width: var(--card-width);
 
@@ -2012,4 +1990,8 @@ div#tankTabContainer.tanks-list {
     .products-tank .indicator[data-value="75"] {
         bottom: 75%;
     }
+}
+
+#mapWrapper {
+    min-height: 320px !important;
 }

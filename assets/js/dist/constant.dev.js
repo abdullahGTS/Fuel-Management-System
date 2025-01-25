@@ -54,7 +54,11 @@ var API_PATHS = {
   // Inner Delivery
   deliveryData: '/api/inner/delivery/delivery_data.json',
   // Inner Tanks
-  tanksData: '/api/inner/tanks/tank_data.json'
+  tanksData: '/api/inner/tanks/tank_data.json',
+  // Reports
+  salesReports: '/api/inner/reports/report_sales_page_data.json',
+  governrateReports: '/api/inner/reports/governrates_page.json',
+  sitesReports: '/api/inner/reports/report_site_page_data.json'
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;

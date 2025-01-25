@@ -1,0 +1,65 @@
+{
+    "company_list": [
+        {
+            "sitenumber": 1001,
+            "name": "port_saeed",
+            "centralarea": "GENERIC",
+            "governorate": "GENERIC",
+            "lastconnection": "12/08/2022 12:53",
+            "console": null,
+            "status": "offline",
+            "Gasoline95": "19259.476",
+            "Gasoline92": "48888.456",
+            "Gasoline80": "35858.720",
+            "Diesel": "41659.809",
+            "CNG": "0.000"
+        },
+        {
+            "sitenumber": 1002,
+            "name": "hassan_roman_new_domyat",
+            "centralarea": "GENERIC",
+            "governorate": "GENERIC",
+            "lastconnection": "12/08/2022 12:52",
+            "console": null,
+            "status": "offline",
+            "Gasoline95": "14942.144",
+            "Gasoline92": "38005.188",
+            "Gasoline80": "0.000",
+            "Diesel": "46027.875",
+            "CNG": "0.000"
+        },
+        {
+            "sitenumber": 1003,
+            "name": "El Abasia",
+            "centralarea": "GENERIC",
+            "governorate": "GENERIC",
+            "lastconnection": "12/08/2022 12:50",
+            "console": null,
+            "status": "offline",
+            "Gasoline95": "65169.881",
+            "Gasoline92": "104201.003",
+            "Gasoline80": "0.000",
+            "Diesel": "0.000",
+            "CNG": "0.000"
+        },
+        {
+            "sitenumber": 1004,
+            "name": "el dwahy bour saeed",
+            "centralarea": "GENERIC",
+            "governorate": "GENERIC",
+            "lastconnection": "12/08/2022 12:49",
+            "console": null,
+            "status": "offline",
+            "Gasoline95": "11667.496",
+            "Gasoline92": "18433.900",
+            "Gasoline80": "8283.717",
+            "Diesel": "54973.136",
+            "CNG": "0.000"
+        }
+    ],
+    "gas95": "111038.997",
+    "gas92": "209528.547",
+    "gas80": "44142.437",
+    "diesel": "142660.820",
+    "cng": "0.000"
+}
