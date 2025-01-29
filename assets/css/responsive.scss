@@ -57,6 +57,12 @@
     }
 }
 
+@media (max-width: 1480px) {
+    #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper .gts-grid .gts-grid-item .gts-item-content.white-box {
+        padding: 15px 20px !important;
+    }
+}
+
 @media (max-width: 1440px) {
     main {
         #auth-wrapper {
@@ -287,6 +293,30 @@
         .gts-grid-item.triple-col {
             grid-column: auto / span 2 !important;
         }
+    }
+
+
+    #gts-wrapper #gts-stage .gts-container .gts-content .gts-grid-wrapper {
+        .reports-site-hero {
+            &.gts-grid .gts-grid-item.double-col,
+            &.gts-grid .gts-grid-item.triple-col {
+                grid-column: auto / span 4 !important;
+            }
+            &.gts-grid .gts-grid-item.double-col {
+                .gts-grid.grid-2 {
+                    grid-template-columns: repeat(3, 1fr) !important;
+                    .gts-grid-item.double-col:first-of-type {
+                        grid-column: auto / span 1 !important;
+                    }
+                    .gts-grid-item.double-col:last-of-type {
+                        grid-column: auto / span 2 !important;
+                    }
+                }
+            }
+        }
+    }
+    #areasReportsCards .gts-grid {
+        grid-template-columns: repeat(1, 1fr) !important;
     }
 }
 

@@ -2,7 +2,7 @@
     .gts-grid-item {
         .gts-value {
             margin: auto;
-
+            min-width: 155px;
             .icon-wrapper {
                 border-radius: var(--gts-sm-curve);
                 padding: 14px;
@@ -664,7 +664,8 @@
 
     }
 
-    #governorateReportsDT {
+    #governorateReportsDT,
+    #sitesReportsDT {
         /* Last row */
         .gts-dt-table tr:last-child td:not(.dtr-hidden):first-of-type {
             border-bottom-left-radius: 0 !important;
@@ -1994,4 +1995,20 @@ div#tankTabContainer.tanks-list {
 
 #mapWrapper {
     min-height: 320px !important;
+}
+
+.full-width-layout {
+    .datatable-filter-items .filter-item {
+        width: 100% !important;
+    }
+}
+
+#areasReportsCards .gts-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    .gts-value {
+        margin: 14px;
+    }
+}
+.full-height {
+    height: 100% !important;
 }

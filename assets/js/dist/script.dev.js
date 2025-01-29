@@ -556,7 +556,7 @@ var DataTable = {
         } // Replace sorting icons with Material Icons
 
 
-        var headers = table.querySelectorAll("th:not(.dt-orderable-none)");
+        var headers = table.querySelectorAll("thead th:not(.dt-orderable-none)");
         headers.forEach(function (header, index) {
           if (index !== 0) {
             var icon = document.createElement("span");
@@ -940,24 +940,42 @@ var DataTable = {
     } // Handle last row (footer or body)
 
 
-    var lastRow = table.querySelector('tbody tr:last-child');
+    var tfoot = table.querySelector('tfoot');
 
-    if (lastRow) {
-      var tds = Array.from(lastRow.querySelectorAll('td')).filter(function (td) {
-        return !td.classList.contains('dtr-hidden');
-      });
+    if (tfoot && tfoot.children.length > 0) {
+      var lastRow = table.querySelector('tfoot tr:last-child');
 
-      if (tds.length > 0) {
-        tds[0].style.borderBottomLeftRadius = 'var(--gts-sm-curve)'; // First visible <td>
+      if (lastRow) {
+        var tds = Array.from(lastRow.querySelectorAll('th')).filter(function (td) {
+          return !td.classList.contains('dtr-hidden');
+        });
 
-        tds[tds.length - 1].style.borderBottomRightRadius = 'var(--gts-sm-curve)'; // Last visible <td>
+        if (tds.length > 0) {
+          tds[0].style.borderBottomLeftRadius = 'var(--gts-sm-curve)'; // First visible <td>
+
+          tds[tds.length - 1].style.borderBottomRightRadius = 'var(--gts-sm-curve)'; // Last visible <td>
+        }
+      }
+    } else {
+      var _lastRow = table.querySelector('tbody tr:last-child');
+
+      if (_lastRow) {
+        var _tds = Array.from(_lastRow.querySelectorAll('td')).filter(function (td) {
+          return !td.classList.contains('dtr-hidden');
+        });
+
+        if (_tds.length > 0) {
+          _tds[0].style.borderBottomLeftRadius = 'var(--gts-sm-curve)'; // First visible <td>
+
+          _tds[_tds.length - 1].style.borderBottomRightRadius = 'var(--gts-sm-curve)'; // Last visible <td>
+        }
       }
     }
   }
 };
 exports.DataTable = DataTable;
 var DatatableFilter = {
-  init: function init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys) {
+  init: function init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys, ExtraComp) {
     var resolver;
     return regeneratorRuntime.async(function init$(_context2) {
       while (1) {
@@ -1047,9 +1065,10 @@ var DatatableFilter = {
                 clearButton.textContent = 'Clear';
                 clearButton.addEventListener('click', function () {
                   wrapper.innerHTML = '';
-                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys);
+                  DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys, ExtraComp);
                   FilterFn.state.selectedFilters = response;
                   DTableFn.init(response);
+                  ExtraComp.init(response);
                 });
                 filterButtonDiv.appendChild(clearButton);
                 filterButtonDiv.appendChild(filterButton);
@@ -1118,55 +1137,7 @@ var Select = {
       });
     }
   }
-}; // const DatePicker = {
-//   init: () => {
-//     const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
-//     const filterDateFrom = document.getElementById("filterDateFrom");
-//     const filterDateTo = document.getElementById("filterDateTo");
-//     if (filterDateFrom && filterDateTo) {
-//       // Initialize Flatpickr for "From" date
-//       const fromPicker = flatpickr(filterDateFrom, {
-//         enableTime: true,
-//         dateFormat: dateFormat,
-//         onChange: function (selectedDates, dateStr) {
-//           if (selectedDates.length > 0) {
-//             // Set the minimum date for the "To" date picker
-//             toPicker.set("minDate", selectedDates[0]);
-//           }
-//         }
-//       });
-//       // Initialize Flatpickr for "To" date
-//       const toPicker = flatpickr(filterDateTo, {
-//         enableTime: true,
-//         dateFormat: dateFormat,
-//         onChange: function (selectedDates, dateStr) {
-//           if (selectedDates.length > 0) {
-//             // Set the maximum date for the "From" date picker
-//             fromPicker.set("maxDate", selectedDates[0]);
-//           }
-//         }
-//       });
-//       // Utility function to format the date in the desired format (if needed)
-//       function formatDate(date) {
-//         const parsedDate = new Date(date);
-//         const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
-//         const day = String(parsedDate.getDate()).padStart(2, "0");
-//         const year = parsedDate.getFullYear();
-//         const hours = String(parsedDate.getHours()).padStart(2, "0");
-//         const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
-//         return `${month}/${day}/${year} ${hours}:${minutes}`;
-//       }
-//       // Optional: Add event listeners for additional actions on date changes
-//       filterDateFrom.addEventListener("change", function () {
-//         console.log("From Date Selected:", formatDate(this.value));
-//       });
-//       filterDateTo.addEventListener("change", function () {
-//         console.log("To Date Selected:", formatDate(this.value));
-//       });
-//     }
-//   }
-// };
-
+};
 exports.Select = Select;
 var DatePicker = {
   init: function init() {

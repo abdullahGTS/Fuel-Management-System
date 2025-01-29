@@ -3,10 +3,18 @@ import { pageReady, Button, Drawer, Tab, DataTable, Select, DatePicker, Datatabl
 import { API_PATHS, fetchData, SharedColors, ChartBackgroundColor } from '../constant.js';
 import { AppearanceToggle } from '../portal.js';
 
+const ProductLabels = {
+    "Gasoline95": "Gasoline 95",
+    "Gasoline92": "Gasoline 92",
+    "Gasoline91": "Gasoline 91",
+    "Gasoline80": "Gasoline 80",
+    "diesel": "Diesel",
+    "cng": "CNG"
+}
 
 const FetchData = {
     init: async() => {
-        const response = await fetchData(API_PATHS.alarmData);
+        const response = await fetchData(API_PATHS.sitesReports);
         if (!response || Object.keys(response).length === 0) {
             console.error("No response data available");
             return;
@@ -16,7 +24,7 @@ const FetchData = {
 }
 
 // Usage
-const AlarmFilter = {
+const SitesReportsFilter = {
     state: {
         response: [],
         filterOptions: {},
@@ -27,167 +35,176 @@ const AlarmFilter = {
         const dtFilterWrapper = document.querySelector('#dtFilterWrapper');
         if (dtFilterWrapper) {
             // Fetch alarm data from API
-            const response = await FetchData.init();
-
+            const res_list = await FetchData.init();
+            const response = res_list.company_list;
             // Update state with alarms
-            AlarmFilter.state.response = response;
+            SitesReportsFilter.state.response = response;
 
             // Get all unique filter categories from the response
             const filterOptions = {
-                'Site Numbers': {
-                    options: [...new Set(response.map(item => item.sitenumber))],
-                    originalKey: 'sitenumber'
+                'Central Area': {
+                    options: [...new Set(response.map(item => item.centralarea))],
+                    originalKey: 'centralarea'
                 },
-                'Sources': {
-                    options: [...new Set(response.map(item => item.source))],
-                    originalKey: 'source'
+                'Governrate Name': {
+                    options: [...new Set(response.map(item => item.governorate))],
+                    originalKey: 'governorate'
                 },
-                'Alarm Type': {
-                    options: [...new Set(response.map(item => item.type))],
-                    originalKey: 'type'
-                },
-                'Is Active': {
-                    options: [...new Set(response.map(item => item.isactive))],
-                    originalKey: 'isactive'
-                },
-                'Severities': {
-                    options: [...new Set(response.map(item => item.severity))],
-                    originalKey: 'severity'
-                },
-                'Devices': {
-                    options: [...new Set(response.map(item => item.device))],
-                    originalKey: 'device'
-                },
-                'Date': {
-                    options: [...new Set(response.map(item => item.time))],
-                    originalKey: 'time'
-                }
             };
 
             // Update state with filter options
-            AlarmFilter.state.filterOptions = filterOptions;
-            const dateKeys = ['time'];
+            SitesReportsFilter.state.filterOptions = filterOptions;
+            const dateKeys = [];
             // Initialize filters with the fetched alarm data
-            const selectedFilters = await DatatableFilter.init(dtFilterWrapper, response, filterOptions, AlarmFilter, AlarmDT, dateKeys);
+            const selectedFilters = await DatatableFilter.init(dtFilterWrapper, response, filterOptions, SitesReportsFilter, SitesReportsDT, dateKeys, CentralAreas);
 
             // Update state with selected filters
-            AlarmFilter.state.selectedFilters = selectedFilters;
+            SitesReportsFilter.state.selectedFilters = selectedFilters;
 
             if (selectedFilters) {
-                AlarmFilter.filterSubmit(selectedFilters);  // Apply filters on load
+                SitesReportsFilter.filterSubmit(selectedFilters);  // Apply filters on load
             }
         }
     },
 
     filterSubmit: async (filters) => {
-        const { response } = AlarmFilter.state;
-        const filteredAlarms = await AlarmFilter.applyFilters(filters, response);
-
-        // Update DataTable with filtered alarms
-        AlarmDT.init(filteredAlarms);
+        const { response } = SitesReportsFilter.state;
+        const filteredSitesReports = await SitesReportsFilter.applyFilters(filters, response);
+        SitesReportsDT.init(filteredSitesReports);
+        CentralAreas.init(filteredSitesReports);
     },
 
     applyFilters: (filters, response) => {
-        let filteredAlarms = response; // Start with the full alarm list
+        let filteredSitesReports = response; // Start with the full alarm list
 
         Object.entries(filters).forEach(([key, values]) => {
             if (key === 'time' && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
-                filteredAlarms = filteredAlarms.filter(res => {
+                filteredSitesReports = filteredSitesReports.filter(res => {
                     const responseDate = new Date(res[key]);
                     return responseDate >= from && alarmDate <= to;
                 });
             } else {
-                // Other filters (multi-select)
-                filteredAlarms = filteredAlarms.filter(res => {
+                filteredSitesReports = filteredSitesReports.filter(res => {
                     return values.some(value => String(res[key]) === String(value));
                 });
             }
         });
 
-        return filteredAlarms; // Return filtered alarms
+        return filteredSitesReports; // Return filtered alarms
     },
 };
 
-const AlarmDT = {
+const SitesReportsDT = {
     // Initialize the Site DataTable
-    init: async (filteredAlarms) => {
+    init: async (filteredSitesReports) => {
 
-        const alarmDT = document.querySelector("#alarmDT");
-        if (alarmDT) {
-            let alarms;
-            if (!filteredAlarms) {
-                alarms = await AlarmDT.fetchData();
+        const sitesReportsDT = document.querySelector("#sitesReportsDT");
+        if (sitesReportsDT) {
+            let sites;
+            if (!filteredSitesReports) {
+                sites = await SitesReportsDT.fetchData();
             } else {
-                if (filteredAlarms.length) {
-                    alarmDT.innerHTML = '';
-                    alarms = filteredAlarms;
+                if (filteredSitesReports.length) {
+                    sitesReportsDT.innerHTML = '';
+                    sites = filteredSitesReports;
                 } else {
-                    alarmDT.innerHTML = '';
-                    AlarmDT.emptyState(alarmDT);
+                    sitesReportsDT.innerHTML = '';
+                    SitesReportsDT.emptyState(sitesReportsDT);
                 }
             }
 
-            if (alarms && alarms.length > 0) {
-                const formattedData = AlarmDT.transformData(alarms);
+            if (sites && sites.length > 0) {
+                const formattedData = SitesReportsDT.transformData(sites);
                 DataTable.init(".gts-dt-wrapper", {
                     data: formattedData,
                     columns: [
-                        { title: `<span class="mat-icon material-symbols-sharp">numbers</span>`, data: "id" },
-                        { title: `<span class="mat-icon material-symbols-sharp">location_on</span> Site Number`, data: "sitenumber" },
-                        { title: `<span class="mat-icon material-symbols-sharp">verified</span> Site Name`, data: "sitename" },
-                        { title: `<span class="mat-icon material-symbols-sharp">notifications_active</span> Type`, data: "type" },
-                        { title: `<span class="mat-icon material-symbols-sharp">personal_bag_question</span> Is Active`, data: "isactive" },
-                        { title: `<span class="mat-icon material-symbols-sharp">cloud</span> Source`, data: "source" },
-                        { title: `<span class="mat-icon material-symbols-sharp">schedule</span> Time`, data: "alarmtime", width: "200px" },
+                        { title: `<span class="mat-icon material-symbols-sharp">numbers</span>`, data: "id", footer: 'Total' },
+                        { title: `<span class="mat-icon material-symbols-sharp">globe_asia</span> Site Number`, data: "sitenumber" },
+                        { title: `<span class="mat-icon material-symbols-sharp">globe_asia</span> Site Name`, data: "name" },
                         {
-                            title: `<span class="mat-icon material-symbols-sharp">notification_important</span> Severity`, data: "severity",
+                            title: `<span class="mat-icon material-symbols-sharp">network_check</span> Status`, data: "status",
                             render: (data, type, row) => {
-                                return `<div class="status-dt"><span class="severity ${data.toLowerCase()}">${data}</span></div>`;
+                                const statusClass = data === "Online" ? "online" : "offline";
+                                return `<div class="status-dt"><span class="${statusClass}">${data}</span></div>`;
                             }
                         },
-                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Device`, data: "device" },
+                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Gasoline 95`, data: "Gasoline95", },
+                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Gasoline 92`, data: "Gasoline92" },
+                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Diesel`, data: "Diesel" },
+                        { title: `<span class="mat-icon material-symbols-sharp">globe_asia</span> Governorate`, data: "governorate" },
+                        { title: `<span class="mat-icon material-symbols-sharp">globe_asia</span> Central Area`, data: "centralarea" },
+                        { title: `<span class="mat-icon material-symbols-sharp">schedule</span> Last Connection`, data: "lastconnection" },
                     ],
                     responsive: true,
                     paging: formattedData.length > 10,
                     pageLength: 10,
-                }, [
-                    { width: "0px", targets: 0 },  // Hide the first column (id)
-                    { width: "480px", targets: 6 },
-                    { width: "100px", targets: 7 },
-                ], "Alarm data table");
+                    fixedHeader: {
+                        header: false,
+                        footer: true
+                    },
+                    footerCallback: function (row, data, start, end, display) {
+                        const api = this.api();
+                        const totalGasoline95 = api.column(4).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
+                        const totalGasoline92 = api.column(5).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
+                        const totalDiesel = api.column(6).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
+                        
+                        // Update footer with totals
+                        $(api.column(4).footer()).html( SitesReportsDT.parseFormattedNumber(totalGasoline95.toFixed(2) ));
+                        $(api.column(5).footer()).html( SitesReportsDT.parseFormattedNumber(totalGasoline92.toFixed(2) ));
+                        $(api.column(6).footer()).html( SitesReportsDT.parseFormattedNumber(totalDiesel.toFixed(2) ));
+                        $(api.column(0).footer()).html('Total');
+                   },
+                }, 
+                [
+                    { width: "0px", targets: 0},
+                ], "Sites Reports data table");
             } else {
                 console.error("No alarms data available");
             }
         }
     },
 
+    parseFormattedNumber: (numberStr) => {
+        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
+        const parsedNumber = parseFloat(formattedNumber);
+
+        if (isNaN(parsedNumber)) {
+            console.error('Invalid number format:', numberStr);
+            return '0'; // Return a string so it can be displayed
+        }
+
+        // Format the number with commas
+        return parsedNumber.toLocaleString();
+    },
+
     // Fetch data from the API
     fetchData: async () => {
         try {
             const response = await FetchData.init();
-            const alarms = await DataTable.fetchData(response);
-            return alarms;
+            const sites = await DataTable.fetchData(response.company_list);
+            return sites;
         } catch (error) {
-            console.error("Error fetching AlarmDT data:", error);
+            console.error("Error fetching SitesReports data:", error);
             return [];
         }
     },
 
     // Transform the raw API data for the DataTable
     transformData: (data) => {
-        return data.map((alarm) => ({
-            id: alarm.id,
-            sitename: alarm.sitename,
-            sitenumber: alarm.sitenumber,
-            type: alarm.type,
-            isactive: alarm.isactive,
-            source: alarm.source,
-            alarmtime: alarm.time,
-            severity: alarm.severity,
-            device: alarm.device,
+        return data.map((site, index) => ({
+            id: index++,
+            sitenumber: site.sitenumber,
+            name: site.name,
+            Gasoline95: site.Gasoline95,
+            Gasoline92: site.Gasoline92,
+            Diesel: site.Diesel,
+            status: site.status === "offline" ? "Offline" : "Online",
+            lastconnection: site.lastconnection,
+            centralarea: site.centralarea,
+            governorate: site.governorate,
         }));
     },
 
@@ -216,79 +233,270 @@ const AlarmDT = {
     },
 };
 
-const AlarmSeverity = {
-    init: () => {
-        const alarmTrendChart = document.querySelector('#alarmTrendChart');
-        if (alarmTrendChart) {
-            google.charts.load('current', { packages: ['corechart'] });
-            google.charts.setOnLoadCallback(AlarmSeverity.fetchData);
+// Fetch Product Data
+const Products = {
+
+    init: async () => {
+        const products = await FetchData.init();
+        const totalSums = Products.calculateTotalSums(products.company_list);
+        Products.renderProducts(totalSums);
+    },
+
+    calculateTotalSums: (records) => {
+        const totals = {};
+        records.forEach(record => {
+            Object.keys(record).forEach(key => {
+
+                if (key === 'Gasoline95' || key === 'Gasoline92' || key === 'Diesel') {
+                    const value = parseFloat(record[key]) || 0;
+                    totals[key] = (totals[key] || 0) + value;
+                }
+            });
+        });
+        return totals;
+    },
+
+    renderProducts: (products) => {
+        const productsCards = document.getElementById('productsReportsCards');
+        if (productsCards) {
+            Object.keys(products).forEach((key) => {
+                // Create the main wrapper for the product card
+                const gridItem = document.createElement('div');
+                gridItem.classList.add('gts-grid-item');
+
+                // Create the main product container
+                const itemContainer = document.createElement('div');
+                itemContainer.classList.add('gts-product');
+                itemContainer.classList.add('gts-item-content');
+                itemContainer.classList.add(key.toLowerCase());
+
+                // Create the inner container for icon and content
+                const gtsValue = document.createElement('div');
+                gtsValue.classList.add('gts-value');
+
+                // Create the icon wrapper
+                const iconWrapper = document.createElement('div');
+                iconWrapper.classList.add('icon-wrapper');
+
+                // Create the icon element (using Material Icons in this example)
+                const icon = document.createElement('span');
+                icon.classList.add('mat-icon', 'material-symbols-sharp');
+                icon.textContent = 'local_gas_station'; // Set your icon name or dynamic icon here
+
+                // Append icon to icon wrapper
+                iconWrapper.appendChild(icon);
+
+                // Create the header for the product quantity
+                const quantityHeader = document.createElement('h3');
+                const quantityValue = document.createElement('span');
+                quantityValue.id = `${key}-value`;
+
+                quantityValue.textContent = Products.parseFormattedNumber(products[key].toFixed(2));
+
+                // Add unit after the value
+                quantityHeader.appendChild(quantityValue);
+                quantityHeader.insertAdjacentText('beforeend', ' lts');
+
+                // Create the product name/label as a paragraph
+                const productLabel = document.createElement('p');
+                productLabel.textContent = `${ProductLabels[key] || key}`;
+
+                // Append elements in the proper structure
+                gtsValue.appendChild(iconWrapper);
+                gtsValue.appendChild(quantityHeader);
+                gtsValue.appendChild(productLabel);
+
+                // Append the main gts-value container to itemContainer
+                itemContainer.appendChild(gtsValue);
+
+                // Append the itemContainer to the gridItem and add it to the main container
+                gridItem.appendChild(itemContainer);
+                productsCards.querySelector('.gts-grid').appendChild(gridItem);
+            });
+        }
+        if (Object.keys(products).length > 3) {
+            Products.scrollProducts(productsCards, Object.keys(products).length);
         }
     },
-    fetchData: async () => {
-        const alarms = await fetchData(API_PATHS.alarmData);
-        if (!alarms || Object.keys(alarms).length === 0) {
-            console.error("No alarms data available");
-            return;
+
+    scrollProducts: (productsCards, items) => {
+        // Get the width of the first product card
+        const itemWidth = productsCards.querySelector('.gts-grid .gts-grid-item:first-child').offsetWidth;
+        productsCards.querySelectorAll('.gts-grid .gts-grid-item').forEach((card) => {
+            card.style.width = `${itemWidth}px`;
+        });
+        productsCards.style.width = `${itemWidth * 3 + 15}px`;
+    },
+
+    parseFormattedNumber: (numberStr) => {
+        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
+        const parsedNumber = parseFloat(formattedNumber);
+
+        if (isNaN(parsedNumber)) {
+            console.error('Invalid number format:', numberStr);
+            return '0'; // Return a string so it can be displayed
         }
 
-        google.charts.load('current', { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(() => AlarmSeverity.drawChart(alarms));
+        // Format the number with commas
+        return parsedNumber.toLocaleString();
     },
-    drawChart: async (alarms) => {
-        const { backgroundColor, txtColor, } = await ChartBackgroundColor();
+}
+
+// Fetch Total Data
+const CentralAreas = {
+    init: async (filteredSite) => {
+        const sites = await FetchData.init(); // Fetch data dynamically
+        const totalCounts = CentralAreas.calculateTotalSums(filteredSite ? filteredSite : sites.company_list); // Get unique counts
+        CentralAreas.renderProducts(totalCounts); // Render cards with counts
+    },
+
+    calculateTotalSums: (records) => {
+        const siteNumbers = new Set();
+        const governorates = new Set();
+
+        records.forEach(record => {
+            if (record.sitenumber) {
+                siteNumbers.add(record.sitenumber); // Collect unique sitenumbers
+            }
+            if (record.governorate) {
+                governorates.add(record.governorate); // Collect unique governorates
+            }
+        });
+
+        return {
+            Sites: siteNumbers.size, // Total unique sitenumbers
+            Governorates: governorates.size // Total unique governorates
+        };
+    },
+
+    renderProducts: (totals) => {
+        const areaCards = document.getElementById('areasReportsCards');
+        if (!areaCards) return;
+        
+        areaCards.querySelector('.gts-grid').innerHTML = ''
+
+        Object.keys(totals).forEach((key) => {
+            // Create the main wrapper for the product card
+            const gridItem = document.createElement('div');
+            gridItem.classList.add('gts-grid-item');
+
+            // Create the main product container
+            const itemContainer = document.createElement('div');
+            itemContainer.classList.add('gts-product', 'gts-item-content', 'white-box', key.toLowerCase());
+
+            // Create the inner container for icon and content
+            const gtsValue = document.createElement('div');
+            gtsValue.classList.add('gts-value');
+
+            // Create the icon wrapper
+            const iconWrapper = document.createElement('div');
+            iconWrapper.classList.add('icon-wrapper');
+
+            // Create the icon element (using Material Icons in this example)
+            const icon = document.createElement('span');
+            icon.classList.add('mat-icon', 'material-symbols-sharp');
+            icon.textContent = key === "Sites" ? "business" : "map"; // Different icon per type
+
+            // Append icon to icon wrapper
+            iconWrapper.appendChild(icon);
+
+            // Create the header for the count
+            const quantityHeader = document.createElement('h3');
+            const quantityValue = document.createElement('span');
+            quantityValue.id = `${key}-value`;
+            quantityValue.textContent = totals[key].toLocaleString(); // Display formatted count
+
+            // Append count to header
+            quantityHeader.appendChild(quantityValue);
+
+            // Create the product name/label as a paragraph
+            const productLabel = document.createElement('p');
+            productLabel.textContent = `Total ${key}`;
+
+            // Append elements in the proper structure
+            gtsValue.appendChild(iconWrapper);
+            gtsValue.appendChild(quantityHeader);
+            gtsValue.appendChild(productLabel);
+
+            // Append the main gts-value container to itemContainer
+            itemContainer.appendChild(gtsValue);
+
+            // Append the itemContainer to the gridItem and add it to the main container
+            gridItem.appendChild(itemContainer);
+            areaCards.querySelector('.gts-grid').appendChild(gridItem);
+        });
+    }
+};
+
+const SitesReportsProducts = {
+    init: () => {
+        const productSalesChart = document.querySelector('#productSalesChart');
+        if (productSalesChart) {
+            google.charts.load('current', { packages: ['corechart'] });
+            google.charts.setOnLoadCallback(SitesReportsProducts.fetchData);
+        }
+    },
+
+    fetchData: async () => {
+        const response = await FetchData.init();
+        google.charts.setOnLoadCallback(() => SitesReportsProducts.drawChart(response.company_list));
+    },
+    parseFormattedNumber: (numberStr) => {
+        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
+        const parsedNumber = parseFloat(formattedNumber);
+
+        if (isNaN(parsedNumber)) {
+            console.error('Invalid number format:', numberStr);
+            return '0'; // Return a string so it can be displayed
+        }
+
+        // Format the number with commas
+        return parsedNumber.toLocaleString();
+    },
+    drawChart: async (sites) => {
+        const { backgroundColor, txtColor } = await ChartBackgroundColor();
+
+        // Aggregate total sales per product
+        const productTotals = { Gasoline95: 0, Gasoline92: 0, Diesel: 0 };
+
+        sites.forEach((gov) => {
+            productTotals.Gasoline95 += parseFloat(gov.Gasoline95) || 0;
+            productTotals.Gasoline92 += parseFloat(gov.Gasoline92) || 0;
+            productTotals.Diesel += parseFloat(gov.Diesel) || 0;
+        });
 
         // Prepare the DataTable for Google Charts
         const data = new google.visualization.DataTable();
-
-        // Add Columns
-        data.addColumn('string', 'Severity'); // X-Axis: Severity types
-        data.addColumn('number', 'Count');   // Y-Axis: Counts
+        data.addColumn('string', 'Product'); // X-Axis: Product name
+        data.addColumn('number', 'Total Usage'); // Y-Axis: Total sales
         data.addColumn({ type: 'string', role: 'style' }); // Style column for colors
+        data.addColumn({ type: 'string', role: 'tooltip', p: { html: true } }); // Tooltip column
 
-        // Define severity levels and their corresponding colors
-        const severityColors = {
-            Unknown: '#9c9b9b',
-            Alarm: '#e61e45',
-            Warning: '#FAB75C',
-            Info: '#2753c4'
-        };
+        // Convert aggregated totals to chart rows
+        const chartRows = Object.entries(productTotals).map(([product, total]) => {
+            const tooltip = `<div class="cus_tooltip"><b>${product}</b><br>${SitesReportsProducts.parseFormattedNumber(total.toFixed(2))} L</div>`;
+            return [product, total, `color: ${SharedColors[product] || '#000000'}`, tooltip];
+        });
 
-        // Count the occurrences of each severity type
-        const severityCounts = alarms.reduce((acc, alarm) => {
-            acc[alarm.severity] = (acc[alarm.severity] || 0) + 1;
-            return acc;
-        }, {});
-
-        // Convert the counts into rows for the DataTable, including color styles
-        const chartRows = Object.entries(severityCounts).map(([severity, count]) => [
-            severity,
-            count,
-            `color: ${severityColors[severity] || '#000000'}` // Use the defined color or fallback to black
-        ]);
         data.addRows(chartRows);
 
         // Chart Options
         const options = {
             title: '',
             backgroundColor: backgroundColor,
-            hAxis: {
-                title: '',
-                textStyle: { color: txtColor }
-            },
-            vAxis: {
-                title: '',
-                textStyle: { color: txtColor }
-            },
+            hAxis: { textStyle: { color: txtColor } },
+            vAxis: { textStyle: { color: txtColor } },
             legend: { position: 'none' },
             chartArea: { width: '80%', height: '70%' },
             tooltip: { isHtml: true }
         };
 
         // Draw the chart
-        const chart = new google.visualization.ColumnChart(document.getElementById('alarmTrendChart'));
+        const chart = new google.visualization.ColumnChart(document.getElementById('productSalesChart'));
         chart.draw(data, options);
     }
-}
+};
+
 
 const ReloadAlarmsCharts = {
     // Initialize the menu toggle functionality
@@ -318,9 +526,9 @@ const ReloadAlarmsCharts = {
             // Step 3: Reload the charts
             setTimeout(() => {
                 RunCharts.init();
-                const alarmTrendChart = document.getElementById('alarmTrendChart');
-                if (alarmTrendChart && !alarmTrendChart.classList.contains('hide')) {
-                    AlarmSeverity.init();
+                const productSalesChart = document.getElementById('productSalesChart');
+                if (productSalesChart && !productSalesChart.classList.contains('hide')) {
+                    SitesReportsProducts.init();
                 }
             });
         }
@@ -329,7 +537,7 @@ const ReloadAlarmsCharts = {
 
 const RunCharts = {
     init: () => {
-        AlarmSeverity.init();
+        SitesReportsProducts.init();
         ReloadAlarmsCharts.init();
     }
 }
@@ -339,7 +547,9 @@ AppearanceToggle.registerCallback((mode) => {
 });
 
 pageReady(() => {
-    AlarmDT.init();
+    SitesReportsDT.init();
+    SitesReportsFilter.init();
     RunCharts.init();
-    AlarmFilter.init();
+    Products.init();
+    CentralAreas.init();
 });

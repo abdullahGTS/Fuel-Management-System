@@ -150,9 +150,9 @@ const GovernorateReportsDT = {
                         const totalDiesel = api.column(3).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
                         
                         // Update footer with totals
-                        $(api.column(1).footer()).html(totalGasoline95.toFixed(2));
-                        $(api.column(2).footer()).html(totalGasoline92.toFixed(2));
-                        $(api.column(3).footer()).html(totalDiesel.toFixed(2));
+                        $(api.column(1).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalGasoline95.toFixed(2)));
+                        $(api.column(2).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalGasoline92.toFixed(2)));
+                        $(api.column(3).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalDiesel.toFixed(2)));
                         $(api.column(0).footer()).html('Total');
                    },
                 }, 
@@ -168,6 +168,19 @@ const GovernorateReportsDT = {
         }
     },
 
+    parseFormattedNumber: (numberStr) => {
+        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
+        const parsedNumber = parseFloat(formattedNumber);
+
+        if (isNaN(parsedNumber)) {
+            console.error('Invalid number format:', numberStr);
+            return '0'; // Return a string so it can be displayed
+        }
+
+        // Format the number with commas
+        return parsedNumber.toLocaleString();
+    },
+    
     // Fetch data from the API
     fetchData: async () => {
         try {
@@ -186,9 +199,8 @@ const GovernorateReportsDT = {
             gov_name: governorate.gov_name,
             Gasoline95: governorate.Gasoline95,
             Gasoline92: governorate.Gasoline92,
-            // Gasoline80: governorate.Gasoline80,
             Diesel: governorate.Diesel,
-            // CNG: governorate.CNG
+            
         }));
     },
 
@@ -238,7 +250,6 @@ const Products = {
         });
         return totals;
     },
-
     renderProducts: (products) => {
         const productsCards = document.getElementById('productsReportsCards');
         if (productsCards) {
