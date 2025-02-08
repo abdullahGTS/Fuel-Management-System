@@ -41,6 +41,7 @@ input[type="search"]::-webkit-search-cancel-button {
     overflow: hidden;
     height: 50px;
     box-shadow: 0 0 21px rgba(21, 110, 65, 0.2) !important;
+    box-shadow: none !important;
     .ripple {
         animation: rEffectAnimation 0.85s linear infinite;
         transform: translate(-50%, -50%) scale(0);

@@ -1249,7 +1249,7 @@ var TankDrawer = {
             svg.setAttribute('viewBox', '0 0 200 100');
             path = document.createElementNS(svgNamespace, 'path');
             path.setAttribute('fill', _constant.SharedColors[tank.product]);
-            path.setAttribute('d', "\n                M 0,0 v 100 h 200 v -100 \n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n            ");
+            path.setAttribute('d', "\n                M 0,0 v 100 h 200 v -100 \n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5\n        ");
             svg.appendChild(path);
             liquid.appendChild(svg); // Calculate products level
 

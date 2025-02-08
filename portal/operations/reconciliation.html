@@ -8,7 +8,7 @@
         content="Manage all your fuel stations and analyze reports from your personalized dashboard.">
     <meta name="keywords" content="Fuel Management, GTS, Dashboard, Station Reports">
     <meta name="author" content="GTS - Global Technology Services">
-    <title>Sites Reports - GTS Fuel Management</title>
+    <title>Delivery Reconciliation - GTS Fuel Management</title>
 
     <!-- Icons  -->
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="../../vendor/css/dataTables.min.css">
     <link rel="stylesheet" href="../../vendor/css/select2.min.css">
     <link rel="stylesheet" href="../../vendor/css/flatpickr.min.css">
+    <link rel="stylesheet" href="../../vendor/css/snackbar.min.css">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,7 +78,7 @@
                                         <span class="mat-icon material-symbols-sharp">local_gas_station</span>
                                         <span class="nav-item">Sites</span>
                                     </a></li>
-                                <li class="active"><a href="./reports/sites.html">
+                                <li><a href="./reports/sites.html">
                                         <span class="mat-icon material-symbols-sharp">lab_profile</span>
                                         <span class="nav-item">Reports</span>
                                     </a></li>
@@ -95,7 +96,7 @@
                                         <span class="mat-icon material-symbols-sharp">local_shipping</span>
                                         <span class="nav-item">Delivery</span>
                                     </a></li>
-                                <li><a href="../operations/reconciliation.html">
+                                    <li class="active"><a href="../operations/reconciliation.html">
                                         <span class="mat-icon material-symbols-sharp">rule_settings</span>
                                         <span class="nav-item">Operation</span>
                                     </a></li>
@@ -135,9 +136,8 @@
                             <button class="btn btn-icon" id="toggle-menu">
                                 <span class="mat-icon material-symbols-sharp">menu_open</span>
                             </button>
-                            <h1>Reports <span class="mat-icon material-symbols-sharp">chevron_right</span>
-                                <span>Sites</span>
-                            </h1>
+                            <h1>Operations <span class="mat-icon material-symbols-sharp">chevron_right</span>
+                                <span>Delivery Reconciliation</span></h1>
                         </div>
                         <div class="gts-head-right">
                             <div class="gts-notification">
@@ -168,88 +168,55 @@
                 <!-- <div class="gts-content custom-scroll-bar"> -->
                 <div class="gts-content">
                     <div class="gts-grid-wrapper">
-                        <div class="page-tabs-buttons">
-                            <a href="./sites.html" class="active tab-item">
-                                <span class="mat-icon material-symbols-sharp">local_gas_station</span>
-                                <span>Sites</span>
-                            </a>
-                            <a href="./governorate.html" class="tab-item">
-                                <span class="mat-icon material-symbols-sharp">globe_asia</span>
-                                <span>Governorate</span>
-                            </a>
-                            <a href="./sales.html" class="tab-item">
-                                <span class="mat-icon material-symbols-sharp">legend_toggle</span>
-                                <span>Sales</span>
-                            </a>
-                        </div>
-
-                        <div class="gts-grid">
-                            <div class="gts-grid-item triple-col">
-                                <div class="gts-grid grid-5 reports-site-hero" id="alarms-hero">
-
-                                    <div class="gts-grid-item double-col">
-                                        <div class="gts-grid grid-2">
-
-                                            <div class="gts-grid-item double-col">
-                                                <div id="areasReportsCards">
-                                                    <div class="gts-grid custom-scroll-bar"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="gts-grid-item double-col">
-                                                <div class="gts-item-content gts-charts white-box">
-                                                    <div class="gts-card-title">
-                                                        <div class="gts-card-title-wrapper">
-                                                            <span class="mat-icon material-symbols-sharp">tune</span>
-                                                            <h3>Filter Options</h3>
-                                                        </div>
-                                                    </div>
-                                                    <div id="dtFilterWrapper" class="full-width-layout"></div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="gts-grid-item triple-col">
-                                        <div class="gts-grid grid-2">
-                                            <div class="gts-grid-item double-col">
-                                                <div class="gts-item-content gts-charts white-box">
-                                                    <div class="gts-card-title">
-                                                        <div class="gts-card-title-wrapper">
-                                                            <span
-                                                                class="mat-icon material-symbols-sharp">equalizer</span>
-                                                            <h3>Total Sales by Product</h3>
-                                                        </div>
-                                                        <div class="chart-controls">
-                                                            <button class="btn btn-icon download-chart"
-                                                                data-popover-target="#download-chart">
-                                                                <span
-                                                                    class="mat-icon material-symbols-sharp">download</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div id="productSalesChart" class="chart-area"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="gts-grid-item double-col">
-                                                <div class="full-height" id="productsReportsCards">
-                                                    <div class="gts-grid custom-scroll-bar"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                            <div class="page-tabs-buttons">
+                                <a href="./reconciliation.html" class="active tab-item">
+                                    <span class="mat-icon material-symbols-sharp">gas_meter</span>
+                                    <span>Delivery Reconciliation</span>
+                                </a>
+                                <a href="./sites.html" class="tab-item">
+                                    <span class="mat-icon material-symbols-sharp">valve</span>
+                                    <span>Sites Sudden Loss</span>
+                                </a>
+                                <a href="./tanks.html" class="tab-item">
+                                    <span class="mat-icon material-symbols-sharp">local_gas_station</span>
+                                    <span>Tanks Sudden Loss</span>
+                                </a>
                             </div>
 
-                            <div class="gts-grid-item triple-col gap-top">
-                                <div class="gts-item-content dt-box">
-                                    <div class="gts-dt-wrapper" id="sitesReportsDT"></div>
+                            <div class="gts-grid">
+                                <div class="gts-grid-item triple-col">
+                                    <div class="gts-grid grid-4" id="alarms-hero">
+
+
+                                        <div class="gts-grid-item double-col double-row">
+                                            <div class="gts-item-content gts-charts white-box">
+                                                <div class="gts-card-title">
+                                                    <div class="gts-card-title-wrapper">
+                                                        <span class="mat-icon material-symbols-sharp">delivery_truck_speed</span>
+                                                        <h3>Reconciliation Delivery</h3>
+                                                    </div>
+                                                </div>
+                                                <div id="filterWrap"></div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="gts-grid-item double-col double-row">
+                                            <div class="gts-item-content gts-charts white-box no-padding">
+                                                <div id="tankVol"></div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="gts-grid-item triple-col gap-top">
+                                    <div class="gts-item-content dt-box">
+                                        <div class="gts-dt-wrapper" id="reconcilationDT"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                     </div>
 
@@ -473,6 +440,7 @@
 
     <script src="../../vendor/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="../../vendor/js/toastr.min.js" defer></script>
+    <script type="text/javascript" src="../../vendor/js/snackbar.min.js" defer></script>
     <script type="text/javascript" src="../../vendor/js/googleCharts.js" defer></script>
     <script type="text/javascript" src="../../vendor/js/html2canvas.min.js" defer></script>
     <script type="text/javascript" src="../../vendor/js/jspdf.umd.min.js" defer></script>
@@ -490,7 +458,7 @@
 
     <!-- GTS Scripts -->
     <script type="module" src="../../assets/js/portal.js" defer></script>
-    <script type="module" src="../../assets/js/reports/sites.js" defer></script>
+    <script type="module" src="../../assets/js/operations/reconciliation.js" defer></script>
 </body>
 
 </html>

@@ -71,6 +71,9 @@ const API_PATHS = {
     salesReports: '/api/inner/reports/report_sales_page_data.json',
     governrateReports: '/api/inner/reports/governrates_page.json',
     sitesReports: '/api/inner/reports/report_site_page_data.json',
+
+    // operations
+    reconcilationData: '/api/inner/operations/delivery_reconcilation.json',
 };
 
 // Shared function to fetch data from JSON files
@@ -114,6 +117,11 @@ const SharedColors = {
         Third: '#83D0FF',
         Fourth: '#ff8f67',
         Fifth: '#FAB75C'
+    },
+    Volume: {
+        More: '#3db16d',
+        Less: '#e61e45',
+        Same: '#FAB75C',
     }
 };
 

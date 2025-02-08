@@ -1046,7 +1046,7 @@ const DatatableFilter = {
                   } 
                   
                   if (!dateKeys.length || !dateKeys.includes(originalKey)) {
-                    const select = document.createElement('select');
+                      const select = document.createElement('select');
                       select.id = originalKey;
                       select.name = originalKey;
                       select.setAttribute('multiple', 'multiple');
@@ -1165,6 +1165,7 @@ const DatePicker = {
     // Iterate over "From" inputs and bind them with their corresponding "To" inputs
     filterDateFromInputs.forEach((filterDateFrom, index) => {
       const filterDateTo = document.querySelector(`#filterDateTo-${index}`);
+
       if (filterDateFrom && filterDateTo) {
         // Initialize Flatpickr for "From" date
         const fromPicker = flatpickr(filterDateFrom, {
@@ -1209,7 +1210,36 @@ const DatePicker = {
         filterDateTo.addEventListener("change", function () {
           console.log(`To Date Selected [Index ${index + 1}]:`, formatDate(this.value));
         });
+      } else {
+
+        flatpickr(filterDateFrom, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+              // Set the minimum date for the "To" date picker
+            }
+          }
+        });
+
+        // Utility function to format the date in the desired format (if needed)
+        function formatDate(date) {
+          const parsedDate = new Date(date);
+          const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+          const day = String(parsedDate.getDate()).padStart(2, "0");
+          const year = parsedDate.getFullYear();
+          const hours = String(parsedDate.getHours()).padStart(2, "0");
+          const minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+          return `${month}/${day}/${year} ${hours}:${minutes}`;
+        }
+
+        // Optional: Add event listeners for additional actions on date changes
+        filterDateFrom.addEventListener("change", function () {
+          console.log(`From Date Selected [Index ${index + 1}]:`, formatDate(this.value));
+        });
       }
+
+
     });
   }
 };

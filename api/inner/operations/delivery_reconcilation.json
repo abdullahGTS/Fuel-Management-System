@@ -1,0 +1,91 @@
+{
+    "tanks_data": [
+        {
+            "id": 7,
+            "fusiontankid": 1,
+            "capacity": "45000.00000",
+            "prodvol": "19498.739"
+        },
+        {
+            "id": 8,
+            "fusiontankid": 2,
+            "capacity": "45000.00000",
+            "prodvol": "28506.449"
+        },
+        {
+            "id": 9,
+            "fusiontankid": 3,
+            "capacity": "45000.00000",
+            "prodvol": "14942.144"
+        },
+        {
+            "id": 10,
+            "fusiontankid": 4,
+            "capacity": "45000.00000",
+            "prodvol": "22931.918"
+        },
+        {
+            "id": 11,
+            "fusiontankid": 5,
+            "capacity": "45000.00000",
+            "prodvol": "23095.957"
+        }
+    ],
+    "tanks_recon_data": [
+        {
+            "id": 1,
+            "fusiontankid": "Tank 1",
+            "capacity": "45000.00000",
+            "prodvol": "24504.133",
+            "amount": "1000.000",
+            "estimatedtime": "11/25/2024 02:47",
+            "name": "port_saeed",
+            "timestamp": "11/25/2024 02:47",
+            "status": "opened"
+        },
+        {
+            "id": 2,
+            "fusiontankid": "Tank 1",
+            "capacity": "45000.00000",
+            "prodvol": "24504.133",
+            "amount": "5000.000",
+            "estimatedtime": "11/25/2024 19:00",
+            "name": "port_saeed",
+            "timestamp": "11/25/2024 16:18",
+            "status": "opened"
+        },
+        {
+            "id": 2,
+            "fusiontankid": "Tank 1",
+            "capacity": "45000.00000",
+            "prodvol": "24504.133",
+            "amount": "5000.000",
+            "estimatedtime": "11/25/2024 19:00",
+            "name": "port_saeed",
+            "timestamp": "11/25/2024 16:18",
+            "status": "opened"
+        },
+        {
+            "id": 2,
+            "fusiontankid": "Tank 2",
+            "capacity": "45000.00000",
+            "prodvol": "24504.133",
+            "amount": "5000.000",
+            "estimatedtime": "11/25/2024 19:00",
+            "name": "port_saeed",
+            "timestamp": "11/25/2024 16:18",
+            "status": "opened"
+        },
+        {
+            "id": 2,
+            "fusiontankid": "Tank 3",
+            "capacity": "45000.00000",
+            "prodvol": "24504.133",
+            "amount": "5000.000",
+            "estimatedtime": "11/25/2024 19:00",
+            "name": "port_test",
+            "timestamp": "11/25/2024 16:18",
+            "status": "opened"
+        }
+    ]
+}

@@ -1152,7 +1152,7 @@ const TankDrawer = {
                 c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
                 c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
                 c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
-            `);
+        `);
 
         svg.appendChild(path);
         liquid.appendChild(svg);

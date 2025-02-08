@@ -1191,6 +1191,30 @@ var DatePicker = {
         filterDateTo.addEventListener("change", function () {
           console.log("To Date Selected [Index ".concat(index + 1, "]:"), formatDate(this.value));
         });
+      } else {
+        // Utility function to format the date in the desired format (if needed)
+        var _formatDate = function _formatDate(date) {
+          var parsedDate = new Date(date);
+          var month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+          var day = String(parsedDate.getDate()).padStart(2, "0");
+          var year = parsedDate.getFullYear();
+          var hours = String(parsedDate.getHours()).padStart(2, "0");
+          var minutes = String(parsedDate.getMinutes()).padStart(2, "0");
+          return "".concat(month, "/").concat(day, "/").concat(year, " ").concat(hours, ":").concat(minutes);
+        }; // Optional: Add event listeners for additional actions on date changes
+
+
+        flatpickr(filterDateFrom, {
+          enableTime: true,
+          dateFormat: dateFormat,
+          onChange: function onChange(selectedDates) {
+            if (selectedDates.length > 0) {// Set the minimum date for the "To" date picker
+            }
+          }
+        });
+        filterDateFrom.addEventListener("change", function () {
+          console.log("From Date Selected [Index ".concat(index + 1, "]:"), _formatDate(this.value));
+        });
       }
     });
   }
