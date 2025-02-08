@@ -318,7 +318,8 @@ const ReconcilationTankFilter = {
         // Event Listener for Form Submission
         form.addEventListener('submit', function (e) {
             e.preventDefault(); // Prevent default form submission
-    
+            const tankVol = document.querySelector('#tankVol');
+
             const formData = {
                 site: siteSelect.value,
                 tank: tankSelect.value,
@@ -326,12 +327,21 @@ const ReconcilationTankFilter = {
                 date: dateInput.value
             };
     
-            console.log('Form Data:', formData);
             Snackbar.show({
                 text: 'Reconciliation have successfully ordered!', 
                 pos: 'bottom-left',
                 duration: 2800
             });
+
+            setTimeout(() => {
+                console.log('Form Data:', formData);
+                tankVol.innerHTML = '';
+                ReconcilationTankFilter.generateTankEmptyState(tankVol);
+                $(siteSelect).val('').trigger('change');
+                $(tankSelect).val('').trigger('change');
+                form.reset();
+            }, 0);
+
         });
     },
 
@@ -521,7 +531,7 @@ const ReconcilationTankFilter = {
 
             // Create the brief (p)
             const brief = document.createElement("p");
-            brief.textContent = "Select Tank To Visualize the Volume";
+            brief.textContent = "Select a tank to be able to visualize the volume";
 
             // Append heading and brief to the empty state div
             emptyStateDiv.appendChild(heading);

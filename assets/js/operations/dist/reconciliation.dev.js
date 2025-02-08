@@ -431,18 +431,26 @@ var ReconcilationTankFilter = {
     form.addEventListener('submit', function (e) {
       e.preventDefault(); // Prevent default form submission
 
+      var tankVol = document.querySelector('#tankVol');
       var formData = {
         site: siteSelect.value,
         tank: tankSelect.value,
         amount: amountInput.value,
         date: dateInput.value
       };
-      console.log('Form Data:', formData);
       Snackbar.show({
         text: 'Reconciliation have successfully ordered!',
         pos: 'bottom-left',
         duration: 2800
       });
+      setTimeout(function () {
+        console.log('Form Data:', formData);
+        tankVol.innerHTML = '';
+        ReconcilationTankFilter.generateTankEmptyState(tankVol);
+        $(siteSelect).val('').trigger('change');
+        $(tankSelect).val('').trigger('change');
+        form.reset();
+      }, 0);
     });
   },
   updateTank: function updateTank(tanks, selectedTank, addedAmount) {
@@ -612,7 +620,7 @@ var ReconcilationTankFilter = {
       heading.textContent = "Select Tank"; // Create the brief (p)
 
       var brief = document.createElement("p");
-      brief.textContent = "Select Tank To Visualize the Volume"; // Append heading and brief to the empty state div
+      brief.textContent = "Select a tank to be able to visualize the volume"; // Append heading and brief to the empty state div
 
       emptyStateDiv.appendChild(heading);
       emptyStateDiv.appendChild(brief); // Insert the empty state div after the site list container

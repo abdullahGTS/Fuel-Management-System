@@ -1,0 +1,56 @@
+{
+    "sitesnumbers": [
+        {
+            "id": 1,
+            "sitenumber": 1001,
+            "tanks": 6
+        },
+        {
+            "id": 2,
+            "sitenumber": 1002,
+            "tanks": 5
+        },
+        {
+            "id": 3,
+            "sitenumber": 1003,
+            "tanks": 6
+        },
+        {
+            "id": 4,
+            "sitenumber": 1004,
+            "tanks": 6
+        }
+    ],
+    "sites": [
+        {
+            "id": 1,
+            "sitenumber": 1001,
+            "name": "port_saeed",
+            "rate": "1000.000",
+            "timestamp": "11/25/2024 02:51"
+        },
+        {
+            "id": 1,
+            "sitenumber": 1002,
+            "name": "port_saeed",
+            "rate": "1000.000",
+            "timestamp": "11/25/2024 02:51"
+        },
+        {
+            "id": 1,
+            "sitenumber": 1003,
+            "name": "port_saeed",
+            "rate": "3200.000",
+            "timestamp": "11/25/2024 02:51"
+        },
+        {
+            "id": 1,
+            "sitenumber": 1004,
+            "name": "port_saeed",
+            "rate": "1000.000",
+            "timestamp": "11/25/2024 02:51"
+        }
+    ],
+    "lowRate": 4201,
+    "highRate": 9340
+}

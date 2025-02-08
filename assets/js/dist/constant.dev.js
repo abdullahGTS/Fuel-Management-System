@@ -60,7 +60,10 @@ var API_PATHS = {
   governrateReports: '/api/inner/reports/governrates_page.json',
   sitesReports: '/api/inner/reports/report_site_page_data.json',
   // operations
-  reconcilationData: '/api/inner/operations/delivery_reconcilation.json'
+  reconcilationData: '/api/inner/operations/delivery_reconcilation.json',
+  siteSuddenLoss: '/api/inner/operations/site_suddenloss.json',
+  // cuurentRate: '/api/inner/operations/current_rate.json',
+  tankSuddenLoss: '/api/inner/operations/tank_suddenloss.json'
 }; // Shared function to fetch data from JSON files
 
 exports.API_PATHS = API_PATHS;
