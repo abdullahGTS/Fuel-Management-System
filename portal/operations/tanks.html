@@ -8,7 +8,7 @@
         content="Manage all your fuel stations and analyze reports from your personalized dashboard.">
     <meta name="keywords" content="Fuel Management, GTS, Dashboard, Station Reports">
     <meta name="author" content="GTS - Global Technology Services">
-    <title>Sites Sudden Loss - GTS Fuel Management</title>
+    <title>Tanks Sudden Loss - GTS Fuel Management</title>
 
     <!-- Icons  -->
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
@@ -137,7 +137,7 @@
                                 <span class="mat-icon material-symbols-sharp">menu_open</span>
                             </button>
                             <h1>Operations <span class="mat-icon material-symbols-sharp">chevron_right</span>
-                                <span>Sites Sudden Loss</span>
+                                <span>Tanks Sudden Loss</span>
                             </h1>
                         </div>
                         <div class="gts-head-right">
@@ -174,11 +174,11 @@
                                 <span class="mat-icon material-symbols-sharp">gas_meter</span>
                                 <span>Delivery Reconciliation</span>
                             </a>
-                            <a href="./sites.html" class="active tab-item">
+                            <a href="./sites.html" class="tab-item">
                                 <span class="mat-icon material-symbols-sharp">valve</span>
                                 <span>Sites Sudden Loss</span>
                             </a>
-                            <a href="./tanks.html" class="tab-item">
+                            <a href="./tanks.html" class="active tab-item">
                                 <span class="mat-icon material-symbols-sharp">local_gas_station</span>
                                 <span>Tanks Sudden Loss</span>
                             </a>
@@ -186,89 +186,35 @@
 
                         <div class="gts-grid">
                             <div class="gts-grid-item triple-col">
-                                <div class="gts-grid grid-5">
+                                <div class="gts-grid grid-4" id="alarms-hero">
 
-                                    <div class="gts-grid-item double-col"  id="sitesDetailsList">
-                                        
-                                        <div class="sites-list-wrapper" id="siteListWrapper">
-                                            <div class="gts-filter">
-                                                <span class="mat-icon material-symbols-sharp">search</span>
-                                                <input type="text" placeholder="Find site by name or number..." />
-                                            </div>
-                                            <div class="sites-list custom-scroll-bar rate-scroll">
-                                                <ul>
-                                                    <!-- <li>
-                                                        <div class="site-wrapper">
-                                                            <div class="icon-wrapper">
-                                                                <span class="mat-icon material-symbols-sharp">map</span>
-                                                            </div>
-                                                            <div class="site-details">
-                                                                <p>{siteNumber}</p>
-                                                                <h3>{siteName}</h3>
-                                                            </div>
-                                                            <div class="site-control">
-                                                                <button class="btn">
-                                                                    Direction
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li> -->
-                                                </ul>
-                                            </div>
-                                        </div>
 
-                                    </div>
-
-                                    <div class="gts-grid-item triple-col" id="sitesDataDetails">
-                                        <div class="gts-grid">
- 
-                                            <div class="gts-grid-item">
-                                                <div class="gts-grid" id="rateLevel">
-                                                    <div class="gts-grid-item triple-col">
-                                                        <div class="gts-item-content white-box">
-                                                            <div class="site-status-wrapper">
-                                                                <div class="total-delivery-title">
-                                                                    <span class="mat-icon material-symbols-sharp">trending_up</span>
-                                                                    <p>High Rate</p>
-                                                                </div>
-                                                                <div class="total-delivery-wrapper">
-                                                                    <h2 id="highRate">00.00</h2>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="gts-grid-item triple-col">
-                                                        <div class="gts-item-content white-box">
-                                                            <div class="site-status-wrapper">
-                                                                <div class="total-delivery-title">
-                                                                    <span class="mat-icon material-symbols-sharp">trending_down</span>
-                                                                    <p>Low Rate</p>
-                                                                </div>
-                                                                <div class="total-delivery-wrapper">
-                                                                    <h2 id="lowRate">00.00</h2>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div class="gts-grid-item double-col double-row">
+                                        <div class="gts-item-content gts-charts white-box">
+                                            <div class="gts-card-title">
+                                                <div class="gts-card-title-wrapper">
+                                                    <span class="mat-icon material-symbols-sharp">delivery_truck_speed</span>
+                                                    <h3>Reconciliation Delivery</h3>
                                                 </div>
                                             </div>
-
-
-                                            <div class="gts-grid-item double-col">
-                                                <div class="gts-item-content white-box no-padding">
-                                                    <div id="rateForm"></div>
-                                                </div>
-                                            </div>
-        
+                                            <div id="filterWrap"></div>
                                         </div>
                                     </div>
+
+
+                                    <div class="gts-grid-item double-col double-row">
+                                        <div class="gts-item-content gts-charts white-box no-padding">
+                                            <div id="tankVol"></div>
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>
 
                             <div class="gts-grid-item triple-col gap-top">
                                 <div class="gts-item-content dt-box">
-                                    <div class="gts-dt-wrapper" id="sitesOperationDT"></div>
+                                    <div class="gts-dt-wrapper" id="tanksOperationDT"></div>
                                 </div>
                             </div>
                         </div>
@@ -513,7 +459,7 @@
 
     <!-- GTS Scripts -->
     <script type="module" src="../../assets/js/portal.js" defer></script>
-    <script type="module" src="../../assets/js/operations/sites.js" defer></script>
+    <script type="module" src="../../assets/js/operations/tanks.js" defer></script>
 </body>
 
 </html>

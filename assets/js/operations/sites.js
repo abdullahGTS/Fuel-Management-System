@@ -927,7 +927,7 @@ const RateForm = {
                 <div class="filter-item">
                     <label for="currentRate">Current Rate</label>
                     <div class="form-item sub-label">
-                        <input type="text" placeholder="Current Rate" id="currentRate" name="currentRate" value="${currentRate}" readonly />
+                        <input type="text" placeholder="Current Rate" id="currentRate" name="currentRate" value="${currentRate}" disabled readonly />
                         <span class="rate-label">lts/hour</span>
                     </div>
                 </div>
@@ -949,16 +949,18 @@ const RateForm = {
         rateForm.appendChild(form);
 
         const newRate = document.querySelector('#newRate');
-        RateForm.postNewRate(rateForm, form, newRate);
+
+        RateForm.postNewRate(rateForm, form, selectedSite.sitenumber, currentRate, newRate);
     },       
 
-    postNewRate: (rateForm, form, newRate) => {
-        console.log('newRate', newRate)
+    postNewRate: (rateForm, form, siteSelect, currentRate, newRate) => {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
             const formData = {
-                newRate: newRate.value,
+                site: siteSelect,
+                old_rate: currentRate,
+                new_rate: newRate.value,
             };
     
             Snackbar.show({

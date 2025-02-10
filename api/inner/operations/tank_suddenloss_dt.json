@@ -1,0 +1,24 @@
+{
+    "sitesnumbers": [
+        {
+            "id": 1,
+            "sitenumber": 1001,
+            "tanks": 6
+        },
+        {
+            "id": 2,
+            "sitenumber": 1002,
+            "tanks": 5
+        },
+        {
+            "id": 3,
+            "sitenumber": 1003,
+            "tanks": 6
+        },
+        {
+            "id": 4,
+            "sitenumber": 1004,
+            "tanks": 6
+        }
+    ]
+}

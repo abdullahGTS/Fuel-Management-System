@@ -75,7 +75,6 @@ const API_PATHS = {
     // operations
     reconcilationData: '/api/inner/operations/delivery_reconcilation.json',
     siteSuddenLoss: '/api/inner/operations/site_suddenloss.json',
-    // cuurentRate: '/api/inner/operations/current_rate.json',
     tankSuddenLoss: '/api/inner/operations/tank_suddenloss.json',
 };
 

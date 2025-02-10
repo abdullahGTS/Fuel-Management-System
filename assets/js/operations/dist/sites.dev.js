@@ -927,19 +927,20 @@ var RateForm = {
     var form = document.createElement('form');
     form.classList.add('datatable-filter-form', 'no-margin-form'); // Create the form content
 
-    form.innerHTML = "\n            <div class=\"datatable-filter-items\" id=\"rec-filter\">\n                <div class=\"filter-item\">\n                    <label for=\"currentRate\">Current Rate</label>\n                    <div class=\"form-item sub-label\">\n                        <input type=\"text\" placeholder=\"Current Rate\" id=\"currentRate\" name=\"currentRate\" value=\"".concat(currentRate, "\" readonly />\n                        <span class=\"rate-label\">lts/hour</span>\n                    </div>\n                </div>\n                <div class=\"filter-item\">\n                    <label for=\"newRate\">New Rate</label>\n                    <div class=\"form-item sub-label\">\n                        <input type=\"text\" placeholder=\"Set new rate\" id=\"newRate\" name=\"newRate\" />\n                        <span class=\"rate-label\">lts/hour</span>\n                    </div>\n                </div>\n            </div>\n            <div class=\"btn-wrapper\">\n                <button class=\"btn submit-button\">Submit New Rate</button>\n            </div>\n        "); // Append the gts-card-title before the form
+    form.innerHTML = "\n            <div class=\"datatable-filter-items\" id=\"rec-filter\">\n                <div class=\"filter-item\">\n                    <label for=\"currentRate\">Current Rate</label>\n                    <div class=\"form-item sub-label\">\n                        <input type=\"text\" placeholder=\"Current Rate\" id=\"currentRate\" name=\"currentRate\" value=\"".concat(currentRate, "\" disabled readonly />\n                        <span class=\"rate-label\">lts/hour</span>\n                    </div>\n                </div>\n                <div class=\"filter-item\">\n                    <label for=\"newRate\">New Rate</label>\n                    <div class=\"form-item sub-label\">\n                        <input type=\"text\" placeholder=\"Set new rate\" id=\"newRate\" name=\"newRate\" />\n                        <span class=\"rate-label\">lts/hour</span>\n                    </div>\n                </div>\n            </div>\n            <div class=\"btn-wrapper\">\n                <button class=\"btn submit-button\">Submit New Rate</button>\n            </div>\n        "); // Append the gts-card-title before the form
 
     rateForm.appendChild(cardTitle);
     rateForm.appendChild(form);
     var newRate = document.querySelector('#newRate');
-    RateForm.postNewRate(rateForm, form, newRate);
+    RateForm.postNewRate(rateForm, form, selectedSite.sitenumber, currentRate, newRate);
   },
-  postNewRate: function postNewRate(rateForm, form, newRate) {
-    console.log('newRate', newRate);
+  postNewRate: function postNewRate(rateForm, form, siteSelect, currentRate, newRate) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var formData = {
-        newRate: newRate.value
+        site: siteSelect,
+        old_rate: currentRate,
+        new_rate: newRate.value
       };
       Snackbar.show({
         text: 'New delivery rate have successfully submitted!',

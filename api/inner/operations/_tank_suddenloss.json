@@ -12,21 +12,21 @@
             "fusiontankid": 2,
             "capacity": "45000.00000",
             "prodvol": "24384.323",
-            "rate": "2000.000"
+            "rate": 0.0
         },
         {
             "id": 3,
             "fusiontankid": 3,
             "capacity": "45000.00000",
             "prodvol": "19885.813",
-            "rate": "1000.000"
+            "rate": 0.0
         },
         {
             "id": 4,
             "fusiontankid": 4,
             "capacity": "45000.00000",
             "prodvol": "21773.996",
-            "rate": "1500.000"
+            "rate": 0.0
         },
         {
             "id": 5,
@@ -43,28 +43,5 @@
             "rate": 0.0
         }
     ],
-    
-    "tanks_table": [
-        {
-            "id": 1,
-            "site": "port_saeed",
-            "tank": "Tank 3",
-            "rate": "1000.000 lts/hour",
-            "timestamp": "02/10/2025 21:24"
-        },
-        {
-            "id": 2,
-            "site": "port_saeed",
-            "tank": "Tank 2",
-            "rate": "2000.000 lts/hour",
-            "timestamp": "02/10/2025 21:24"
-        },
-        {
-            "id": 3,
-            "site": "port_saeed",
-            "tank": "Tank 4",
-            "rate": "1500.000 lts/hour",
-            "timestamp": "02/10/2025 21:24"
-        }
-    ]
+    "tanks_table": []
 }

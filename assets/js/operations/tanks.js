@@ -3,18 +3,10 @@ import { pageReady, Button, Drawer, Tab, DataTable, Select, DatePicker, Datatabl
 import { API_PATHS, fetchData, SharedColors, ChartBackgroundColor } from '../constant.js';
 import { AppearanceToggle } from '../portal.js';
 
-const ProductLabels = {
-    "Gasoline95": "Gasoline 95",
-    "Gasoline92": "Gasoline 92",
-    "Gasoline91": "Gasoline 91",
-    "Gasoline80": "Gasoline 80",
-    "diesel": "Diesel",
-    "cng": "CNG"
-}
 
 const FetchData = {
     init: async() => {
-        const response = await fetchData(API_PATHS.governrateReports);
+        const response = await fetchData(API_PATHS.tankSuddenLoss);
         if (!response || Object.keys(response).length === 0) {
             console.error("No response data available");
             return;
@@ -23,184 +15,72 @@ const FetchData = {
     }
 }
 
-// Usage
-const GovernorateFilter = {
-    state: {
-        response: [],
-        filterOptions: {},
-        selectedFilters: {},
-    },
-
-    init: async () => {
-        const dtFilterWrapper = document.querySelector('#dtFilterWrapper');
-        if (dtFilterWrapper) {
-            // Fetch alarm data from API
-            const response = await FetchData.init();
-
-            // Update state with alarms
-            GovernorateFilter.state.response = response;
-
-            // Get all unique filter categories from the response
-            const filterOptions = {
-                'Governrate Name': {
-                    options: [...new Set(response.map(item => item.gov_name))],
-                    originalKey: 'gov_name'
-                },
-                'Product': {
-                    options: [...new Set(response.map(item => item.product))],
-                    originalKey: 'product'
-                },
-                'Start Date': {
-                    options: [...new Set(response.map(item => item.startdate))],
-                    originalKey: 'startdate'
-                },
-                'End Date': {
-                    options: [...new Set(response.map(item => item.enddate))],
-                    originalKey: 'enddate'
-                }
-            };
-
-            // Update state with filter options
-            GovernorateFilter.state.filterOptions = filterOptions;
-            const dateKeys = ['startdate', 'enddate'];
-            // Initialize filters with the fetched alarm data
-            const selectedFilters = await DatatableFilter.init(dtFilterWrapper, response, filterOptions, GovernorateFilter, GovernorateReportsDT, dateKeys);
-
-            // Update state with selected filters
-            GovernorateFilter.state.selectedFilters = selectedFilters;
-
-            if (selectedFilters) {
-                GovernorateFilter.filterSubmit(selectedFilters);  // Apply filters on load
-            }
-        }
-    },
-
-    filterSubmit: async (filters) => {
-        const { response } = GovernorateFilter.state;
-        const filteredGovernorate = await GovernorateFilter.applyFilters(filters, response);
-
-        // Update DataTable with filtered alarms
-        GovernorateReportsDT.init(filteredGovernorate);
-    },
-
-    applyFilters: (filters, response) => {
-        let filteredGovernorate = response; // Start with the full alarm list
-
-        Object.entries(filters).forEach(([key, values]) => {
-            if (key === 'time' && values.from && values.to) {
-                // Filter by date range
-                const from = new Date(values.from);
-                const to = new Date(values.to);
-                filteredGovernorate = filteredGovernorate.filter(res => {
-                    const responseDate = new Date(res[key]);
-                    return responseDate >= from && alarmDate <= to;
-                });
-            } else {
-                // Other filters (multi-select)
-                filteredGovernorate = filteredGovernorate.filter(res => {
-                    return values.some(value => String(res[key]) === String(value));
-                });
-            }
-        });
-
-        return filteredGovernorate; // Return filtered alarms
-    },
-};
-
-const GovernorateReportsDT = {
+const TanksOperationDT = {
     // Initialize the Site DataTable
-    init: async (filteredGovernorate) => {
+    init: async (filteredData) => {
 
-        const governorateReportsDT = document.querySelector("#governorateReportsDT");
-        if (governorateReportsDT) {
-            let governorate;
-            if (!filteredGovernorate) {
-                governorate = await GovernorateReportsDT.fetchData();
+        const tanksOperationDT = document.querySelector("#tanksOperationDT");
+        if (tanksOperationDT) {
+            let tanks;
+            if (!filteredData) {
+                tanks = await TanksOperationDT.fetchData();
             } else {
-                if (filteredGovernorate.length) {
-                    governorateReportsDT.innerHTML = '';
-                    governorate = filteredGovernorate;
+                if (filteredData.length) {
+                    tanksOperationDT.innerHTML = '';
+                    tanks = filteredData;
                 } else {
-                    governorateReportsDT.innerHTML = '';
-                    GovernorateReportsDT.emptyState(governorateReportsDT);
+                    tanksOperationDT.innerHTML = '';
+                    TanksOperationDT.emptyState(tanksOperationDT);
                 }
             }
 
-            if (governorate && governorate.length > 0) {
-                const formattedData = GovernorateReportsDT.transformData(governorate);
+            if (tanks && tanks.length > 0) {
+                const formattedData = TanksOperationDT.transformData(tanks);
                 DataTable.init(".gts-dt-wrapper", {
                     data: formattedData,
                     columns: [
-                        { title: `<span class="mat-icon material-symbols-sharp">globe_asia</span> Governrates`, data: "gov_name", footer: 'Total' },
-                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Gasoline 95`, data: "Gasoline95", },
-                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Gasoline 92`, data: "Gasoline92" },
-                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Diesel`, data: "Diesel" },
+                        { title: `<span class="mat-icon material-symbols-sharp">numbers</span>`, data: "id" },
+                        { title: `<span class="mat-icon material-symbols-sharp">local_gas_station</span> Tank`, data: "tank" },
+                        { title: `<span class="mat-icon material-symbols-sharp">verified</span> Site Name`, data: "site" },
+                        { title: `<span class="mat-icon material-symbols-sharp">waterfall_chart</span> Rate`, data: "rate" },
+                        { title: `<span class="mat-icon material-symbols-sharp">schedule</span> Timestamp`, data: "timestamp" }
+
                     ],
                     responsive: true,
                     paging: formattedData.length > 10,
                     pageLength: 10,
-                    fixedHeader: {
-                        header: false,
-                        footer: true
-                    },
-                    footerCallback: function (row, data, start, end, display) {
-                        const api = this.api();
-                        const totalGasoline95 = api.column(1).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
-                        const totalGasoline92 = api.column(2).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
-                        const totalDiesel = api.column(3).data().reduce((a, b) => a + parseFloat(b) || 0, 0);
-                        
-                        // Update footer with totals
-                        $(api.column(1).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalGasoline95.toFixed(2)));
-                        $(api.column(2).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalGasoline92.toFixed(2)));
-                        $(api.column(3).footer()).html( GovernorateReportsDT.parseFormattedNumber(totalDiesel.toFixed(2)));
-                        $(api.column(0).footer()).html('Total');
-                   },
-                }, 
-                [
-                    { targets: 0, visible: true, className: 'not-id', createdCell: function (td) { $(td).css('text-align', 'left'); } },
-                    { width: "280px", targets: 1 },
-                    { width: "280px", targets: 2 },
-                    { width: "280px", targets: 3 },
-                ], "Governorate data table");
+                }, [
+                    // { width: "0px", targets: 0 },  // Hide the first column (id)
+                    // { width: "480px", targets: 6 },
+                    // { width: "100px", targets: 7 },
+                ], "Sites data table");
             } else {
-                console.error("No alarms data available");
+                console.error("No data available");
             }
         }
     },
 
-    parseFormattedNumber: (numberStr) => {
-        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
-        const parsedNumber = parseFloat(formattedNumber);
-
-        if (isNaN(parsedNumber)) {
-            console.error('Invalid number format:', numberStr);
-            return '0'; // Return a string so it can be displayed
-        }
-
-        // Format the number with commas
-        return parsedNumber.toLocaleString();
-    },
-    
     // Fetch data from the API
     fetchData: async () => {
         try {
             const response = await FetchData.init();
-            const governorate = await DataTable.fetchData(response.governrates);
-            return governorate;
+            const tanks = await DataTable.fetchData(response.tanks_table);
+            console.log('tanks', tanks);
+            return tanks;
         } catch (error) {
-            console.error("Error fetching GovernorateReportsDT data:", error);
+            console.error("Error fetching TanksOperationDT data:", error);
             return [];
         }
     },
 
     // Transform the raw API data for the DataTable
     transformData: (data) => {
-        return data.map((governorate) => ({
-            gov_name: governorate.gov_name,
-            Gasoline95: governorate.Gasoline95,
-            Gasoline92: governorate.Gasoline92,
-            Diesel: governorate.Diesel,
-            
+        return data.map((tanks) => ({
+            id: tanks.id,
+            site: tanks.site,
+            tank: tanks.tank,
+            rate: tanks.rate,
+            timestamp: tanks.timestamp
         }));
     },
 
@@ -229,223 +109,301 @@ const GovernorateReportsDT = {
     },
 };
 
-// Fetch Product Data
-const Products = {
+const ReconcilationTankFilter = {
+    init: async() => {
+        const filterWrap = document.querySelector('#filterWrap');
+        const tankVol = document.querySelector('#tankVol');
 
-    init: async () => {
-        const products = await FetchData.init();
-        const totalSums = Products.calculateTotalSums(products.governrates);
-        Products.renderProducts(totalSums);
-    },
+        if ( filterWrap && tankVol ) {
+            tankVol.innerHTML = '';
+            ReconcilationTankFilter.generateTankEmptyState(tankVol);
 
-    calculateTotalSums: (records) => {
-        const totals = {};
-        records.forEach(record => {
-            Object.keys(record).forEach(key => {
-                if (key !== "gov_name") {
-                    const value = parseFloat(record[key]) || 0;
-                    totals[key] = (totals[key] || 0) + value;
-                }
-            });
-        });
-        return totals;
-    },
-    renderProducts: (products) => {
-        const productsCards = document.getElementById('productsReportsCards');
-        if (productsCards) {
-            Object.keys(products).forEach((key) => {
-                // Create the main wrapper for the product card
-                const gridItem = document.createElement('div');
-                gridItem.classList.add('gts-grid-item');
-
-                // Create the main product container
-                const itemContainer = document.createElement('div');
-                itemContainer.classList.add('gts-product');
-                itemContainer.classList.add('gts-item-content');
-                itemContainer.classList.add(key.toLowerCase());
-
-                // Create the inner container for icon and content
-                const gtsValue = document.createElement('div');
-                gtsValue.classList.add('gts-value');
-
-                // Create the icon wrapper
-                const iconWrapper = document.createElement('div');
-                iconWrapper.classList.add('icon-wrapper');
-
-                // Create the icon element (using Material Icons in this example)
-                const icon = document.createElement('span');
-                icon.classList.add('mat-icon', 'material-symbols-sharp');
-                icon.textContent = 'local_gas_station'; // Set your icon name or dynamic icon here
-
-                // Append icon to icon wrapper
-                iconWrapper.appendChild(icon);
-
-                // Create the header for the product quantity
-                const quantityHeader = document.createElement('h3');
-                const quantityValue = document.createElement('span');
-                quantityValue.id = `${key}-value`;
-
-                quantityValue.textContent = Products.parseFormattedNumber(products[key].toFixed(2));
-
-                // Add unit after the value
-                quantityHeader.appendChild(quantityValue);
-                quantityHeader.insertAdjacentText('beforeend', ' lts');
-
-                // Create the product name/label as a paragraph
-                const productLabel = document.createElement('p');
-                productLabel.textContent = `${ProductLabels[key] || key}`;
-
-                // Append elements in the proper structure
-                gtsValue.appendChild(iconWrapper);
-                gtsValue.appendChild(quantityHeader);
-                gtsValue.appendChild(productLabel);
-
-                // Append the main gts-value container to itemContainer
-                itemContainer.appendChild(gtsValue);
-
-                // Append the itemContainer to the gridItem and add it to the main container
-                gridItem.appendChild(itemContainer);
-                productsCards.querySelector('.gts-grid').appendChild(gridItem);
-            });
-        }
-        if (Object.keys(products).length > 3) {
-            Products.scrollProducts(productsCards, Object.keys(products).length);
+            const { tanks, sites } = await ReconcilationTankFilter.fetchData();
+            ReconcilationTankFilter.generateFilter(filterWrap, sites, tanks);
         }
     },
-
-    scrollProducts: (productsCards, items) => {
-        // Get the width of the first product card
-        const itemWidth = productsCards.querySelector('.gts-grid .gts-grid-item:first-child').offsetWidth;
-        productsCards.querySelectorAll('.gts-grid .gts-grid-item').forEach((card) => {
-            card.style.width = `${itemWidth}px`;
-        });
-        productsCards.style.width = `${itemWidth * 3 + 15}px`;
+    fetchData: async() => {
+        const data = await FetchData.init();
+        return { tanks: data.tanks_select, sites: data.tanks_table };
     },
 
-    parseFormattedNumber: (numberStr) => {
-        const formattedNumber = numberStr.toString().replace(/,/g, '').trim();
-        const parsedNumber = parseFloat(formattedNumber);
+    generateFilter: (wrap, sites, tanks) => {
+        const form = document.createElement('form');
+        form.classList.add('datatable-filter-form', 'no-margin-form');
+    
+        const datatableFilterItems = document.createElement('div');
+        datatableFilterItems.classList.add('datatable-filter-items');
+        datatableFilterItems.id = 'rec-filter';
+    
+        // Function to create a filter item (label + field)
+        const createFilterItem = (labelText, fieldId, fieldElement, className) => {
+            const filterItem = document.createElement('div');
+            filterItem.classList.add('filter-item');
+                    
+            const itemLabel = document.createElement('label');
+            itemLabel.setAttribute('for', fieldId);
+            itemLabel.textContent = labelText;
+    
+            const formItem = document.createElement('div');
+            formItem.classList.add('form-item');
+    
+            fieldElement.id = fieldId;
+            formItem.appendChild(fieldElement);
+    
+            const rateLabel = document.createElement('span');
+            rateLabel.classList.add('rate-label');
+            rateLabel.innerHTML = 'lts/hour';
 
-        if (isNaN(parsedNumber)) {
-            console.error('Invalid number format:', numberStr);
-            return '0'; // Return a string so it can be displayed
-        }
+            if ( className === 'sub-label' ) {
+                formItem.classList.add(className);
+                formItem.appendChild(rateLabel);
+            }
 
-        // Format the number with commas
-        return parsedNumber.toLocaleString();
-    },
-}
-
-const GovernorateProducts = {
-    init: () => {
-        const productSalesChart = document.querySelector('#productSalesChart');
-        if (productSalesChart) {
-            google.charts.load('current', { packages: ['corechart'] });
-            google.charts.setOnLoadCallback(GovernorateProducts.fetchData);
-        }
-    },
-
-    fetchData: async () => {
-        const response = await FetchData.init();
-        google.charts.setOnLoadCallback(() => GovernorateProducts.drawChart(response.governrates));
-    },
-
-    drawChart: async (governrates) => {
-        const { backgroundColor, txtColor } = await ChartBackgroundColor();
-
-        // Aggregate total sales per product
-        const productTotals = { Gasoline95: 0, Gasoline92: 0, Diesel: 0 };
-
-        governrates.forEach((gov) => {
-            productTotals.Gasoline95 += parseFloat(gov.Gasoline95) || 0;
-            productTotals.Gasoline92 += parseFloat(gov.Gasoline92) || 0;
-            productTotals.Diesel += parseFloat(gov.Diesel) || 0;
-        });
-
-        // Prepare the DataTable for Google Charts
-        const data = new google.visualization.DataTable();
-        data.addColumn('string', 'Product'); // X-Axis: Product name
-        data.addColumn('number', 'Total Usage'); // Y-Axis: Total sales
-        data.addColumn({ type: 'string', role: 'style' }); // Style column for colors
-        data.addColumn({ type: 'string', role: 'tooltip', p: { html: true } }); // Tooltip column
-
-        // Convert aggregated totals to chart rows
-        const chartRows = Object.entries(productTotals).map(([product, total]) => {
-            const tooltip = `<div class="cus_tooltip"><b>${product}</b><br>${total.toFixed(2)} L</div>`;
-            return [product, total, `color: ${SharedColors[product] || '#000000'}`, tooltip];
-        });
-
-        data.addRows(chartRows);
-
-        // Chart Options
-        const options = {
-            title: '',
-            backgroundColor: backgroundColor,
-            hAxis: { textStyle: { color: txtColor } },
-            vAxis: { textStyle: { color: txtColor } },
-            legend: { position: 'none' },
-            chartArea: { width: '80%', height: '70%' },
-            tooltip: { isHtml: true }
+            filterItem.appendChild(itemLabel);
+            filterItem.appendChild(formItem);
+    
+            return filterItem;
         };
+    
+        // Create Site Dropdown
+        const siteSelect = document.createElement('select');
+        siteSelect.classList.add('custom-select', 'js-example-basic-single');
+        siteSelect.innerHTML = `<option value="">Select Site</option>`;
+        [...new Set(sites.map(site => site.site))].forEach(site => {
+            const option = document.createElement('option');
+            option.value = site;
+            option.textContent = site;
+            siteSelect.appendChild(option);
+        });
+    
+        // Create Tank Dropdown (Initially Disabled)
+        const tankSelect = document.createElement('select');
+        tankSelect.classList.add('custom-select', 'js-example-basic-single');
+        tankSelect.innerHTML = `<option value="">Select Tank</option>`;
+        tankSelect.disabled = true;
+    
+        // Create Current Rate (Initially Disabled)
+        const currentRate = document.createElement('input');
+        currentRate.type = 'text';
+        currentRate.placeholder = 'Enter Amount';
+        currentRate.name = 'amount';
+        currentRate.disabled = true;
+        currentRate.readOnly = true;
+        // <span class="rate-label">lts/hour</span>
 
-        // Draw the chart
-        const chart = new google.visualization.ColumnChart(document.getElementById('productSalesChart'));
-        chart.draw(data, options);
-    }
-};
+    
+        // Create New Rate (Initially Disabled)
+        const updateRate = document.createElement('input');
+        updateRate.type = 'text';
+        updateRate.placeholder = 'New rate';
+        updateRate.name = 'newRate';
+        updateRate.disabled = true;
+        // <span class="rate-label">lts/hour</span>
 
 
-const ReloadAlarmsCharts = {
-    // Initialize the menu toggle functionality
-    init: () => {
-        // Attach the click event listener to #toggle-menu
-        document.getElementById('toggle-menu').addEventListener('click', ReloadAlarmsCharts.chartReload);
+        // Append filter items
+        datatableFilterItems.appendChild(createFilterItem('Select Site', 'siteSelect', siteSelect, 'no-label'));
+        datatableFilterItems.appendChild(createFilterItem('Select Tank', 'tankSelect', tankSelect, 'no-label'));
+        datatableFilterItems.appendChild(createFilterItem('Current Rate', 'currentRate', currentRate, 'sub-label'));
+        datatableFilterItems.appendChild(createFilterItem('New Rate', 'newRate', updateRate, 'sub-label'));
+    
+        // Create Submit Button
+        const btnWrapper = document.createElement('div');
+        btnWrapper.classList.add('btn-wrapper');
+
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Submit';
+        submitButton.classList.add('submit-button', 'btn');
+        btnWrapper.appendChild(submitButton);
+        // Append main filter container to form
+        form.appendChild(datatableFilterItems);
+        form.appendChild(btnWrapper);
+    
+        // Append form to wrap
+        wrap.appendChild(form);
+    
+        // Event Listener: Site Selection
+        $(siteSelect).on('change', function (e) {
+            const tankVol = document.querySelector('#tankVol');
+            tankVol.innerHTML = '';
+            ReconcilationTankFilter.generateTankEmptyState(tankVol);
+
+            const selectedSite = e.target.value;
+            const filteredTanks = sites.filter(site => site.site === selectedSite);
+    
+            // Reset Tank Dropdown
+            tankSelect.innerHTML = `<option value="">Select Tank</option>`;
+            tankSelect.disabled = !filteredTanks.length;
+    
+            // Populate Tanks based on selected site
+            [...new Set(filteredTanks.map(site => site.tank))].forEach(tankId => {
+                const option = document.createElement('option');
+                option.value = tankId;
+                option.textContent = tankId;
+                tankSelect.appendChild(option);
+            });
+        });
+    
+        // Event Listener: Tank Selection
+        let selectedTank;
+        $(tankSelect).on('change', function (e) {
+            const tankVol = document.querySelector('#tankVol');
+            tankVol.innerHTML = '';
+            ReconcilationTankFilter.generateTankEmptyState(tankVol);
+
+            selectedTank = e.target.value;
+            const tankDetails = tanks.find(tank => tank.fusiontankid == selectedTank.replace('Tank ', ''));
+    
+            if (tankDetails) {
+                ReconcilationTankFilter.generateTankUI(tankDetails);
+                // currentRate.disabled = false;
+                currentRate.value = tankDetails.rate;
+                updateRate.disabled = false;
+            }
+        });
+
+        ReconcilationTankFilter.submitForm(form, siteSelect, tankSelect, currentRate, updateRate);
+        Select.init();
     },
 
-    chartReload: () => {
-        // Step 1: Check if the .gts-charts element exists
-        if (document.querySelector('.chart-area')) {
-            // Step 2: Kill current charts by clearing their containers
-            const chartContainers = document.querySelectorAll('.chart-area');
-            const chartLegend = document.querySelectorAll('.chart-legend');
+    submitForm: (form, siteSelect, tankSelect, currentRate, updateRate) => {
+        // Event Listener for Form Submission
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+            const tankVol = document.querySelector('#tankVol');
 
-            if (chartContainers) {
-                chartContainers.forEach(container => {
-                    container.innerHTML = ''; // Clear the chart container
-                });
-            }
-            if (chartLegend) {
-                chartLegend.forEach(container => {
-                    container.innerHTML = ''; // Clear the chart container
-                });
-            }
-
-            // Step 3: Reload the charts
-            setTimeout(() => {
-                RunCharts.init();
-                const productSalesChart = document.getElementById('productSalesChart');
-                if (productSalesChart && !productSalesChart.classList.contains('hide')) {
-                    GovernorateProducts.init();
-                }
+            const formData = {
+                site: siteSelect.value,
+                tank: tankSelect.value,
+                old_rate: currentRate.value,
+                new_rate: updateRate.value
+            };
+    
+            Snackbar.show({
+                text: 'Reconciliation have successfully ordered!', 
+                pos: 'bottom-left',
+                duration: 2800
             });
+
+            setTimeout(() => {
+                console.log('Form Data:', formData);
+                tankVol.innerHTML = '';
+                ReconcilationTankFilter.generateTankEmptyState(tankVol);
+                $(siteSelect).val('').trigger('change');
+                $(tankSelect).val('').trigger('change');
+                form.reset();
+            }, 0);
+
+        });
+    },
+
+    generateTankUI: (tankDetails) => {
+        const tankVol = document.querySelector('#tankVol');
+        tankVol.innerHTML = '';
+        const capacityWrap = document.createElement('div');
+        capacityWrap.classList.add('capacityWrap');
+
+        const productsTank = document.createElement('div');
+        productsTank.classList.add('products-tank');
+        const liquid = document.createElement('div');
+        liquid.classList.add('liquid');
+
+        // Add SVG for products
+        const svgNamespace = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNamespace, 'svg');
+        svg.classList.add('products');
+        svg.setAttribute('viewBox', '0 0 200 100');
+
+        const path = document.createElementNS(svgNamespace, 'path');
+        // path.setAttribute('fill', SharedColors[tank.product]);
+        let fillColor;
+        if (tankDetails.prodvol < (tankDetails.capacity / 2)) {
+            fillColor = SharedColors.Volume.Less;
+        } else if (tankDetails.prodvol > (tankDetails.capacity / 2)) {
+            fillColor = SharedColors.Volume.More;
+        } else {
+            fillColor = SharedColors.Volume.Same;
+        }
+    
+        path.setAttribute('fill', fillColor);
+
+        path.setAttribute('d', `
+                M 0,0 v 100 h 200 v -100 
+                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
+                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
+                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
+                c -10,0 -15,5 -25,5 c -10,0 -15,-5 -25,-5
+        `);
+
+        svg.appendChild(path);
+        liquid.appendChild(svg);
+
+        // Calculate products level
+        const productsLevel = (tankDetails.prodvol / tankDetails.capacity) * 100;
+        svg.style.top = `calc(97.5% - ${productsLevel}%)`;
+
+        // Add liquid container to the tank
+        productsTank.appendChild(liquid);
+
+        // Add indicators
+        [25, 50, 75].forEach(value => {
+            const indicator = document.createElement('div');
+            indicator.classList.add('indicator');
+            indicator.setAttribute('data-value', value);
+            indicator.style.bottom = `${value}%`;
+            productsTank.appendChild(indicator);
+        });
+
+        // Add label
+        const label = document.createElement('div');
+        label.classList.add('label');
+        // label.style.bottom = `${productsLevel}%`;
+        const currentValue = parseFloat(tankDetails.prodvol).toFixed(2);
+
+        label.innerHTML = `${currentValue}<span>lts</span>`;
+        productsTank.appendChild(label);
+        capacityWrap.innerHTML = `<b>Capacity</b>: ${tankDetails.capacity}`;
+        tankVol.appendChild(capacityWrap); // Insert returned HTML
+        tankVol.appendChild(productsTank); // Insert returned HTML
+
+        const tankVolRect = liquid.getBoundingClientRect();
+        const labelRect = label.getBoundingClientRect();
+        let labelBottom = productsLevel; // Initial bottom position in %
+        
+        const labelHeightPercent = (labelRect.height / tankVolRect.height) * 100; // Convert height to %
+        
+        if (labelBottom > 100 - labelHeightPercent) {
+            labelBottom = 100 - labelHeightPercent; // Prevent overflow
+        }
+        label.style.bottom = `${labelBottom}%`;
+    },
+
+    generateTankEmptyState: (wrapper) => {
+        if (!wrapper.querySelector(".emptyState")) {
+            const emptyStateDiv = document.createElement("div");
+            emptyStateDiv.className = "emptyState";
+
+            // Create the heading (h3)
+            const heading = document.createElement("h3");
+            heading.textContent = "Select Tank";
+
+            // Create the brief (p)
+            const brief = document.createElement("p");
+            brief.textContent = "Select a tank to be able to visualize the volume";
+
+            // Append heading and brief to the empty state div
+            emptyStateDiv.appendChild(heading);
+            emptyStateDiv.appendChild(brief);
+
+            // Insert the empty state div after the site list container
+            wrapper.appendChild(emptyStateDiv);
         }
     }
-};
 
-const RunCharts = {
-    init: () => {
-        GovernorateProducts.init();
-        ReloadAlarmsCharts.init();
-    }
 }
-
-AppearanceToggle.registerCallback((mode) => {
-    ReloadAlarmsCharts.chartReload();
-});
 
 pageReady(() => {
-    GovernorateReportsDT.init();
-    GovernorateFilter.init();
-    RunCharts.init();
-    Products.init();
+    TanksOperationDT.init();
+    ReconcilationTankFilter.init();
 });
