@@ -158,9 +158,10 @@ var SitesOperationDT = {
   },
   // Transform the raw API data for the DataTable
   transformData: function transformData(data) {
+    var counter = 1;
     return data.map(function (sites) {
       return {
-        id: sites.id,
+        id: counter++,
         name: sites.name,
         sitenumber: sites.sitenumber,
         rate: sites.rate,

@@ -73,8 +73,9 @@ const SitesOperationDT = {
 
     // Transform the raw API data for the DataTable
     transformData: (data) => {
+        let counter = 1;
         return data.map((sites) => ({
-            id: sites.id,
+            id: counter++,
             name: sites.name,
             sitenumber: sites.sitenumber,
             rate: sites.rate,

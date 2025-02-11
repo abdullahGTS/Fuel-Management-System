@@ -53,7 +53,7 @@ const TanksOperationDT = {
                     // { width: "0px", targets: 0 },  // Hide the first column (id)
                     // { width: "480px", targets: 6 },
                     // { width: "100px", targets: 7 },
-                ], "Sites data table");
+                ], "Tanks sudden loss data");
             } else {
                 console.error("No data available");
             }

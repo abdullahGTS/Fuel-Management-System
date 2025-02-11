@@ -14,6 +14,8 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -468,12 +470,6 @@ var DataTable = {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
               }
 
-              if (column.classList.contains('dt-orderable-none')) {
-                data = ''; // Clear the cell's content for export
-
-                column.remove();
-              }
-
               return data;
             },
             body: function body(data, row, column, node) {
@@ -482,21 +478,42 @@ var DataTable = {
                 var statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
 
                 if (statusMatch) {
-                  data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
+                  data = statusMatch[1];
                 }
-              } // Additional check: remove content for the last column if it contains "view-more"
-
-
-              if (node && $(node).find('button.view-more').length > 0) {
-                data = ''; // Clear the cell's content for export
               }
 
-              return data; // Return the cleaned data
+              return data;
             }
           }
         },
-        customize: function customize(doc) {// console.log('doc.pageSize', doc);
-          // console.log('doc.pageMargins', doc.pageMargins);
+        customize: function customize(doc) {
+          // ✅ Set page size to 'auto' to fit long content
+          doc.pageSize = 'A3'; // Try 'A3' or 'auto' for more space
+
+          doc.pageMargins = [20, 20, 20, 20]; // ✅ Reduce font size to fit more content
+
+          doc.defaultStyle.fontSize = 10;
+          doc.styles.tableHeader.fontSize = 10; // ✅ Prevent header line breaks
+
+          doc.styles.tableHeader.alignment = 'left';
+          doc.styles.tableHeader.noWrap = true; // Ensures header text stays in one line
+
+          doc.styles.table.alignment = 'left';
+          doc.styles.table.noWrap = true; // Ensures header text stays in one line
+          // ✅ Auto-resize table columns
+          // doc.content[1].table.widths = Array(doc.content[1].table.body[0].length).fill('*');
+          // ✅ Reduce row spacing to fit more rows
+
+          var table = doc.content[1].table.body;
+          table.forEach(function (row) {
+            row.forEach(function (cell) {
+              if (_typeof(cell) === 'object') {
+                cell.margin = [2, 2, 2, 2]; // Reduce spacing inside each cell
+              }
+            });
+          }); // ✅ Ensure all rows are included
+
+          doc.content[1].table.dontBreakRows = true;
         }
       }],
       columnDefs: columnDefs,
@@ -1140,7 +1157,7 @@ var Select = {
 };
 exports.Select = Select;
 var DatePicker = {
-  init: function init() {
+  init: function init(options) {
     var dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
     // Select all "From" and "To" inputs dynamically
 
@@ -1204,14 +1221,15 @@ var DatePicker = {
         }; // Optional: Add event listeners for additional actions on date changes
 
 
-        flatpickr(filterDateFrom, {
+        flatpickr(filterDateFrom, _objectSpread({
           enableTime: true,
-          dateFormat: dateFormat,
+          dateFormat: dateFormat
+        }, options, {
           onChange: function onChange(selectedDates) {
             if (selectedDates.length > 0) {// Set the minimum date for the "To" date picker
             }
           }
-        });
+        }));
         filterDateFrom.addEventListener("change", function () {
           console.log("From Date Selected [Index ".concat(index + 1, "]:"), _formatDate(this.value));
         });

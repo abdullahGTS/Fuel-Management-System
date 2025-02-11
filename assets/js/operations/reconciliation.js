@@ -224,11 +224,13 @@ const ReconcilationTankFilter = {
     
         // Create Date Picker (Initially Disabled)
         const dateInput = document.createElement('input');
+        const today = new Date();
         dateInput.type = 'text';
         dateInput.placeholder = 'Pick a delivery date';
         dateInput.name = 'filterDate';
         dateInput.classList.add('data-picker-wrapper');
         dateInput.disabled = true;
+        dateInput.setAttribute('minDate', 'today');
     
         // Append filter items
         datatableFilterItems.appendChild(createFilterItem('Select Site', 'siteSelect', siteSelect));
@@ -309,8 +311,10 @@ const ReconcilationTankFilter = {
         });    
     
         ReconcilationTankFilter.submitForm(form, siteSelect, tankSelect, amountInput, dateInput);
-
-        DatePicker.init();
+        const options = {
+            minDate: 'today',
+        }
+        DatePicker.init(options);
         Select.init();
     },
 

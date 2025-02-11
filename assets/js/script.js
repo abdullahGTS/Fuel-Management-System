@@ -479,12 +479,6 @@ const DataTable = {
               if (typeof data === 'string') {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
               }
-
-              if (column.classList.contains('dt-orderable-none')) {
-                data = ''; // Clear the cell's content for export
-                column.remove();
-              }
-
               return data;
             },
             body: function (data, row, column, node) {
@@ -492,25 +486,47 @@ const DataTable = {
                 data = data.replace(/<span class="mat-icon material-symbols-sharp">.*?<\/span>/g, '');
                 const statusMatch = data.match(/<div class="status-dt">.*?<span.*?>(.*?)<\/span>.*?<\/div>/);
                 if (statusMatch) {
-                  data = statusMatch[1]; // Extract the inner content (e.g., Online or Offline)
+                  data = statusMatch[1];
                 }
               }
-
-              // Additional check: remove content for the last column if it contains "view-more"
-              if (node && $(node).find('button.view-more').length > 0) {
-                data = ''; // Clear the cell's content for export
-              }
-
-              return data; // Return the cleaned data
-
+              return data;
             }
           }
         },
         customize: function (doc) {
-          // console.log('doc.pageSize', doc);
-          // console.log('doc.pageMargins', doc.pageMargins);
+          // ✅ Set page size to 'auto' to fit long content
+          doc.pageSize = 'A3';  // Try 'A3' or 'auto' for more space
+          doc.pageMargins = [20, 20, 20, 20];
+      
+          // ✅ Reduce font size to fit more content
+          doc.defaultStyle.fontSize = 10;
+          doc.styles.tableHeader.fontSize = 10;
+      
+          // ✅ Prevent header line breaks
+          doc.styles.tableHeader.alignment = 'left';
+          doc.styles.tableHeader.noWrap = true;  // Ensures header text stays in one line
+
+          doc.styles.table.alignment = 'left';
+          doc.styles.table.noWrap = true;  // Ensures header text stays in one line
+
+          // ✅ Auto-resize table columns
+          // doc.content[1].table.widths = Array(doc.content[1].table.body[0].length).fill('*');
+      
+          // ✅ Reduce row spacing to fit more rows
+          let table = doc.content[1].table.body;
+          table.forEach(row => {
+            row.forEach(cell => {
+              if (typeof cell === 'object') {
+                cell.margin = [2, 2, 2, 2];  // Reduce spacing inside each cell
+              }
+            });
+          });
+      
+          // ✅ Ensure all rows are included
+          doc.content[1].table.dontBreakRows = true;
         }
-      }],
+      }      
+    ],
       columnDefs,
       initComplete: function () {
         // Add the custom table title
@@ -1155,7 +1171,7 @@ const Select = {
 }
 
 const DatePicker = {
-  init: () => {
+  init: (options) => {
     const dateFormat = "m/d/Y H:i"; // Flatpickr format for mm/dd/yyyy hh:mm
 
     // Select all "From" and "To" inputs dynamically
@@ -1215,6 +1231,7 @@ const DatePicker = {
         flatpickr(filterDateFrom, {
           enableTime: true,
           dateFormat: dateFormat,
+          ...options,
           onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
               // Set the minimum date for the "To" date picker

@@ -341,11 +341,13 @@ var ReconcilationTankFilter = {
     amountContainer.appendChild(fillButton); // Create Date Picker (Initially Disabled)
 
     var dateInput = document.createElement('input');
+    var today = new Date();
     dateInput.type = 'text';
     dateInput.placeholder = 'Pick a delivery date';
     dateInput.name = 'filterDate';
     dateInput.classList.add('data-picker-wrapper');
-    dateInput.disabled = true; // Append filter items
+    dateInput.disabled = true;
+    dateInput.setAttribute('minDate', 'today'); // Append filter items
 
     datatableFilterItems.appendChild(createFilterItem('Select Site', 'siteSelect', siteSelect));
     datatableFilterItems.appendChild(createFilterItem('Select Tank', 'tankSelect', tankSelect));
@@ -421,8 +423,11 @@ var ReconcilationTankFilter = {
       }
     });
     ReconcilationTankFilter.submitForm(form, siteSelect, tankSelect, amountInput, dateInput);
+    var options = {
+      minDate: 'today'
+    };
 
-    _script.DatePicker.init();
+    _script.DatePicker.init(options);
 
     _script.Select.init();
   },
