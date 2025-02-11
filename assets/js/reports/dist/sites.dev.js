@@ -158,15 +158,16 @@ var SitesReportsFilter = {
           key = _ref2[0],
           values = _ref2[1];
 
-      if (key === 'time' && values.from && values.to) {
+      if (['time'].includes(key) && values.from && values.to) {
         // Filter by date range
         var from = new Date(values.from);
         var to = new Date(values.to);
         filteredSitesReports = filteredSitesReports.filter(function (res) {
           var responseDate = new Date(res[key]);
-          return responseDate >= from && alarmDate <= to;
+          return responseDate >= from && responseDate <= to;
         });
       } else {
+        // Other filters (multi-select)
         filteredSitesReports = filteredSitesReports.filter(function (res) {
           return values.some(function (value) {
             return String(res[key]) === String(value);

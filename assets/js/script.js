@@ -1105,7 +1105,7 @@ const DatatableFilter = {
                   DatatableFilter.init(wrapper, response, filterOptions, FilterFn, DTableFn, dateKeys, ExtraComp);
                   FilterFn.state.selectedFilters = response;
                   DTableFn.init(response);
-                  ExtraComp.init(response);
+                  if (ExtraComp) ExtraComp.init(response);
               });
 
               filterButtonDiv.appendChild(clearButton);

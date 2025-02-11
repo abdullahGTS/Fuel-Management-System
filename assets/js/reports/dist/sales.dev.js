@@ -161,13 +161,13 @@ var SalesFilter = {
           key = _ref2[0],
           values = _ref2[1];
 
-      if (key === 'time' && values.from && values.to) {
+      if (['startdate', 'enddate'].includes(key) && values.from && values.to) {
         // Filter by date range
         var from = new Date(values.from);
         var to = new Date(values.to);
         filteredSales = filteredSales.filter(function (res) {
           var responseDate = new Date(res[key]);
-          return responseDate >= from && alarmDate <= to;
+          return responseDate >= from && responseDate <= to;
         });
       } else {
         // Other filters (multi-select)

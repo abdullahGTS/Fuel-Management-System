@@ -1483,6 +1483,8 @@
         .fill-button {
             background-color: transparent !important;
             color: var(--gts-green-color) !important;
+            padding: 12px 21px 13px !important;
+            height: auto !important;
             &::before {
                 background-color: var(--gts-green-color) !important;
                 opacity: 0.1;
@@ -1537,7 +1539,8 @@
         input {
             background-color: var(--gts-white-color) !important;
             border-color: rgba(var(--gts-brd-color), .2) !important;
-            padding: 13px 21px !important;
+            padding: 12px 14px 13px !important;
+            min-height: 32px !important;
             &:disabled {
                 opacity: 0.5;
             }
@@ -1550,7 +1553,7 @@
                 gap: 0px;
                 position: relative;
                 input {
-                    padding: 12px 14px !important;
+                    padding: 12px 14px 13px !important;
                     background-color: var(--gts-white-color);
                     border-color: rgba(var(--gts-brd-color), 0.2);
 
@@ -1582,24 +1585,32 @@
     }
 
     .filter-item .form-item .select2 .select2-selection {
-        border: 1px solid #aaa;
-        border-radius: 4px;
+        border: 1px solid;
+        border-color: rgba(var(--gts-brd-color), .2);
+        border-radius: var(--gts-sm-curve);
         cursor: text;
-        padding-bottom: 5px;
-        padding-right: 5px;
         position: relative;
-        padding: 11.5px 14px !important;
+        padding: 7px 0px 8px !important;
+        padding: 12px 14px!important;
         min-height: 32px;
         input {
             margin: 0 !important;
+            padding: 0 !important;
         }
         &.select2-selection--single {
             height: auto !important;
+            padding: 11px 14px !important;
             .select2-selection__rendered {
                 line-height: 20px !important;
+                padding: 0 !important;
             }
         }
     }
+}
+.select2-dropdown {
+    border-radius: var(--gts-sm-curve) !important;
+    background-color: var(--gts-light-color) !important;
+    border-color: rgba(var(--gts-brd-color), 0.2) !important;
 }
 .select2-search__field {
     padding: 10px !important;

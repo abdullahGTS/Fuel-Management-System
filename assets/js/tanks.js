@@ -90,13 +90,13 @@ const TanksFilter = {
         let filteredTanks = response; // Start with the full responses list
 
         Object.entries(filters).forEach(([key, values]) => {
-            if (key === 'datestart' && values.from && values.to) {
+            if (['timestamp'].includes(key) && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
                 filteredTanks = filteredTanks.filter(res => {
-                    const responsesDate = new Date(res[key]);
-                    return responsesDate >= from && alarmDate <= to;
+                    const responseDate = new Date(res[key]);
+                    return responseDate >= from && responseDate <= to;
                 });
             } else {
                 // Other filters (multi-select)

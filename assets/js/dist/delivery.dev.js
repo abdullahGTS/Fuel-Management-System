@@ -170,13 +170,13 @@ var DeliveryFilter = {
           key = _ref2[0],
           values = _ref2[1];
 
-      if (key === 'datestart' && values.from && values.to) {
+      if (['datestart', 'dateend'].includes(key) && values.from && values.to) {
         // Filter by date range
         var from = new Date(values.from);
         var to = new Date(values.to);
         filteredDelivery = filteredDelivery.filter(function (res) {
-          var responsesDate = new Date(res[key]);
-          return responsesDate >= from && alarmDate <= to;
+          var responseDate = new Date(res[key]);
+          return responseDate >= from && responseDate <= to;
         });
       } else {
         // Other filters (multi-select)
@@ -186,16 +186,7 @@ var DeliveryFilter = {
           });
         });
       }
-    }); //     else if (key === 'dateend' && values.from && values.to) {
-    //         // Filter by date range
-    //         const from = new Date(values.from);
-    //         const to = new Date(values.to);
-    //         filteredDelivery = filteredDelivery.filter(res => {
-    //             const responsesDate = new Date(res[key]);
-    //             return responsesDate >= from && alarmDate <= to;
-    //         });
-    // }
-
+    });
     return filteredDelivery; // Return filtered response
   }
 };

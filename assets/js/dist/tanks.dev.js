@@ -178,13 +178,13 @@ var TanksFilter = {
           key = _ref2[0],
           values = _ref2[1];
 
-      if (key === 'datestart' && values.from && values.to) {
+      if (['timestamp'].includes(key) && values.from && values.to) {
         // Filter by date range
         var from = new Date(values.from);
         var to = new Date(values.to);
         filteredTanks = filteredTanks.filter(function (res) {
-          var responsesDate = new Date(res[key]);
-          return responsesDate >= from && alarmDate <= to;
+          var responseDate = new Date(res[key]);
+          return responseDate >= from && responseDate <= to;
         });
       } else {
         // Other filters (multi-select)

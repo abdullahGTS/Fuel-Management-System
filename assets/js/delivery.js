@@ -80,37 +80,25 @@ const DeliveryFilter = {
         DeliveryDT.init(filteredDelivery);
     },
 
-    applyFilters: (filters, response) => {
+    applyFilters: (filters, response, ) => {
         let filteredDelivery = response; // Start with the full responses list
 
         Object.entries(filters).forEach(([key, values]) => {
-            if (key === 'datestart' && values.from && values.to) {
+            if (['datestart', 'dateend'].includes(key) && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
                 filteredDelivery = filteredDelivery.filter(res => {
-                    const responsesDate = new Date(res[key]);
-                    return responsesDate >= from && alarmDate <= to;
+                    const responseDate = new Date(res[key]);
+                    return responseDate >= from && responseDate <= to;
                 });
-            }  else {
+            } else {
                 // Other filters (multi-select)
                 filteredDelivery = filteredDelivery.filter(res => {
                     return values.some(value => String(res[key]) === String(value));
                 });
             }
         });
-
-
-    //     else if (key === 'dateend' && values.from && values.to) {
-    //         // Filter by date range
-    //         const from = new Date(values.from);
-    //         const to = new Date(values.to);
-    //         filteredDelivery = filteredDelivery.filter(res => {
-    //             const responsesDate = new Date(res[key]);
-    //             return responsesDate >= from && alarmDate <= to;
-    //         });
-        
-    // }
 
         return filteredDelivery; // Return filtered response
     },

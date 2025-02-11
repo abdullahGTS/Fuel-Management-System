@@ -87,13 +87,13 @@ const GovernorateFilter = {
         let filteredGovernorate = response; // Start with the full alarm list
 
         Object.entries(filters).forEach(([key, values]) => {
-            if (key === 'time' && values.from && values.to) {
+            if (['startdate', 'enddate'].includes(key) && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
                 filteredGovernorate = filteredGovernorate.filter(res => {
                     const responseDate = new Date(res[key]);
-                    return responseDate >= from && alarmDate <= to;
+                    return responseDate >= from && responseDate <= to;
                 });
             } else {
                 // Other filters (multi-select)

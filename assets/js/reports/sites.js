@@ -76,17 +76,17 @@ const SitesReportsFilter = {
 
     applyFilters: (filters, response) => {
         let filteredSitesReports = response; // Start with the full alarm list
-
         Object.entries(filters).forEach(([key, values]) => {
-            if (key === 'time' && values.from && values.to) {
+            if (['time'].includes(key) && values.from && values.to) {
                 // Filter by date range
                 const from = new Date(values.from);
                 const to = new Date(values.to);
                 filteredSitesReports = filteredSitesReports.filter(res => {
                     const responseDate = new Date(res[key]);
-                    return responseDate >= from && alarmDate <= to;
+                    return responseDate >= from && responseDate <= to;
                 });
             } else {
+                // Other filters (multi-select)
                 filteredSitesReports = filteredSitesReports.filter(res => {
                     return values.some(value => String(res[key]) === String(value));
                 });
